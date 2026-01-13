@@ -1,0 +1,329 @@
+{% extends "base.html" %}
+
+{% block title %}Itinerarios{% endblock %}
+
+{% block head %}
+<style>
+    #tree-container {
+        width: 100%;
+        height: 600px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+    }
+
+    .node circle {
+        stroke-width: 3px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .node circle:hover {
+        stroke-width: 5px;
+        filter: brightness(1.1);
+    }
+
+    .node text {
+        font-size: 12px;
+        font-weight: 500;
+    }
+
+    .link {
+        fill: none;
+        stroke: #999;
+        stroke-width: 2px;
+        stroke-opacity: 0.6;
+    }
+
+    .tooltip-tree {
+        position: absolute;
+        padding: 12px;
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        pointer-events: none;
+        z-index: 1000;
+        max-width: 300px;
+    }
+
+    .legend-item {
+        display: inline-flex;
+        align-items: center;
+        margin-right: 15px;
+    }
+
+    .legend-color {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        margin-right: 5px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h1><i class="bi bi-diagram-3 text-primary"></i> Arbol de Itinerarios</h1>
+        <p class="text-muted">{{ path.description }}</p>
+    </div>
+</div>
+
+<!-- Legend -->
+<div class="row mb-3">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body py-2">
+                <strong class="me-3">Leyenda:</strong>
+                <span class="legend-item">
+                    <span class="legend-color" style="background: #4CAF50;"></span> Literacy
+                </span>
+                <span class="legend-item">
+                    <span class="legend-color" style="background: #2196F3;"></span> Numeracy
+                </span>
+                <span class="legend-item">
+                    <span class="legend-color" style="background: #9C27B0;"></span> Digital
+                </span>
+                <span class="legend-item">
+                    <span class="legend-color" style="background: #FF9800;"></span> Citizenship
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tree Visualization -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-bezier2"></i> Visualizacion del Itinerario</h5>
+                <div>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="resetZoom()">
+                        <i class="bi bi-arrows-fullscreen"></i> Reset Vista
+                    </button>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div id="tree-container"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Node Details -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-info-circle"></i> Detalle del Nodo Seleccionado</h5>
+            </div>
+            <div class="card-body" id="node-details">
+                <p class="text-muted">Haz clic en un nodo para ver sus detalles</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-bar-chart"></i> Indicadores de Rendimiento</h5>
+            </div>
+            <div class="card-body" id="performance-details">
+                <p class="text-muted">Selecciona un nodo para ver sus indicadores</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tooltip -->
+<div class="tooltip-tree" id="tooltip" style="display: none;"></div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const treeData = {{ tree_data | safe }};
+
+// SVG setup
+const container = document.getElementById('tree-container');
+const width = container.clientWidth;
+const height = 600;
+const margin = {top: 40, right: 120, bottom: 40, left: 120};
+
+const svg = d3.select('#tree-container')
+    .append('svg')
+    .attr('width', width)
+    .attr('height', height);
+
+const g = svg.append('g')
+    .attr('transform', `translate(${margin.left},${margin.top})`);
+
+// Zoom behavior
+const zoom = d3.zoom()
+    .scaleExtent([0.3, 3])
+    .on('zoom', (event) => g.attr('transform', event.transform));
+
+svg.call(zoom);
+
+// Tree layout
+const treeLayout = d3.tree()
+    .size([height - margin.top - margin.bottom, width - margin.left - margin.right]);
+
+// Process data - create hierarchy from children arrays
+function processData(data) {
+    // If data has children array with multiple roots, create a virtual root
+    if (data.children && data.children.length > 0) {
+        return d3.hierarchy(data);
+    }
+    return d3.hierarchy(data);
+}
+
+const root = processData(treeData);
+treeLayout(root);
+
+// Draw links
+g.selectAll('.link')
+    .data(root.links())
+    .enter()
+    .append('path')
+    .attr('class', 'link')
+    .attr('d', d3.linkHorizontal()
+        .x(d => d.y)
+        .y(d => d.x));
+
+// Draw nodes
+const nodes = g.selectAll('.node')
+    .data(root.descendants())
+    .enter()
+    .append('g')
+    .attr('class', 'node')
+    .attr('transform', d => `translate(${d.y},${d.x})`)
+    .on('click', showNodeDetails)
+    .on('mouseover', showTooltip)
+    .on('mouseout', hideTooltip);
+
+// Node circles
+nodes.append('circle')
+    .attr('r', d => {
+        const difficulty = d.data.difficulty || 1;
+        return 15 + difficulty * 3;
+    })
+    .attr('fill', d => d.data.skillColor || '#666')
+    .attr('stroke', d => d3.color(d.data.skillColor || '#666').darker());
+
+// Node labels
+nodes.append('text')
+    .attr('dy', 4)
+    .attr('x', d => d.children ? -25 : 25)
+    .attr('text-anchor', d => d.children ? 'end' : 'start')
+    .text(d => d.data.name || d.data.id)
+    .style('fill', '#333');
+
+// Performance indicators (small badges)
+nodes.append('text')
+    .attr('dy', -20)
+    .attr('text-anchor', 'middle')
+    .attr('class', 'performance-badge')
+    .text(d => {
+        if (d.data.performance && d.data.performance.averageScore > 0) {
+            return Math.round(d.data.performance.averageScore) + '%';
+        }
+        return '';
+    })
+    .style('font-size', '10px')
+    .style('fill', d => {
+        const score = d.data.performance?.averageScore || 0;
+        if (score >= 70) return '#28a745';
+        if (score >= 50) return '#ffc107';
+        return '#dc3545';
+    });
+
+// Tooltip functions
+const tooltip = document.getElementById('tooltip');
+
+function showTooltip(event, d) {
+    const perf = d.data.performance || {};
+    tooltip.innerHTML = `
+        <strong>${d.data.name || d.data.id}</strong><br>
+        <small class="text-muted">${d.data.skill || 'N/A'} - ${d.data.difficultyLabel || ''}</small>
+        <hr class="my-2">
+        <small>
+            <i class="bi bi-check-circle"></i> Completado: ${perf.completionRate || 0}%<br>
+            <i class="bi bi-star"></i> Puntuacion: ${perf.averageScore || 0}<br>
+            <i class="bi bi-clock"></i> Tiempo: ${perf.timeSpent || 0} min
+        </small>
+    `;
+    tooltip.style.display = 'block';
+    tooltip.style.left = (event.pageX + 15) + 'px';
+    tooltip.style.top = (event.pageY - 10) + 'px';
+}
+
+function hideTooltip() {
+    tooltip.style.display = 'none';
+}
+
+// Show node details in panel
+function showNodeDetails(event, d) {
+    const data = d.data;
+    const perf = data.performance || {};
+
+    document.getElementById('node-details').innerHTML = `
+        <h5 style="color: ${data.skillColor}">${data.name || data.id}</h5>
+        <p>${data.description || 'Sin descripcion'}</p>
+        <hr>
+        <p><strong>Competencia:</strong> ${data.skill || 'N/A'}</p>
+        <p><strong>Dificultad:</strong> ${data.difficultyLabel || 'N/A'}</p>
+        <p><strong>Duracion estimada:</strong> ${data.estimatedDuration || 30} min</p>
+        <p><strong>Metodologia:</strong> ${data.methodology || 'Tutorial adaptativo'}</p>
+        ${data.objectives ? `
+        <p><strong>Objetivos:</strong></p>
+        <ul>${data.objectives.map(o => `<li>${o}</li>`).join('')}</ul>
+        ` : ''}
+        ${data.strategies ? `
+        <p><strong>Estrategias EAI:</strong></p>
+        <ul>${data.strategies.map(s => `<li>${s}</li>`).join('')}</ul>
+        ` : ''}
+    `;
+
+    document.getElementById('performance-details').innerHTML = `
+        <div class="row text-center">
+            <div class="col-6 mb-3">
+                <div class="h3 mb-0 ${perf.completionRate >= 70 ? 'text-success' : perf.completionRate >= 50 ? 'text-warning' : 'text-danger'}">
+                    ${Math.round(perf.completionRate || 0)}%
+                </div>
+                <small class="text-muted">Tasa Completado</small>
+            </div>
+            <div class="col-6 mb-3">
+                <div class="h3 mb-0 ${perf.averageScore >= 70 ? 'text-success' : perf.averageScore >= 50 ? 'text-warning' : 'text-danger'}">
+                    ${Math.round(perf.averageScore || 0)}
+                </div>
+                <small class="text-muted">Puntuacion Media</small>
+            </div>
+            <div class="col-6">
+                <div class="h3 mb-0 text-info">${Math.round(perf.timeSpent || 0)}</div>
+                <small class="text-muted">Minutos Promedio</small>
+            </div>
+            <div class="col-6">
+                <div class="h3 mb-0 text-secondary">${perf.attempts || 0}</div>
+                <small class="text-muted">Intentos Totales</small>
+            </div>
+        </div>
+        <hr>
+        <div class="progress" style="height: 25px;">
+            <div class="progress-bar ${perf.retentionRate >= 70 ? 'bg-success' : perf.retentionRate >= 50 ? 'bg-warning' : 'bg-danger'}"
+                 style="width: ${perf.retentionRate || 0}%">
+                Retencion: ${Math.round(perf.retentionRate || 0)}%
+            </div>
+        </div>
+    `;
+}
+
+function resetZoom() {
+    svg.transition()
+        .duration(750)
+        .call(zoom.transform, d3.zoomIdentity
+            .translate(margin.left, margin.top));
+}
+</script>
+{% endblock %}

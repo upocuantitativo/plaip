@@ -1,0 +1,208 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1 class="mb-4">
+            <i class="bi bi-diagram-3 text-primary"></i>
+            PLAIP Dashboard
+        </h1>
+        <p class="lead text-muted">
+            Personalized Learning's Artificial Intelligence Paths -
+            Sistema de itinerarios personalizados de aprendizaje para Basic Skills
+        </p>
+    </div>
+</div>
+
+<!-- Stats Cards -->
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="card bg-primary text-white h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-subtitle mb-2 opacity-75">Itinerario Activo</h6>
+                        <h3 class="card-title mb-0">{{ path_name }}</h3>
+                    </div>
+                    <i class="bi bi-signpost-split display-4 opacity-50"></i>
+                </div>
+            </div>
+            <div class="card-footer bg-transparent border-0">
+                <small><i class="bi bi-node-plus"></i> {{ num_nodes }} nodos de aprendizaje</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card bg-success text-white h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-subtitle mb-2 opacity-75">Estudiantes</h6>
+                        <h3 class="card-title mb-0">{{ num_students }}</h3>
+                    </div>
+                    <i class="bi bi-people display-4 opacity-50"></i>
+                </div>
+            </div>
+            <div class="card-footer bg-transparent border-0">
+                <small><i class="bi bi-person-plus"></i> Perfiles registrados</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card bg-info text-white h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-subtitle mb-2 opacity-75">Basic Skills</h6>
+                        <h3 class="card-title mb-0">4 Areas</h3>
+                    </div>
+                    <i class="bi bi-mortarboard display-4 opacity-50"></i>
+                </div>
+            </div>
+            <div class="card-footer bg-transparent border-0">
+                <small>Digital, Citizenship, Literacy, Numeracy</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Basic Skills Overview -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-bookmark-star"></i> Competencias Basicas (Basic Skills)</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <div class="card border-success">
+                            <div class="card-body text-center">
+                                <i class="bi bi-book display-4 text-success"></i>
+                                <h5 class="mt-2">Literacy</h5>
+                                <small class="text-muted">Comprension lectora y analisis critico</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card border-primary">
+                            <div class="card-body text-center">
+                                <i class="bi bi-calculator display-4 text-primary"></i>
+                                <h5 class="mt-2">Numeracy</h5>
+                                <small class="text-muted">Razonamiento numerico y datos</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card border-purple" style="border-color: #9C27B0 !important;">
+                            <div class="card-body text-center">
+                                <i class="bi bi-laptop display-4" style="color: #9C27B0;"></i>
+                                <h5 class="mt-2">Digital Skills</h5>
+                                <small class="text-muted">Competencias digitales (DigComp)</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card border-warning">
+                            <div class="card-body text-center">
+                                <i class="bi bi-people display-4 text-warning"></i>
+                                <h5 class="mt-2">Citizenship</h5>
+                                <small class="text-muted">Ciudadania y pensamiento critico</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-lightning"></i> Acciones Rapidas</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('itinerary') }}" class="btn btn-outline-primary">
+                        <i class="bi bi-diagram-3"></i> Ver Arbol de Itinerarios
+                    </a>
+                    <button class="btn btn-outline-success" onclick="createSampleStudents()">
+                        <i class="bi bi-person-plus"></i> Crear Estudiantes de Prueba
+                    </button>
+                    <a href="{{ url_for('simulation') }}" class="btn btn-outline-info">
+                        <i class="bi bi-cpu"></i> Ejecutar Simulacion RL
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-info-circle"></i> Sobre PLAIP</h5>
+            </div>
+            <div class="card-body">
+                <p>
+                    <strong>PLAIP</strong> (Personalized Learning's Artificial Intelligence Paths)
+                    es un sistema de itinerarios personalizados de aprendizaje basado en
+                    <strong>aprendizaje por refuerzo</strong>.
+                </p>
+                <p class="mb-0">
+                    El sistema permite:
+                </p>
+                <ul class="mb-0">
+                    <li>Definir itinerarios de aprendizaje para Basic Skills</li>
+                    <li>Clonar perfiles virtuales de estudiantes</li>
+                    <li>Simular escenarios para encontrar rutas optimas</li>
+                    <li>Redisenar itinerarios basados en feedback</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Framework Reference -->
+<div class="row">
+    <div class="col-12">
+        <div class="card bg-light">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <img src="https://education.ec.europa.eu/themes/contrib/oe_theme/images/ec_logo.svg"
+                         alt="EU Logo" height="50" class="me-3">
+                    <div>
+                        <h6 class="mb-1">Proyecto ERASMUS-EDU-2026-POL-EXP-T03</h6>
+                        <small class="text-muted">
+                            Basado en el marco de Basic Skills de la Comision Europea |
+                            <a href="https://education.ec.europa.eu/education-levels/school-education/basic-skills"
+                               target="_blank">Mas informacion</a>
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+async function createSampleStudents() {
+    try {
+        const response = await fetch('/api/students/sample', {method: 'POST'});
+        const data = await response.json();
+        alert(`Creados ${data.length} estudiantes de prueba`);
+        location.reload();
+    } catch (error) {
+        alert('Error al crear estudiantes: ' + error.message);
+    }
+}
+</script>
+{% endblock %}
