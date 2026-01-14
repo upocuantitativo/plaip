@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Initial Diagnostic - InfiniteLearner AI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .logo-bar { background: #fff; padding: 10px 0; border-bottom: 3px solid #003399; }
+        .logo-bar img { max-height: 50px; margin: 0 15px; }
+        .navbar-brand-custom { font-weight: 700; font-size: 1.3rem; }
+        .nav-wp-badge { font-size: 0.65rem; padding: 2px 5px; margin-left: 5px; }
+        .diagnostic-hero { background: linear-gradient(135deg, #17a2b8 0%, #138496 100%); color: white; padding: 40px; border-radius: 15px; margin-bottom: 30px; }
+        .skill-card { border-radius: 15px; transition: all 0.3s; }
+        .skill-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+        .diagnostic-section { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; }
+        .question-item { background: white; border-radius: 10px; padding: 20px; margin-bottom: 15px; border-left: 4px solid #17a2b8; }
+        .footer-logos img { max-height: 40px; margin: 0 10px; opacity: 0.8; }
+    </style>
+</head>
+<body>
+    <div class="logo-bar">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <div class="d-flex align-items-center">
+                    <img src="static/img/upo.jpg" alt="UPO" onerror="this.outerHTML='<span class=\'badge bg-primary me-2\'>UPO</span>'">
+                    <img src="static/img/incoma.jpg" alt="INCOMA" onerror="this.outerHTML='<span class=\'badge bg-info me-2\'>INCOMA</span>'">
+                </div>
+                <div class="text-center flex-grow-1"><span class="fw-bold text-primary">Erasmus+ KA3 - European Policy Experimentation</span></div>
+                <div><img src="static/img/erasmus.jpg" alt="EU" style="max-height:45px" onerror="this.outerHTML='<span class=\'badge bg-warning text-dark\'>EU</span>'"></div>
+            </div>
+        </div>
+    </div>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand navbar-brand-custom" href="index.html"><i class="bi bi-infinity"></i> InfiniteLearner AI</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html"><i class="bi bi-house-heart"></i> Project</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"><i class="bi bi-book"></i> Foundations <span class="badge bg-light text-primary nav-wp-badge">WP2</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="framework.html"><i class="bi bi-diagram-3 me-2"></i>Shared Pedagogical Framework</a></li>
+                            <li><a class="dropdown-item" href="itinerary.html"><i class="bi bi-signpost-split me-2"></i>Learning Pathways</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="toolkit.html"><i class="bi bi-tools me-2"></i>Toolkit for Teachers</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active" href="#" data-bs-toggle="dropdown"><i class="bi bi-rocket-takeoff"></i> Pilots <span class="badge bg-warning text-dark nav-wp-badge">WP3</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="diagnostic.html"><i class="bi bi-clipboard2-pulse me-2"></i>Initial Diagnostic</a></li>
+                            <li><a class="dropdown-item" href="activities.html"><i class="bi bi-puzzle me-2"></i>Learning Activities</a></li>
+                            <li><a class="dropdown-item" href="evaluation.html"><i class="bi bi-check2-square me-2"></i>Formative Assessment</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="students.html"><i class="bi bi-people me-2"></i>Student Profiles</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"><i class="bi bi-speedometer2"></i> Dashboards</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="dashboard_teacher.html"><i class="bi bi-person-workspace me-2"></i>Teacher Dashboard</a></li>
+                            <li><a class="dropdown-item" href="dashboard_student.html"><i class="bi bi-mortarboard me-2"></i>Student Dashboard</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="recommendations.html"><i class="bi bi-lightbulb me-2"></i>AI Recommendations</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="consolidation.html"><i class="bi bi-file-earmark-check"></i> Results <span class="badge bg-success nav-wp-badge">WP4</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="simulation.html"><i class="bi bi-cpu"></i> RL Simulation</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container-fluid py-4">
+        <div class="diagnostic-hero">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1><i class="bi bi-clipboard2-pulse me-3"></i>Initial Diagnostic Assessment</h1>
+                    <p class="lead mb-0">Questionnaires and diagnostic tests to identify needs, map strengths and weaknesses, and initiate the Personalised Learning Pathway.</p>
+                </div>
+                <div class="col-lg-4 text-center">
+                    <div class="bg-white bg-opacity-10 rounded-3 p-3">
+                        <h5 class="mb-2">Assessment Duration</h5>
+                        <span class="badge bg-light text-info fs-5">~30 min</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-12"><h3 class="mb-4"><i class="bi bi-stars me-2"></i>Competence Areas Assessed</h3></div>
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="card skill-card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <div class="rounded-circle bg-success bg-opacity-10 d-inline-flex p-3 mb-3"><i class="bi bi-book text-success fs-2"></i></div>
+                        <h5>Literacy</h5>
+                        <p class="text-muted small">Reading comprehension, text interpretation, writing skills</p>
+                        <span class="badge bg-success">10 questions</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="card skill-card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <div class="rounded-circle bg-primary bg-opacity-10 d-inline-flex p-3 mb-3"><i class="bi bi-calculator text-primary fs-2"></i></div>
+                        <h5>Numeracy</h5>
+                        <p class="text-muted small">Mathematical reasoning, data interpretation, problem solving</p>
+                        <span class="badge bg-primary">10 questions</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="card skill-card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <div class="rounded-circle d-inline-flex p-3 mb-3" style="background:rgba(156,39,176,0.1)"><i class="bi bi-laptop fs-2" style="color:#9C27B0"></i></div>
+                        <h5>Digital Skills</h5>
+                        <p class="text-muted small">Online safety, information evaluation, digital tools</p>
+                        <span class="badge" style="background:#9C27B0">12 questions</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="card skill-card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <div class="rounded-circle bg-warning bg-opacity-10 d-inline-flex p-3 mb-3"><i class="bi bi-flag text-warning fs-2"></i></div>
+                        <h5>Citizenship</h5>
+                        <p class="text-muted small">Civic knowledge, democratic participation, social responsibility</p>
+                        <span class="badge bg-warning text-dark">10 questions</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-lg-6 mb-4">
+                <div class="diagnostic-section">
+                    <h4><i class="bi bi-person-badge me-2 text-info"></i>Demographic Questionnaire</h4>
+                    <p class="text-muted">Collects basic information to contextualize learning pathways.</p>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Age and education level</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Learning preferences</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Technology access</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Previous digital experience</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-6 mb-4">
+                <div class="diagnostic-section">
+                    <h4><i class="bi bi-heart me-2 text-danger"></i>Emotional Factors Survey</h4>
+                    <p class="text-muted">Assesses motivation and self-efficacy for personalization.</p>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Intrinsic motivation level</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Self-efficacy beliefs</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Learning anxiety indicators</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Goal orientation</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-info text-white"><h4 class="mb-0"><i class="bi bi-question-circle me-2"></i>Sample Diagnostic Questions</h4></div>
+                    <div class="card-body">
+                        <div class="question-item">
+                            <span class="badge bg-success mb-2">Literacy</span>
+                            <p class="mb-2"><strong>Read the following passage and identify the main argument presented by the author.</strong></p>
+                            <small class="text-muted">Tests reading comprehension and critical analysis</small>
+                        </div>
+                        <div class="question-item">
+                            <span class="badge bg-primary mb-2">Numeracy</span>
+                            <p class="mb-2"><strong>Interpret this graph showing population growth and calculate the percentage change between 2010-2020.</strong></p>
+                            <small class="text-muted">Tests data interpretation and mathematical reasoning</small>
+                        </div>
+                        <div class="question-item">
+                            <span class="badge mb-2" style="background:#9C27B0">Digital</span>
+                            <p class="mb-2"><strong>Identify which of these website characteristics indicate a reliable information source.</strong></p>
+                            <small class="text-muted">Tests critical evaluation of online information</small>
+                        </div>
+                        <div class="question-item">
+                            <span class="badge bg-warning text-dark mb-2">Citizenship</span>
+                            <p class="mb-2"><strong>Explain the role of the European Parliament in the EU decision-making process.</strong></p>
+                            <small class="text-muted">Tests civic knowledge and understanding of institutions</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card bg-info text-white">
+                    <div class="card-body text-center py-4">
+                        <h4><i class="bi bi-play-circle me-2"></i>Start Diagnostic Assessment</h4>
+                        <p class="mb-3">Begin the initial assessment to create personalized learning pathways</p>
+                        <button class="btn btn-light btn-lg" disabled><i class="bi bi-clipboard-check me-2"></i>Start Assessment (Demo)</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-light py-4 mt-4">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-4 text-center text-md-start footer-logos">
+                    <img src="static/img/upo.jpg" alt="UPO" onerror="this.style.display='none'">
+                    <img src="static/img/incoma.jpg" alt="INCOMA" onerror="this.style.display='none'">
+                </div>
+                <div class="col-md-4 text-center"><p class="mb-1"><strong>InfiniteLearner AI</strong></p><small class="text-muted">ERASMUS-EDU-2026-POL-EXP-T03-DIGITAL-BS</small></div>
+                <div class="col-md-4 text-center text-md-end"><img src="static/img/erasmus.jpg" alt="EU" style="max-height:35px" onerror="this.style.display='none'"></div>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

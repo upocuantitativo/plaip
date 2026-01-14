@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results & Consolidation - InfiniteLearner AI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .logo-bar { background: #fff; padding: 10px 0; border-bottom: 3px solid #003399; }
+        .logo-bar img { max-height: 50px; margin: 0 15px; }
+        .navbar-brand-custom { font-weight: 700; font-size: 1.3rem; }
+        .nav-wp-badge { font-size: 0.65rem; padding: 2px 5px; margin-left: 5px; }
+        .consolidation-hero { background: linear-gradient(135deg, #198754 0%, #157347 100%); color: white; padding: 40px; border-radius: 15px; margin-bottom: 30px; }
+        .result-card { border-radius: 15px; transition: all 0.3s; border: none; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+        .result-card:hover { transform: translateY(-3px); box-shadow: 0 5px 20px rgba(0,0,0,0.12); }
+        .deliverable-item { padding: 20px; border-radius: 15px; margin-bottom: 15px; background: #f8f9fa; border-left: 5px solid; }
+        .policy-card { background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 15px; padding: 25px; }
+        .impact-number { font-size: 2.5rem; font-weight: 700; }
+        .footer-logos img { max-height: 40px; margin: 0 10px; opacity: 0.8; }
+    </style>
+</head>
+<body>
+    <div class="logo-bar">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <div class="d-flex align-items-center">
+                    <img src="static/img/upo.jpg" alt="UPO" onerror="this.outerHTML='<span class=\'badge bg-primary me-2\'>UPO</span>'">
+                    <img src="static/img/incoma.jpg" alt="INCOMA" onerror="this.outerHTML='<span class=\'badge bg-info me-2\'>INCOMA</span>'">
+                </div>
+                <div class="text-center flex-grow-1"><span class="fw-bold text-primary">Erasmus+ KA3 - European Policy Experimentation</span></div>
+                <div><img src="static/img/erasmus.jpg" alt="EU" style="max-height:45px" onerror="this.outerHTML='<span class=\'badge bg-warning text-dark\'>EU</span>'"></div>
+            </div>
+        </div>
+    </div>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand navbar-brand-custom" href="index.html"><i class="bi bi-infinity"></i> InfiniteLearner AI</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html"><i class="bi bi-house-heart"></i> Project</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"><i class="bi bi-book"></i> Foundations <span class="badge bg-light text-primary nav-wp-badge">WP2</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="framework.html"><i class="bi bi-diagram-3 me-2"></i>Shared Pedagogical Framework</a></li>
+                            <li><a class="dropdown-item" href="itinerary.html"><i class="bi bi-signpost-split me-2"></i>Learning Pathways</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="toolkit.html"><i class="bi bi-tools me-2"></i>Toolkit for Teachers</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"><i class="bi bi-rocket-takeoff"></i> Pilots <span class="badge bg-warning text-dark nav-wp-badge">WP3</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="diagnostic.html"><i class="bi bi-clipboard2-pulse me-2"></i>Initial Diagnostic</a></li>
+                            <li><a class="dropdown-item" href="activities.html"><i class="bi bi-puzzle me-2"></i>Learning Activities</a></li>
+                            <li><a class="dropdown-item" href="evaluation.html"><i class="bi bi-check2-square me-2"></i>Formative Assessment</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="students.html"><i class="bi bi-people me-2"></i>Student Profiles</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"><i class="bi bi-speedometer2"></i> Dashboards</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="dashboard_teacher.html"><i class="bi bi-person-workspace me-2"></i>Teacher Dashboard</a></li>
+                            <li><a class="dropdown-item" href="dashboard_student.html"><i class="bi bi-mortarboard me-2"></i>Student Dashboard</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="recommendations.html"><i class="bi bi-lightbulb me-2"></i>AI Recommendations</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item"><a class="nav-link active" href="consolidation.html"><i class="bi bi-file-earmark-check"></i> Results <span class="badge bg-success nav-wp-badge">WP4</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="simulation.html"><i class="bi bi-cpu"></i> RL Simulation</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container-fluid py-4">
+        <div class="consolidation-hero">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1><i class="bi bi-file-earmark-check me-3"></i>Results & Consolidation</h1>
+                    <p class="lead mb-0">WP4 deliverables: Evidence synthesis, policy recommendations, and replication guidelines for AI-powered personalised learning pathways.</p>
+                </div>
+                <div class="col-lg-4 text-center">
+                    <div class="bg-white bg-opacity-10 rounded-3 p-3">
+                        <h5 class="mb-2">Work Package</h5>
+                        <span class="badge bg-light text-success fs-4">WP4</span>
+                        <p class="small mb-0 mt-2 opacity-75">Months 25-36</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="card result-card h-100">
+                    <div class="card-body text-center">
+                        <div class="impact-number text-success">3+</div>
+                        <h6>EU Countries</h6>
+                        <p class="text-muted small mb-0">International pilots</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="card result-card h-100">
+                    <div class="card-body text-center">
+                        <div class="impact-number text-primary">500+</div>
+                        <h6>Students</h6>
+                        <p class="text-muted small mb-0">Pilot participants</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="card result-card h-100">
+                    <div class="card-body text-center">
+                        <div class="impact-number text-warning">50+</div>
+                        <h6>Teachers</h6>
+                        <p class="text-muted small mb-0">Trained educators</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="card result-card h-100">
+                    <div class="card-body text-center">
+                        <div class="impact-number text-info">4</div>
+                        <h6>Competences</h6>
+                        <p class="text-muted small mb-0">Basic skills addressed</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-12"><h3 class="mb-4"><i class="bi bi-folder-check me-2"></i>Key Deliverables</h3></div>
+            <div class="col-lg-6 mb-4">
+                <div class="deliverable-item" style="border-color:#198754">
+                    <div class="d-flex align-items-start">
+                        <div class="rounded-circle bg-success text-white p-2 me-3">
+                            <i class="bi bi-book"></i>
+                        </div>
+                        <div>
+                            <h5>Consolidated Pedagogical Framework</h5>
+                            <p class="text-muted mb-2">Fine-tuned version of the Shared Pedagogical Framework based on pilot evidence and stakeholder feedback.</p>
+                            <span class="badge bg-success">D4.1</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="deliverable-item" style="border-color:#0d6efd">
+                    <div class="d-flex align-items-start">
+                        <div class="rounded-circle bg-primary text-white p-2 me-3">
+                            <i class="bi bi-tools"></i>
+                        </div>
+                        <div>
+                            <h5>Final Toolkit for Teachers</h5>
+                            <p class="text-muted mb-2">Complete toolkit with practical resources, guides, and training materials for classroom implementation.</p>
+                            <span class="badge bg-primary">D4.2</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 mb-4">
+                <div class="deliverable-item" style="border-color:#ffc107">
+                    <div class="d-flex align-items-start">
+                        <div class="rounded-circle bg-warning text-dark p-2 me-3">
+                            <i class="bi bi-file-text"></i>
+                        </div>
+                        <div>
+                            <h5>Policy Recommendations</h5>
+                            <p class="text-muted mb-2">Evidence-based recommendations for European education policymakers on AI integration in basic skills education.</p>
+                            <span class="badge bg-warning text-dark">D4.3</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="deliverable-item" style="border-color:#6f42c1">
+                    <div class="d-flex align-items-start">
+                        <div class="rounded-circle text-white p-2 me-3" style="background:#6f42c1">
+                            <i class="bi bi-arrow-repeat"></i>
+                        </div>
+                        <div>
+                            <h5>Replication Guidelines</h5>
+                            <p class="text-muted mb-2">Step-by-step guide for adapting and implementing the framework in different European contexts.</p>
+                            <span class="badge" style="background:#6f42c1">D4.4</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="policy-card">
+                    <h4 class="mb-4"><i class="bi bi-building me-2"></i>Policy Recommendations Preview</h4>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="d-flex">
+                                <div class="rounded-circle bg-success bg-opacity-10 p-2 me-3 flex-shrink-0">
+                                    <i class="bi bi-check-circle text-success"></i>
+                                </div>
+                                <div>
+                                    <h6>Teacher-Centered AI Integration</h6>
+                                    <p class="small text-muted mb-0">AI should support, not replace, teachers' pedagogical decisions and professional judgement.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="d-flex">
+                                <div class="rounded-circle bg-primary bg-opacity-10 p-2 me-3 flex-shrink-0">
+                                    <i class="bi bi-shield-check text-primary"></i>
+                                </div>
+                                <div>
+                                    <h6>Ethical AI Governance</h6>
+                                    <p class="small text-muted mb-0">Transparent, fair, and privacy-respecting frameworks for AI in education.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="d-flex">
+                                <div class="rounded-circle bg-warning bg-opacity-10 p-2 me-3 flex-shrink-0">
+                                    <i class="bi bi-people text-warning"></i>
+                                </div>
+                                <div>
+                                    <h6>Equity-First Design</h6>
+                                    <p class="small text-muted mb-0">AI systems must reduce, not amplify, existing educational inequalities.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="d-flex">
+                                <div class="rounded-circle bg-info bg-opacity-10 p-2 me-3 flex-shrink-0">
+                                    <i class="bi bi-mortarboard text-info"></i>
+                                </div>
+                                <div>
+                                    <h6>Professional Development</h6>
+                                    <p class="small text-muted mb-0">Investment in teacher training for effective AI tool utilization.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card bg-success text-white">
+                    <div class="card-body text-center py-4">
+                        <h4><i class="bi bi-download me-2"></i>Access Project Outputs</h4>
+                        <p class="mb-3">All project deliverables will be made available as open educational resources</p>
+                        <div class="d-flex justify-content-center gap-3 flex-wrap">
+                            <a href="framework.html" class="btn btn-light"><i class="bi bi-book me-2"></i>View Framework</a>
+                            <a href="toolkit.html" class="btn btn-outline-light"><i class="bi bi-tools me-2"></i>Teacher Toolkit</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-light py-4 mt-4">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-4 text-center text-md-start footer-logos">
+                    <img src="static/img/upo.jpg" alt="UPO" onerror="this.style.display='none'">
+                    <img src="static/img/incoma.jpg" alt="INCOMA" onerror="this.style.display='none'">
+                </div>
+                <div class="col-md-4 text-center"><p class="mb-1"><strong>InfiniteLearner AI</strong></p><small class="text-muted">ERASMUS-EDU-2026-POL-EXP-T03-DIGITAL-BS</small></div>
+                <div class="col-md-4 text-center text-md-end"><img src="static/img/erasmus.jpg" alt="EU" style="max-height:35px" onerror="this.style.display='none'"></div>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

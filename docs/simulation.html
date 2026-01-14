@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RL Simulation - InfiniteLearner AI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .logo-bar { background: #fff; padding: 10px 0; border-bottom: 3px solid #003399; }
+        .logo-bar img { max-height: 50px; margin: 0 15px; }
+        .navbar-brand-custom { font-weight: 700; font-size: 1.3rem; }
+        .nav-wp-badge { font-size: 0.65rem; padding: 2px 5px; margin-left: 5px; }
+        .simulation-hero { background: linear-gradient(135deg, #212529 0%, #343a40 100%); color: white; padding: 40px; border-radius: 15px; margin-bottom: 30px; }
+        .sim-card { border-radius: 15px; transition: all 0.3s; border: none; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+        .sim-card:hover { transform: translateY(-3px); box-shadow: 0 5px 20px rgba(0,0,0,0.12); }
+        .tech-badge { display: inline-block; padding: 8px 15px; border-radius: 25px; margin: 5px; background: #f8f9fa; border: 2px solid #dee2e6; font-weight: 500; }
+        .architecture-box { background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 15px; padding: 25px; }
+        .state-var { padding: 10px 15px; border-radius: 8px; margin-bottom: 8px; font-size: 0.9rem; }
+        .console-output { background: #1e1e1e; color: #00ff00; font-family: 'Courier New', monospace; border-radius: 10px; padding: 20px; font-size: 0.85rem; }
+        .footer-logos img { max-height: 40px; margin: 0 10px; opacity: 0.8; }
+    </style>
+</head>
+<body>
+    <div class="logo-bar">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <div class="d-flex align-items-center">
+                    <img src="static/img/upo.jpg" alt="UPO" onerror="this.outerHTML='<span class=\'badge bg-primary me-2\'>UPO</span>'">
+                    <img src="static/img/incoma.jpg" alt="INCOMA" onerror="this.outerHTML='<span class=\'badge bg-info me-2\'>INCOMA</span>'">
+                </div>
+                <div class="text-center flex-grow-1"><span class="fw-bold text-primary">Erasmus+ KA3 - European Policy Experimentation</span></div>
+                <div><img src="static/img/erasmus.jpg" alt="EU" style="max-height:45px" onerror="this.outerHTML='<span class=\'badge bg-warning text-dark\'>EU</span>'"></div>
+            </div>
+        </div>
+    </div>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand navbar-brand-custom" href="index.html"><i class="bi bi-infinity"></i> InfiniteLearner AI</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html"><i class="bi bi-house-heart"></i> Project</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"><i class="bi bi-book"></i> Foundations <span class="badge bg-light text-primary nav-wp-badge">WP2</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="framework.html"><i class="bi bi-diagram-3 me-2"></i>Shared Pedagogical Framework</a></li>
+                            <li><a class="dropdown-item" href="itinerary.html"><i class="bi bi-signpost-split me-2"></i>Learning Pathways</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="toolkit.html"><i class="bi bi-tools me-2"></i>Toolkit for Teachers</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"><i class="bi bi-rocket-takeoff"></i> Pilots <span class="badge bg-warning text-dark nav-wp-badge">WP3</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="diagnostic.html"><i class="bi bi-clipboard2-pulse me-2"></i>Initial Diagnostic</a></li>
+                            <li><a class="dropdown-item" href="activities.html"><i class="bi bi-puzzle me-2"></i>Learning Activities</a></li>
+                            <li><a class="dropdown-item" href="evaluation.html"><i class="bi bi-check2-square me-2"></i>Formative Assessment</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="students.html"><i class="bi bi-people me-2"></i>Student Profiles</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"><i class="bi bi-speedometer2"></i> Dashboards</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="dashboard_teacher.html"><i class="bi bi-person-workspace me-2"></i>Teacher Dashboard</a></li>
+                            <li><a class="dropdown-item" href="dashboard_student.html"><i class="bi bi-mortarboard me-2"></i>Student Dashboard</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="recommendations.html"><i class="bi bi-lightbulb me-2"></i>AI Recommendations</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="consolidation.html"><i class="bi bi-file-earmark-check"></i> Results <span class="badge bg-success nav-wp-badge">WP4</span></a></li>
+                    <li class="nav-item"><a class="nav-link active" href="simulation.html"><i class="bi bi-cpu"></i> RL Simulation</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container-fluid py-4">
+        <div class="simulation-hero">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1><i class="bi bi-cpu me-3"></i>Reinforcement Learning Simulation</h1>
+                    <p class="lead mb-0">Train and optimize personalised learning pathways using virtual student clones and reinforcement learning algorithms.</p>
+                </div>
+                <div class="col-lg-4 text-center">
+                    <div class="bg-white bg-opacity-10 rounded-3 p-3">
+                        <h5 class="mb-2">Simulation Status</h5>
+                        <span class="badge bg-warning text-dark fs-6">Development</span>
+                        <p class="small mb-0 mt-2 opacity-75">Technical Preview</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-lg-8">
+                <div class="card sim-card mb-4">
+                    <div class="card-header bg-dark text-white"><h5 class="mb-0"><i class="bi bi-diagram-3 me-2"></i>RL Architecture Overview</h5></div>
+                    <div class="card-body">
+                        <div class="architecture-box mb-4">
+                            <div class="row text-center">
+                                <div class="col-md-4 mb-3">
+                                    <div class="rounded-circle bg-primary bg-opacity-10 d-inline-flex p-3 mb-2">
+                                        <i class="bi bi-eye text-primary fs-3"></i>
+                                    </div>
+                                    <h6>State (S)</h6>
+                                    <p class="small text-muted mb-0">Student profile variables</p>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="rounded-circle bg-warning bg-opacity-10 d-inline-flex p-3 mb-2">
+                                        <i class="bi bi-lightning text-warning fs-3"></i>
+                                    </div>
+                                    <h6>Action (A)</h6>
+                                    <p class="small text-muted mb-0">Learning activity selection</p>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="rounded-circle bg-success bg-opacity-10 d-inline-flex p-3 mb-2">
+                                        <i class="bi bi-trophy text-success fs-3"></i>
+                                    </div>
+                                    <h6>Reward (R)</h6>
+                                    <p class="small text-muted mb-0">Learning outcome signal</p>
+                                </div>
+                            </div>
+                        </div>
+                        <h6 class="mb-3"><i class="bi bi-stack me-2"></i>State Space Components</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="state-var bg-success bg-opacity-10">
+                                    <i class="bi bi-person me-2 text-success"></i>Demographic variables (V1-V4)
+                                </div>
+                                <div class="state-var bg-danger bg-opacity-10">
+                                    <i class="bi bi-heart me-2 text-danger"></i>Emotional factors (V5-V6)
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="state-var bg-primary bg-opacity-10">
+                                    <i class="bi bi-lightbulb me-2 text-primary"></i>Cognitive factors (V7-V12)
+                                </div>
+                                <div class="state-var bg-warning bg-opacity-10">
+                                    <i class="bi bi-graph-up me-2 text-warning"></i>Current performance (V16-V20)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card sim-card">
+                    <div class="card-header bg-dark text-white"><h5 class="mb-0"><i class="bi bi-terminal me-2"></i>Simulation Console</h5></div>
+                    <div class="card-body p-0">
+                        <div class="console-output">
+                            <p class="mb-1">> Initializing InfiniteLearner RL Environment...</p>
+                            <p class="mb-1">> Loading student profiles from database...</p>
+                            <p class="mb-1">> Students loaded: 3 virtual clones</p>
+                            <p class="mb-1">> Activity space: 48 learning activities</p>
+                            <p class="mb-1">> Difficulty levels: [Basic, Elementary, Intermediate, Advanced]</p>
+                            <p class="mb-1">> </p>
+                            <p class="mb-1">> Starting training episode 1/1000...</p>
+                            <p class="mb-1">> Agent: PPO (Proximal Policy Optimization)</p>
+                            <p class="mb-1">> Learning rate: 0.0003</p>
+                            <p class="mb-1">> </p>
+                            <p class="mb-1 text-warning">> Episode 1: Reward = 0.45 | Steps = 12</p>
+                            <p class="mb-1 text-warning">> Episode 50: Reward = 0.68 | Steps = 10</p>
+                            <p class="mb-1" style="color:#00ff00">> Episode 100: Reward = 0.82 | Steps = 8</p>
+                            <p class="mb-1" style="color:#00ff00">> Episode 500: Reward = 0.91 | Steps = 7</p>
+                            <p class="mb-0">> Training in progress... <span class="blink">_</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card sim-card mb-4">
+                    <div class="card-header bg-white"><h5 class="mb-0"><i class="bi bi-gear me-2"></i>Technology Stack</h5></div>
+                    <div class="card-body">
+                        <div class="tech-badge"><i class="bi bi-filetype-py me-1"></i>Python</div>
+                        <div class="tech-badge"><i class="bi bi-braces me-1"></i>PyTorch</div>
+                        <div class="tech-badge"><i class="bi bi-box me-1"></i>Gymnasium</div>
+                        <div class="tech-badge"><i class="bi bi-graph-up me-1"></i>Stable-Baselines3</div>
+                        <div class="tech-badge"><i class="bi bi-database me-1"></i>PostgreSQL</div>
+                        <div class="tech-badge"><i class="bi bi-cloud me-1"></i>Flask API</div>
+                    </div>
+                </div>
+
+                <div class="card sim-card mb-4">
+                    <div class="card-header bg-white"><h5 class="mb-0"><i class="bi bi-people me-2"></i>Virtual Student Clones</h5></div>
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3 p-2 bg-light rounded">
+                            <div class="rounded-circle bg-success text-white p-2 me-3" style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-size:0.8rem">MG</div>
+                            <div>
+                                <strong>Maria (Clone)</strong>
+                                <p class="small text-muted mb-0">High performer profile</p>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center mb-3 p-2 bg-light rounded">
+                            <div class="rounded-circle bg-warning text-dark p-2 me-3" style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-size:0.8rem">PR</div>
+                            <div>
+                                <strong>Pablo (Clone)</strong>
+                                <p class="small text-muted mb-0">Average performer profile</p>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center p-2 bg-light rounded">
+                            <div class="rounded-circle bg-danger text-white p-2 me-3" style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-size:0.8rem">AM</div>
+                            <div>
+                                <strong>Ana (Clone)</strong>
+                                <p class="small text-muted mb-0">Needs support profile</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card sim-card">
+                    <div class="card-header bg-white"><h5 class="mb-0"><i class="bi bi-bar-chart me-2"></i>Training Metrics</h5></div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between mb-1">
+                                <small>Average Reward</small>
+                                <small class="fw-bold text-success">0.91</small>
+                            </div>
+                            <div class="progress" style="height:8px">
+                                <div class="progress-bar bg-success" style="width:91%"></div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between mb-1">
+                                <small>Policy Loss</small>
+                                <small class="fw-bold">0.023</small>
+                            </div>
+                            <div class="progress" style="height:8px">
+                                <div class="progress-bar bg-info" style="width:23%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="d-flex justify-content-between mb-1">
+                                <small>Episodes Complete</small>
+                                <small class="fw-bold">512/1000</small>
+                            </div>
+                            <div class="progress" style="height:8px">
+                                <div class="progress-bar bg-warning" style="width:51%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card bg-dark text-white">
+                    <div class="card-body text-center py-4">
+                        <h4><i class="bi bi-github me-2"></i>Explore the Source Code</h4>
+                        <p class="mb-3">The RL simulation module is open source and available for research purposes</p>
+                        <a href="https://github.com/upocuantitativo/plaip" class="btn btn-light"><i class="bi bi-github me-2"></i>View on GitHub</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-light py-4 mt-4">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-4 text-center text-md-start footer-logos">
+                    <img src="static/img/upo.jpg" alt="UPO" onerror="this.style.display='none'">
+                    <img src="static/img/incoma.jpg" alt="INCOMA" onerror="this.style.display='none'">
+                </div>
+                <div class="col-md-4 text-center"><p class="mb-1"><strong>InfiniteLearner AI</strong></p><small class="text-muted">ERASMUS-EDU-2026-POL-EXP-T03-DIGITAL-BS</small></div>
+                <div class="col-md-4 text-center text-md-end"><img src="static/img/erasmus.jpg" alt="EU" style="max-height:35px" onerror="this.style.display='none'"></div>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

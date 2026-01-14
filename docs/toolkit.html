@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toolkit for Teachers - InfiniteLearner AI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .logo-bar { background: #fff; padding: 10px 0; border-bottom: 3px solid #003399; }
+        .logo-bar img { max-height: 50px; margin: 0 15px; }
+        .navbar-brand-custom { font-weight: 700; font-size: 1.3rem; }
+        .nav-wp-badge { font-size: 0.65rem; padding: 2px 5px; margin-left: 5px; }
+        .toolkit-hero { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; padding: 40px; border-radius: 15px; margin-bottom: 30px; }
+        .resource-card { border-radius: 15px; transition: all 0.3s; border: none; box-shadow: 0 2px 10px rgba(0,0,0,0.08); height: 100%; }
+        .resource-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+        .resource-icon { width: 70px; height: 70px; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin-bottom: 15px; }
+        .guide-item { padding: 20px; border-radius: 10px; margin-bottom: 15px; background: #f8f9fa; border-left: 4px solid; }
+        .guide-step { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; flex-shrink: 0; }
+        .video-placeholder { background: #212529; border-radius: 10px; padding: 60px 20px; text-align: center; color: white; }
+        .download-card { background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 15px; padding: 25px; text-align: center; border: 2px dashed #dee2e6; }
+        .faq-item { border: none; border-radius: 10px; margin-bottom: 10px; }
+        .footer-logos img { max-height: 40px; margin: 0 10px; opacity: 0.8; }
+        .eu-disclaimer { font-size: 0.75rem; color: #666; max-width: 600px; margin: 10px auto; }
+    </style>
+</head>
+<body>
+    <div class="logo-bar">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <div class="d-flex align-items-center">
+                    <img src="static/img/upo.jpg" alt="UPO" onerror="this.outerHTML='<span class=\'badge bg-primary me-2\'>UPO</span>'">
+                    <img src="static/img/incoma.jpg" alt="INCOMA" onerror="this.outerHTML='<span class=\'badge bg-info me-2\'>INCOMA</span>'">
+                </div>
+                <div class="text-center flex-grow-1"><span class="fw-bold text-primary">Erasmus+ KA3 - European Policy Experimentation</span></div>
+                <div><img src="static/img/erasmus.jpg" alt="EU" style="max-height:45px" onerror="this.outerHTML='<span class=\'badge bg-warning text-dark\'>EU</span>'"></div>
+            </div>
+        </div>
+    </div>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand navbar-brand-custom" href="index.html"><i class="bi bi-infinity"></i> InfiniteLearner AI</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html"><i class="bi bi-house-heart"></i> Project</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active" href="#" data-bs-toggle="dropdown"><i class="bi bi-book"></i> Foundations <span class="badge bg-light text-primary nav-wp-badge">WP2</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="framework.html"><i class="bi bi-diagram-3 me-2"></i>Shared Pedagogical Framework</a></li>
+                            <li><a class="dropdown-item" href="itinerary.html"><i class="bi bi-signpost-split me-2"></i>Learning Pathways</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="toolkit.html"><i class="bi bi-tools me-2"></i>Toolkit for Teachers</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"><i class="bi bi-rocket-takeoff"></i> Pilots <span class="badge bg-warning text-dark nav-wp-badge">WP3</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="diagnostic.html"><i class="bi bi-clipboard2-pulse me-2"></i>Initial Diagnostic</a></li>
+                            <li><a class="dropdown-item" href="activities.html"><i class="bi bi-puzzle me-2"></i>Learning Activities</a></li>
+                            <li><a class="dropdown-item" href="evaluation.html"><i class="bi bi-check2-square me-2"></i>Formative Assessment</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="students.html"><i class="bi bi-people me-2"></i>Student Profiles</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"><i class="bi bi-speedometer2"></i> Dashboards</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="dashboard_teacher.html"><i class="bi bi-person-workspace me-2"></i>Teacher Dashboard</a></li>
+                            <li><a class="dropdown-item" href="dashboard_student.html"><i class="bi bi-mortarboard me-2"></i>Student Dashboard</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="recommendations.html"><i class="bi bi-lightbulb me-2"></i>AI Recommendations</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="consolidation.html"><i class="bi bi-file-earmark-check"></i> Results <span class="badge bg-success nav-wp-badge">WP4</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="simulation.html"><i class="bi bi-cpu"></i> RL Simulation</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container-fluid py-4">
+        <div class="toolkit-hero">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1><i class="bi bi-tools me-3"></i>Toolkit for Teachers</h1>
+                    <p class="lead mb-0">Practical resources, guides, and training materials to effectively implement AI-powered personalised learning pathways in your classroom.</p>
+                </div>
+                <div class="col-lg-4 text-center">
+                    <div class="bg-white bg-opacity-10 rounded-3 p-3">
+                        <h5 class="mb-2">Toolkit Status</h5>
+                        <span class="badge bg-warning text-dark fs-6">Beta Version</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-12"><h3 class="mb-4"><i class="bi bi-grid-3x3-gap me-2"></i>Quick Access Resources</h3></div>
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="card resource-card">
+                    <div class="card-body text-center p-4">
+                        <div class="resource-icon bg-primary bg-opacity-10 mx-auto"><i class="bi bi-book text-primary"></i></div>
+                        <h5>User Guide</h5>
+                        <p class="text-muted small">Complete platform manual with step-by-step instructions</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="card resource-card">
+                    <div class="card-body text-center p-4">
+                        <div class="resource-icon bg-success bg-opacity-10 mx-auto"><i class="bi bi-play-circle text-success"></i></div>
+                        <h5>Video Tutorials</h5>
+                        <p class="text-muted small">Short videos explaining key platform features</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="card resource-card">
+                    <div class="card-body text-center p-4">
+                        <div class="resource-icon bg-warning bg-opacity-10 mx-auto"><i class="bi bi-file-earmark-text text-warning"></i></div>
+                        <h5>Templates</h5>
+                        <p class="text-muted small">Ready-to-use activity templates and lesson plans</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="card resource-card">
+                    <div class="card-body text-center p-4">
+                        <div class="resource-icon bg-info bg-opacity-10 mx-auto"><i class="bi bi-question-circle text-info"></i></div>
+                        <h5>FAQ</h5>
+                        <p class="text-muted small">Answers to frequently asked questions</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-primary text-white"><h4 class="mb-0"><i class="bi bi-book me-2"></i>Platform User Guide</h4></div>
+                    <div class="card-body">
+                        <div class="guide-item" style="border-color: #4CAF50;">
+                            <div class="d-flex align-items-start">
+                                <div class="guide-step bg-success me-3">1</div>
+                                <div><h5>Initial Setup</h5><p class="mb-0">Configure your class and register students on the platform.</p></div>
+                            </div>
+                        </div>
+                        <div class="guide-item" style="border-color: #2196F3;">
+                            <div class="d-flex align-items-start">
+                                <div class="guide-step bg-primary me-3">2</div>
+                                <div><h5>Run Initial Diagnostic</h5><p class="mb-0">Assess students' starting levels across all competences.</p></div>
+                            </div>
+                        </div>
+                        <div class="guide-item" style="border-color: #9C27B0;">
+                            <div class="d-flex align-items-start">
+                                <div class="guide-step me-3" style="background: #9C27B0;">3</div>
+                                <div><h5>Assign Learning Activities</h5><p class="mb-0">Guide students through personalized learning paths.</p></div>
+                            </div>
+                        </div>
+                        <div class="guide-item" style="border-color: #FF9800;">
+                            <div class="d-flex align-items-start">
+                                <div class="guide-step bg-warning me-3">4</div>
+                                <div><h5>Monitor & Intervene</h5><p class="mb-0">Use dashboards to track progress and identify students needing support.</p></div>
+                            </div>
+                        </div>
+                        <div class="guide-item" style="border-color: #E91E63;">
+                            <div class="d-flex align-items-start">
+                                <div class="guide-step me-3" style="background: #E91E63;">5</div>
+                                <div><h5>Formative Evaluation</h5><p class="mb-0">Continuously assess learning and adjust pathways as needed.</p></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-12"><h3 class="mb-4"><i class="bi bi-play-circle me-2"></i>Video Tutorials</h3></div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="video-placeholder"><i class="bi bi-play-btn fs-1 mb-3"></i><p class="mb-0">Platform Overview</p><small class="opacity-50">5:30 min</small></div>
+                    <div class="card-body"><h6>Getting Started</h6><p class="small text-muted mb-0">Introduction to the InfiniteLearner AI platform.</p></div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="video-placeholder"><i class="bi bi-play-btn fs-1 mb-3"></i><p class="mb-0">Student Management</p><small class="opacity-50">4:15 min</small></div>
+                    <div class="card-body"><h6>Managing Students</h6><p class="small text-muted mb-0">How to create and manage student profiles.</p></div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="video-placeholder"><i class="bi bi-play-btn fs-1 mb-3"></i><p class="mb-0">Using the Dashboard</p><small class="opacity-50">6:45 min</small></div>
+                    <div class="card-body"><h6>Teacher Dashboard</h6><p class="small text-muted mb-0">Understanding learning signals and progress.</p></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card bg-success text-white">
+                    <div class="card-body text-center py-4">
+                        <h4><i class="bi bi-headset me-2"></i>Need More Help?</h4>
+                        <p class="mb-3">Contact our support team for assistance</p>
+                        <a href="mailto:mchaves@upo.es" class="btn btn-light"><i class="bi bi-envelope me-2"></i>Email Support</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-light py-4 mt-4">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-4 text-center text-md-start footer-logos">
+                    <img src="static/img/upo.jpg" alt="UPO" onerror="this.style.display='none'">
+                    <img src="static/img/incoma.jpg" alt="INCOMA" onerror="this.style.display='none'">
+                </div>
+                <div class="col-md-4 text-center"><p class="mb-1"><strong>InfiniteLearner AI</strong></p><small class="text-muted">ERASMUS-EDU-2026-POL-EXP-T03-DIGITAL-BS</small></div>
+                <div class="col-md-4 text-center text-md-end"><img src="static/img/erasmus.jpg" alt="EU" style="max-height:35px" onerror="this.style.display='none'"></div>
+            </div>
+            <div class="eu-disclaimer text-center mt-3"><small>Co-funded by the European Union. Views and opinions expressed are those of the author(s) only.</small></div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
