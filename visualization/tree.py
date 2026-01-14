@@ -33,6 +33,11 @@ def generate_tree_data(learning_path, student_id: Optional[str] = None) -> Dict:
         else:
             perf = node.performance
 
+        # Get activities if available
+        activities = {}
+        if hasattr(node, 'activities') and node.activities:
+            activities = node.activities
+
         return {
             'id': node.id,
             'name': node.title,
@@ -45,6 +50,7 @@ def generate_tree_data(learning_path, student_id: Optional[str] = None) -> Dict:
             'objectives': node.learning_objectives,
             'strategies': [s.value for s in node.recommended_strategies],
             'methodology': node.methodology.value,
+            'activities': activities,
             'performance': {
                 'completionRate': round(perf.completion_rate, 1),
                 'averageScore': round(perf.average_score, 1),

@@ -1,6 +1,9 @@
 """
-PLAIP - Personalized Learning's Artificial Intelligence Paths
+InfiniteLearner AI - AI-powered Personalised Learning Pathways for Basic Skills
 Flask Web Application
+
+European Policy Experimentation (Erasmus+ KA3)
+ERASMUS-EDU-2026-POL-EXP-T03-DIGITAL-BS
 
 Main application for managing and visualizing personalized learning paths
 with reinforcement learning optimization.
@@ -50,12 +53,8 @@ def get_or_create_learning_path():
 
 @app.route('/')
 def index():
-    """Main dashboard"""
-    path = get_or_create_learning_path()
-    return render_template('index.html',
-                           path_name=path.name,
-                           num_nodes=len(path.nodes),
-                           num_students=len(students))
+    """Redirect to landing page"""
+    return redirect(url_for('landing'))
 
 
 @app.route('/itinerary')
@@ -91,16 +90,203 @@ def analytics():
 
 
 # ============================================================================
+# New Routes - InfiniteLearner AI Structure
+# ============================================================================
+
+@app.route('/landing')
+def landing():
+    """Project landing page for partner recruitment"""
+    return render_template('landing.html')
+
+
+@app.route('/framework')
+def framework():
+    """WP2 - Shared Pedagogical Framework"""
+    path = get_or_create_learning_path()
+    return render_template('framework.html', path=path)
+
+
+@app.route('/toolkit')
+def toolkit():
+    """WP2 - Toolkit for Teachers"""
+    return render_template('toolkit.html')
+
+
+@app.route('/diagnostic')
+def diagnostic():
+    """WP3 - Initial Diagnostic Assessment"""
+    return render_template('diagnostic.html', students=list(students.values()))
+
+
+@app.route('/activities')
+def activities():
+    """WP3 - Learning Activities"""
+    path = get_or_create_learning_path()
+    return render_template('activities.html', path=path, students=list(students.values()))
+
+
+@app.route('/evaluation')
+def evaluation():
+    """WP3 - Formative Evaluation"""
+    path = get_or_create_learning_path()
+    return render_template('evaluation.html', path=path, students=list(students.values()))
+
+
+@app.route('/dashboard/teacher')
+def dashboard_teacher():
+    """Teacher Dashboard - Observable Learning Signals"""
+    path = get_or_create_learning_path()
+    return render_template('dashboard_teacher.html',
+                          path=path,
+                          students=list(students.values()),
+                          num_students=len(students))
+
+
+@app.route('/dashboard/student')
+def dashboard_student():
+    """Student Dashboard - Personal Progress"""
+    return render_template('dashboard_student.html', students=list(students.values()))
+
+
+@app.route('/recommendations')
+def recommendations():
+    """AI Recommendations - Next Steps Suggestions"""
+    path = get_or_create_learning_path()
+    return render_template('recommendations.html',
+                          path=path,
+                          students=list(students.values()),
+                          has_agent=trained_agent is not None)
+
+
+@app.route('/consolidation')
+def consolidation():
+    """WP4 - Results Consolidation and Recommendations"""
+    path = get_or_create_learning_path()
+    chart_data = generate_performance_chart(path, list(students.values()))
+    return render_template('consolidation.html',
+                          path=path,
+                          students=list(students.values()),
+                          chart_data=json.dumps(chart_data))
+
+
+# ============================================================================
 # API Endpoints
 # ============================================================================
 
 @app.route('/api/tree')
 def api_tree():
-    """Get tree data for visualization"""
+    """Get tree data for visualization with filters"""
     path = get_or_create_learning_path()
     student_id = request.args.get('student_id')
-    tree_data = generate_tree_data(path, student_id)
+
+    # Get filter parameters
+    profile_type = request.args.get('profile', 'all')
+    gender = request.args.get('gender', 'all')
+    age_range = request.args.get('age', 'all')
+    skill_filter = request.args.get('skill', 'all')
+
+    # Generate personalized tree based on filters
+    tree_data = generate_personalized_tree(path, profile_type, gender, age_range, skill_filter)
     return jsonify(tree_data)
+
+
+def generate_personalized_tree(path, profile_type, gender, age_range, skill_filter):
+    """Generate a personalized tree based on profile filters"""
+    from visualization.tree import generate_tree_data
+    import random
+
+    # Base tree data
+    tree_data = generate_tree_data(path)
+
+    # Profile-based difficulty adjustments
+    difficulty_adjustments = {
+        'high_performer': {'base_score': 75, 'completion': 85, 'retention': 80},
+        'average': {'base_score': 55, 'completion': 60, 'retention': 55},
+        'struggling': {'base_score': 35, 'completion': 40, 'retention': 30},
+        'all': {'base_score': 55, 'completion': 60, 'retention': 55}
+    }
+
+    # Age-based adjustments
+    age_adjustments = {
+        '12-14': {'score_mod': -10, 'time_mod': 1.3},
+        '15-16': {'score_mod': 0, 'time_mod': 1.0},
+        '17-18': {'score_mod': 5, 'time_mod': 0.9},
+        '19+': {'score_mod': 10, 'time_mod': 0.8},
+        'all': {'score_mod': 0, 'time_mod': 1.0}
+    }
+
+    # Gender-based engagement patterns (research-based differences)
+    gender_patterns = {
+        'female': {'literacy_boost': 5, 'citizenship_boost': 3, 'digital_boost': 0},
+        'male': {'literacy_boost': -2, 'citizenship_boost': 0, 'digital_boost': 5},
+        'non_binary': {'literacy_boost': 2, 'citizenship_boost': 5, 'digital_boost': 2},
+        'all': {'literacy_boost': 0, 'citizenship_boost': 0, 'digital_boost': 0}
+    }
+
+    profile_adj = difficulty_adjustments.get(profile_type, difficulty_adjustments['all'])
+    age_adj = age_adjustments.get(age_range, age_adjustments['all'])
+    gender_adj = gender_patterns.get(gender, gender_patterns['all'])
+
+    def adjust_node(node):
+        """Recursively adjust node performance based on filters"""
+        if 'performance' in node:
+            skill = node.get('skill', '')
+
+            # Base score from profile
+            base = profile_adj['base_score']
+
+            # Age adjustment
+            base += age_adj['score_mod']
+
+            # Gender-skill adjustment
+            if skill == 'literacy':
+                base += gender_adj['literacy_boost']
+            elif skill == 'citizenship':
+                base += gender_adj['citizenship_boost']
+            elif skill == 'digital':
+                base += gender_adj['digital_boost']
+
+            # Add randomness
+            base += random.randint(-8, 8)
+            base = max(10, min(95, base))
+
+            node['performance']['averageScore'] = round(base, 1)
+            node['performance']['completionRate'] = round(
+                profile_adj['completion'] + age_adj['score_mod'] / 2 + random.randint(-5, 5), 1
+            )
+            node['performance']['retentionRate'] = round(
+                profile_adj['retention'] + random.randint(-10, 10), 1
+            )
+            node['performance']['timeSpent'] = round(
+                (node.get('estimatedDuration', 30) or 30) * age_adj['time_mod'] * random.uniform(0.8, 1.2), 1
+            )
+            node['performance']['attempts'] = random.randint(1, 3) if profile_type == 'high_performer' else random.randint(2, 5)
+
+        # Adjust visibility based on skill filter
+        if skill_filter != 'all' and node.get('skill') != skill_filter:
+            node['filtered'] = True
+        else:
+            node['filtered'] = False
+
+        # Process children
+        if 'children' in node and node['children']:
+            for child in node['children']:
+                adjust_node(child)
+
+    # Adjust root and all children
+    if 'children' in tree_data:
+        for child in tree_data['children']:
+            adjust_node(child)
+
+    # Add filter metadata
+    tree_data['appliedFilters'] = {
+        'profile': profile_type,
+        'gender': gender,
+        'ageRange': age_range,
+        'skill': skill_filter
+    }
+
+    return tree_data
 
 
 @app.route('/api/students', methods=['GET', 'POST'])

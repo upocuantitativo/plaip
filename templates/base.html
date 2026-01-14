@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}PLAIP{% endblock %} - Personalized Learning Paths</title>
+    <title>{% block title %}InfiniteLearner AI{% endblock %}</title>
 
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -12,49 +12,178 @@
     <!-- Custom CSS -->
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
 
+    <style>
+        .logo-bar {
+            background: #fff;
+            padding: 10px 0;
+            border-bottom: 3px solid #003399;
+        }
+        .logo-bar img {
+            max-height: 50px;
+            margin: 0 15px;
+        }
+        .eu-flag {
+            max-height: 45px;
+        }
+        .navbar-brand-custom {
+            font-weight: 700;
+            font-size: 1.3rem;
+        }
+        .nav-wp-badge {
+            font-size: 0.65rem;
+            padding: 2px 5px;
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+        .dropdown-menu {
+            min-width: 280px;
+        }
+        .footer-logos img {
+            max-height: 40px;
+            margin: 0 10px;
+            opacity: 0.8;
+        }
+        .eu-disclaimer {
+            font-size: 0.75rem;
+            color: #666;
+            max-width: 600px;
+            margin: 10px auto;
+        }
+    </style>
+
     {% block head %}{% endblock %}
 </head>
 <body>
+    <!-- Logo Bar -->
+    <div class="logo-bar">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <div class="d-flex align-items-center">
+                    <!-- UPO Logo -->
+                    <img src="{{ url_for('static', filename='img/upo.jpg') }}" alt="Pablo de Olavide University"
+                         onerror="this.outerHTML='<span class=\'badge bg-primary me-2\'>UPO</span>'">
+                    <!-- INCOMA Logo -->
+                    <img src="{{ url_for('static', filename='img/incoma.jpg') }}" alt="INCOMA"
+                         onerror="this.outerHTML='<span class=\'badge bg-info me-2\'>INCOMA</span>'">
+                </div>
+                <div class="text-center flex-grow-1">
+                    <span class="fw-bold text-primary" style="font-size: 1.1rem;">
+                        Erasmus+ KA3 - European Policy Experimentation
+                    </span>
+                </div>
+                <div>
+                    <!-- Erasmus+ Logo -->
+                    <img src="{{ url_for('static', filename='img/erasmus.jpg') }}" alt="Co-funded by the European Union" class="eu-flag"
+                         onerror="this.outerHTML='<span class=\'badge bg-warning text-dark\'>EU Co-funded</span>'">
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{{ url_for('index') }}">
-                <i class="bi bi-diagram-3"></i> PLAIP
+            <a class="navbar-brand navbar-brand-custom" href="{{ url_for('landing') }}">
+                <i class="bi bi-infinity"></i> InfiniteLearner AI
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
+                    <!-- Project/Landing -->
                     <li class="nav-item">
-                        <a class="nav-link {% if request.endpoint == 'index' %}active{% endif %}" href="{{ url_for('index') }}">
-                            <i class="bi bi-house"></i> Inicio
+                        <a class="nav-link {% if request.endpoint == 'landing' %}active{% endif %}" href="{{ url_for('landing') }}">
+                            <i class="bi bi-house-heart"></i> Project
                         </a>
                     </li>
+
+                    <!-- WP2 - Foundations -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle {% if request.endpoint in ['itinerary', 'framework'] %}active{% endif %}"
+                           href="#" data-bs-toggle="dropdown">
+                            <i class="bi bi-book"></i> Foundations
+                            <span class="badge bg-light text-primary nav-wp-badge">WP2</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><h6 class="dropdown-header">WP2 - Methodological Foundation</h6></li>
+                            <li><a class="dropdown-item" href="{{ url_for('framework') }}">
+                                <i class="bi bi-diagram-3 me-2"></i>Shared Pedagogical Framework
+                            </a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('itinerary') }}">
+                                <i class="bi bi-signpost-split me-2"></i>Learning Pathways
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{{ url_for('toolkit') }}">
+                                <i class="bi bi-tools me-2"></i>Toolkit for Teachers
+                            </a></li>
+                        </ul>
+                    </li>
+
+                    <!-- WP3 - Pilots -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle {% if request.endpoint in ['diagnostic', 'activities', 'evaluation', 'students_page'] %}active{% endif %}"
+                           href="#" data-bs-toggle="dropdown">
+                            <i class="bi bi-rocket-takeoff"></i> Pilots
+                            <span class="badge bg-warning text-dark nav-wp-badge">WP3</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><h6 class="dropdown-header">WP3 - InfiniteLearner AI Pilots</h6></li>
+                            <li><a class="dropdown-item" href="{{ url_for('diagnostic') }}">
+                                <i class="bi bi-clipboard2-pulse me-2"></i>Initial Diagnostic
+                            </a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('activities') }}">
+                                <i class="bi bi-puzzle me-2"></i>Learning Activities
+                            </a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('evaluation') }}">
+                                <i class="bi bi-check2-square me-2"></i>Formative Assessment
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{{ url_for('students_page') }}">
+                                <i class="bi bi-people me-2"></i>Student Profiles
+                            </a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Dashboards -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle {% if request.endpoint in ['dashboard_teacher', 'dashboard_student', 'analytics'] %}active{% endif %}"
+                           href="#" data-bs-toggle="dropdown">
+                            <i class="bi bi-speedometer2"></i> Dashboards
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><h6 class="dropdown-header">Observable Learning Signals</h6></li>
+                            <li><a class="dropdown-item" href="{{ url_for('dashboard_teacher') }}">
+                                <i class="bi bi-person-workspace me-2"></i>Teacher Dashboard
+                            </a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('dashboard_student') }}">
+                                <i class="bi bi-mortarboard me-2"></i>Student Dashboard
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{{ url_for('recommendations') }}">
+                                <i class="bi bi-lightbulb me-2"></i>AI Recommendations
+                            </a></li>
+                        </ul>
+                    </li>
+
+                    <!-- WP4 - Consolidation -->
                     <li class="nav-item">
-                        <a class="nav-link {% if request.endpoint == 'itinerary' %}active{% endif %}" href="{{ url_for('itinerary') }}">
-                            <i class="bi bi-diagram-3"></i> Itinerarios
+                        <a class="nav-link {% if request.endpoint == 'consolidation' %}active{% endif %}" href="{{ url_for('consolidation') }}">
+                            <i class="bi bi-file-earmark-check"></i> Results
+                            <span class="badge bg-success nav-wp-badge">WP4</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.endpoint == 'students_page' %}active{% endif %}" href="{{ url_for('students_page') }}">
-                            <i class="bi bi-people"></i> Estudiantes
-                        </a>
-                    </li>
+
+                    <!-- RL Simulation -->
                     <li class="nav-item">
                         <a class="nav-link {% if request.endpoint == 'simulation' %}active{% endif %}" href="{{ url_for('simulation') }}">
-                            <i class="bi bi-cpu"></i> Simulacion RL
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.endpoint == 'analytics' %}active{% endif %}" href="{{ url_for('analytics') }}">
-                            <i class="bi bi-graph-up"></i> Analiticas
+                            <i class="bi bi-cpu"></i> RL Simulation
                         </a>
                     </li>
                 </ul>
                 <span class="navbar-text">
-                    <span class="badge bg-light text-dark">
-                        <i class="bi bi-mortarboard"></i> Basic Skills
+                    <span class="badge bg-light text-primary">
+                        <i class="bi bi-shield-check"></i> Digital + Citizenship Skills
                     </span>
                 </span>
             </div>
@@ -67,13 +196,33 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-light py-3 mt-auto">
-        <div class="container text-center">
-            <small class="text-muted">
-                PLAIP - Personalized Learning's Artificial Intelligence Paths |
-                Proyecto ERASMUS-EDU-2026-POL-EXP-T03 |
-                Universidad Pablo de Olavide
-            </small>
+    <footer class="bg-light py-4 mt-auto">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-4 text-center text-md-start footer-logos">
+                    <img src="{{ url_for('static', filename='img/upo.jpg') }}" alt="UPO"
+                         onerror="this.style.display='none'">
+                    <img src="{{ url_for('static', filename='img/incoma.jpg') }}" alt="INCOMA"
+                         onerror="this.style.display='none'">
+                </div>
+                <div class="col-md-4 text-center">
+                    <p class="mb-1"><strong>InfiniteLearner AI</strong></p>
+                    <small class="text-muted">
+                        ERASMUS-EDU-2026-POL-EXP-T03-DIGITAL-BS
+                    </small>
+                </div>
+                <div class="col-md-4 text-center text-md-end">
+                    <img src="{{ url_for('static', filename='img/erasmus.jpg') }}" alt="EU" style="max-height: 35px;"
+                         onerror="this.style.display='none'">
+                </div>
+            </div>
+            <div class="eu-disclaimer text-center mt-3">
+                <small>
+                    Co-funded by the European Union. Views and opinions expressed are however those of the author(s) only
+                    and do not necessarily reflect those of the European Union or the European Education and Culture Executive Agency (EACEA).
+                    Neither the European Union nor EACEA can be held responsible for them.
+                </small>
+            </div>
         </div>
     </footer>
 
@@ -83,6 +232,8 @@
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <!-- Plotly -->
     <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Custom JS -->
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 

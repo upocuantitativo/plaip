@@ -1,0 +1,352 @@
+{% extends "base.html" %}
+
+{% block title %}Teacher Dashboard{% endblock %}
+
+{% block head %}
+<style>
+    .signal-card {
+        border-radius: 15px;
+        transition: all 0.3s;
+    }
+    .signal-card:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+    .metric-value { font-size: 2.5rem; font-weight: 700; }
+    .trend-up { color: #28a745; }
+    .trend-down { color: #dc3545; }
+    .student-row:hover { background: #f8f9fa; }
+    .alert-badge { position: absolute; top: -5px; right: -5px; }
+    .pattern-indicator {
+        width: 10px; height: 10px; border-radius: 50%;
+        display: inline-block; margin-right: 5px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('landing') }}">Project</a></li>
+                <li class="breadcrumb-item">Dashboards</li>
+                <li class="breadcrumb-item active">Teacher Dashboard</li>
+            </ol>
+        </nav>
+        <h1><i class="bi bi-person-workspace text-primary"></i> Teacher Dashboard</h1>
+        <p class="text-muted lead">
+            Observable Learning Signals visualization. Monitor student progress, identify learning patterns,
+            and make informed pedagogical decisions.
+        </p>
+    </div>
+</div>
+
+<!-- Teacher Role Alert -->
+<div class="alert alert-info mb-4">
+    <div class="row align-items-center">
+        <div class="col-auto">
+            <i class="bi bi-person-check fs-3"></i>
+        </div>
+        <div class="col">
+            <strong>Teacher-centered approach:</strong> The platform provides data and suggestions,
+            but the final pedagogical decision always corresponds to you. AI supports, not replaces,
+            your professional judgement.
+        </div>
+    </div>
+</div>
+
+<!-- Overview Metrics -->
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="card signal-card h-100 border-0 shadow-sm">
+            <div class="card-body text-center">
+                <div class="metric-value text-primary">{{ num_students }}</div>
+                <p class="text-muted mb-0">Active Students</p>
+                <small class="trend-up"><i class="bi bi-arrow-up"></i> 2 this week</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card signal-card h-100 border-0 shadow-sm">
+            <div class="card-body text-center">
+                <div class="metric-value text-success">68%</div>
+                <p class="text-muted mb-0">Avg Completion Rate</p>
+                <small class="trend-up"><i class="bi bi-arrow-up"></i> +5% vs last week</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card signal-card h-100 border-0 shadow-sm">
+            <div class="card-body text-center">
+                <div class="metric-value text-warning">3</div>
+                <p class="text-muted mb-0">Alerts</p>
+                <small class="text-muted">Students needing attention</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card signal-card h-100 border-0 shadow-sm">
+            <div class="card-body text-center">
+                <div class="metric-value text-info">24</div>
+                <p class="text-muted mb-0">Activities Completed</p>
+                <small class="text-muted">Today across all students</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Observable Learning Signals -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="bi bi-broadcast me-2"></i>Observable Learning Signals</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h6 class="text-muted mb-3">Response Patterns</h6>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <span class="pattern-indicator bg-success"></span>
+                                Correct responses: <strong>72%</strong>
+                            </li>
+                            <li class="mb-2">
+                                <span class="pattern-indicator bg-warning"></span>
+                                Partial responses: <strong>18%</strong>
+                            </li>
+                            <li class="mb-2">
+                                <span class="pattern-indicator bg-danger"></span>
+                                Incorrect responses: <strong>10%</strong>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <h6 class="text-muted mb-3">Engagement Metrics</h6>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <i class="bi bi-arrow-repeat text-info me-2"></i>
+                                Avg attempts per activity: <strong>1.8</strong>
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-clock text-warning me-2"></i>
+                                Avg time per activity: <strong>12 min</strong>
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-pencil text-primary me-2"></i>
+                                Response revisions: <strong>23%</strong>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <h6 class="text-muted mb-3">Progression</h6>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                On track: <strong>{{ (students|length * 0.6)|int }} students</strong>
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-exclamation-circle text-warning me-2"></i>
+                                Needs support: <strong>{{ (students|length * 0.3)|int }} students</strong>
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-x-circle text-danger me-2"></i>
+                                At risk: <strong>{{ (students|length * 0.1)|int }} students</strong>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Student Overview Table -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-people me-2"></i>Student Progress Overview</h5>
+                <div>
+                    <select class="form-select form-select-sm" style="width: auto;">
+                        <option>All skills</option>
+                        <option>Digital</option>
+                        <option>Citizenship</option>
+                        <option>Literacy</option>
+                        <option>Numeracy</option>
+                    </select>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Student</th>
+                                <th>Profile</th>
+                                <th>Progress</th>
+                                <th>Last Activity</th>
+                                <th>Score</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for student in students %}
+                            <tr class="student-row">
+                                <td>
+                                    <strong>{{ student.name }}</strong>
+                                    <br><small class="text-muted">{{ student.demographics.education_stage.name }}</small>
+                                </td>
+                                <td>
+                                    {% if student.cognitive.prior_knowledge.digital > 60 %}
+                                    <span class="badge bg-success">High performer</span>
+                                    {% elif student.cognitive.prior_knowledge.digital > 40 %}
+                                    <span class="badge bg-warning text-dark">Average</span>
+                                    {% else %}
+                                    <span class="badge bg-danger">Struggling</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="progress" style="height: 8px; width: 100px;">
+                                        <div class="progress-bar bg-primary" style="width: {{ student.cognitive.prior_knowledge.digital }}%"></div>
+                                    </div>
+                                    <small>{{ student.cognitive.prior_knowledge.digital|int }}%</small>
+                                </td>
+                                <td><small>2 hours ago</small></td>
+                                <td><strong>{{ (student.cognitive.prior_knowledge.digital * 0.9)|int }}</strong>/100</td>
+                                <td>
+                                    {% if student.emotional.intrinsic_motivation > 60 %}
+                                    <span class="badge bg-success"><i class="bi bi-check-circle"></i> On track</span>
+                                    {% elif student.emotional.intrinsic_motivation > 40 %}
+                                    <span class="badge bg-warning text-dark"><i class="bi bi-exclamation-circle"></i> Monitor</span>
+                                    {% else %}
+                                    <span class="badge bg-danger"><i class="bi bi-x-circle"></i> At risk</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary" title="View details">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-info" title="View recommendations">
+                                        <i class="bi bi-lightbulb"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Row -->
+<div class="row g-4 mb-4">
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-bar-chart me-2"></i>Progress by Skill</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="skillChart" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-graph-up me-2"></i>Weekly Progression</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="progressChart" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Alerts Section -->
+<div class="row">
+    <div class="col-12">
+        <div class="card border-warning">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0"><i class="bi bi-bell me-2"></i>Attention Required</h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group list-group-flush">
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <i class="bi bi-exclamation-triangle text-warning me-2"></i>
+                            <strong>Student A</strong> - Low engagement in Digital Skills module
+                            <br><small class="text-muted">3 activities abandoned in the last 2 days</small>
+                        </div>
+                        <button class="btn btn-sm btn-outline-warning">Review</button>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <i class="bi bi-graph-down text-danger me-2"></i>
+                            <strong>Student B</strong> - Declining performance in Citizenship
+                            <br><small class="text-muted">Score dropped 15% in the last week</small>
+                        </div>
+                        <button class="btn btn-sm btn-outline-danger">Review</button>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <i class="bi bi-clock text-info me-2"></i>
+                            <strong>Student C</strong> - Extended time on activities
+                            <br><small class="text-muted">Average time 3x higher than peers</small>
+                        </div>
+                        <button class="btn btn-sm btn-outline-info">Review</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Skill Chart
+const skillCtx = document.getElementById('skillChart').getContext('2d');
+new Chart(skillCtx, {
+    type: 'bar',
+    data: {
+        labels: ['Digital', 'Citizenship', 'Literacy', 'Numeracy'],
+        datasets: [{
+            label: 'Class Average',
+            data: [72, 65, 78, 60],
+            backgroundColor: ['#9C27B0', '#FF9800', '#4CAF50', '#2196F3']
+        }]
+    },
+    options: {
+        scales: { y: { beginAtZero: true, max: 100 } },
+        plugins: { legend: { display: false } }
+    }
+});
+
+// Progress Chart
+const progressCtx = document.getElementById('progressChart').getContext('2d');
+new Chart(progressCtx, {
+    type: 'line',
+    data: {
+        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5'],
+        datasets: [{
+            label: 'Completion Rate',
+            data: [45, 52, 58, 62, 68],
+            borderColor: '#0d6efd',
+            tension: 0.3,
+            fill: false
+        }, {
+            label: 'Avg Score',
+            data: [55, 60, 63, 67, 72],
+            borderColor: '#28a745',
+            tension: 0.3,
+            fill: false
+        }]
+    },
+    options: {
+        scales: { y: { beginAtZero: true, max: 100 } }
+    }
+});
+</script>
+{% endblock %}
