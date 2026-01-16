@@ -1,5 +1,5 @@
 """
-InfiniteLearner AI - AI-powered Personalised Learning Pathways for Basic Skills
+InfiniteLearner - AI-powered Personalised Learning Pathways for Basic Skills
 Flask Web Application
 
 European Policy Experimentation (Erasmus+ KA3)
@@ -90,7 +90,7 @@ def analytics():
 
 
 # ============================================================================
-# New Routes - InfiniteLearner AI Structure
+# New Routes - InfiniteLearner Structure
 # ============================================================================
 
 @app.route('/landing')

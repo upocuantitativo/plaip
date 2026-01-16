@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='img/favicon.svg') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}InfiniteLearner AI{% endblock %}</title>
+    <title>{% block title %}InfiniteLearner{% endblock %}</title>
 
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -84,7 +85,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container-fluid">
             <a class="navbar-brand navbar-brand-custom" href="{{ url_for('landing') }}">
-                <i class="bi bi-infinity"></i> InfiniteLearner AI
+                <i class="bi bi-infinity"></i> InfiniteLearner
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -128,7 +129,7 @@
                             <span class="badge bg-warning text-dark nav-wp-badge">WP3</span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><h6 class="dropdown-header">WP3 - InfiniteLearner AI Pilots</h6></li>
+                            <li><h6 class="dropdown-header">WP3 - InfiniteLearner Pilots</h6></li>
                             <li><a class="dropdown-item" href="{{ url_for('diagnostic') }}">
                                 <i class="bi bi-clipboard2-pulse me-2"></i>Initial Diagnostic
                             </a></li>
@@ -206,7 +207,7 @@
                          onerror="this.style.display='none'">
                 </div>
                 <div class="col-md-4 text-center">
-                    <p class="mb-1"><strong>InfiniteLearner AI</strong></p>
+                    <p class="mb-1"><strong>InfiniteLearner</strong></p>
                     <small class="text-muted">
                         ERASMUS-EDU-2026-POL-EXP-T03-DIGITAL-BS
                     </small>
