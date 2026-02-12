@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg?v=2">
+    <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png?v=2">
+    <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png?v=2">
+    <link rel="apple-touch-icon" href="../favicon-180.png?v=2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfiniteLearner - KI-gesteuerte personalisierte Lernpfade</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #003399;
+            --secondary-color: #0066cc;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .logo-bar {
+            background: #fff;
+            padding: 10px 0;
+            border-bottom: 3px solid #003399;
+        }
+        .logo-bar img {
+            max-height: 50px;
+            margin: 0 15px;
+        }
+        .eu-flag {
+            max-height: 45px;
+        }
+        .navbar-brand-custom {
+            font-weight: 700;
+            font-size: 1.3rem;
+        }
+        .nav-wp-badge {
+            font-size: 0.65rem;
+            padding: 2px 5px;
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+        .dropdown-menu {
+            min-width: 280px;
+        }
+        .hero-section {
+            background: linear-gradient(135deg, #003399 0%, #0066cc 50%, #0099ff 100%);
+            color: white;
+            padding: 60px 0;
+        }
+        .hero-title { font-size: 3rem; font-weight: 700; }
+        .hero-subtitle { font-size: 1.3rem; opacity: 0.9; }
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .stat-card:hover { transform: translateY(-5px); }
+        .stat-number { font-size: 2.5rem; font-weight: 700; color: #003399; }
+        .wp-card { border-left: 4px solid; transition: all 0.3s; }
+        .wp-card:hover { box-shadow: 0 5px 20px rgba(0,0,0,0.15); }
+        .wp1 { border-color: #6c757d; }
+        .wp2 { border-color: #0d6efd; }
+        .wp3 { border-color: #ffc107; }
+        .wp4 { border-color: #198754; }
+        .wp5 { border-color: #dc3545; }
+        .skill-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 25px;
+            margin: 5px;
+            font-weight: 500;
+        }
+        .partner-card {
+            border: 2px dashed #dee2e6;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        .partner-card:hover { border-color: #003399; background: #f8f9fa; }
+        .timeline-item {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 20px;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 5px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: #003399;
+        }
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: 7px;
+            top: 20px;
+            width: 2px;
+            height: calc(100% + 5px);
+            background: #dee2e6;
+        }
+        .timeline-item:last-child::after { display: none; }
+        .cta-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 20px;
+            padding: 40px;
+        }
+        .footer-logos img {
+            max-height: 40px;
+            margin: 0 10px;
+            opacity: 0.8;
+        }
+        .eu-disclaimer {
+            font-size: 0.75rem;
+            color: #666;
+            max-width: 600px;
+            margin: 10px auto;
+        }
+
+        /* Language Selector Sidebar */
+        .lang-sidebar { position: fixed; left: 0; top: 50%; transform: translateY(-50%); z-index: 1050; display: flex; flex-direction: column; gap: 8px; padding: 10px 6px; background: rgba(255,255,255,0.95); border-radius: 0 12px 12px 0; box-shadow: 2px 2px 12px rgba(0,0,0,0.15); }
+        .lang-sidebar a { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; text-decoration: none; font-size: 0.75rem; font-weight: 700; color: #fff; transition: transform 0.2s, box-shadow 0.2s; }
+        .lang-sidebar a:hover { transform: scale(1.15); box-shadow: 0 2px 8px rgba(0,0,0,0.25); }
+        .lang-sidebar a.active { outline: 3px solid #003399; outline-offset: 2px; }
+        .lang-sidebar .lang-es { background: #c60b1e; }
+        .lang-sidebar .lang-en { background: #003478; }
+        .lang-sidebar .lang-de { background: #000; }
+        @media (max-width: 768px) { .lang-sidebar { top: auto; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: row; border-radius: 12px; padding: 6px 10px; } }
+    </style>
+</head>
+<body>
+    <!-- Language Selector Sidebar -->
+    <div class="lang-sidebar">
+        <a href="../es/index.html" class="lang-es" title="Espanol">ES</a>
+        <a href="../index.html" class="lang-en" title="English">EN</a>
+        <a href="index.html" class="lang-de active" title="Deutsch">DE</a>
+    </div>
+
+    <!-- Logo Bar -->
+    <div class="logo-bar">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <div class="d-flex align-items-center">
+                    <img src="../static/img/upo.jpg" alt="Pablo de Olavide Universitat"
+                         onerror="this.outerHTML='<span class=\'badge bg-primary me-2\'>UPO</span>'">
+                </div>
+                <div class="text-center flex-grow-1">
+                    <span class="fw-bold text-primary" style="font-size: 1.1rem;">
+                        Erasmus+ KA3 - Europäische Politikexperimentierung
+                    </span>
+                </div>
+                <div>
+                    <img src="../static/img/erasmus.jpg" alt="Kofinanziert von der Europäischen Union" class="eu-flag"
+                         onerror="this.outerHTML='<span class=\'badge bg-warning text-dark\'>EU-kofinanziert</span>'">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand navbar-brand-custom" href="index.html">
+                <i class="bi bi-infinity"></i> InfiniteLearner
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html">
+                            <i class="bi bi-house-heart"></i> Projekt
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#partners">
+                            <i class="bi bi-people-fill"></i> Partner
+                        </a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            <i class="bi bi-book"></i> Grundlagen
+                            <span class="badge bg-light text-primary nav-wp-badge">WP2</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><h6 class="dropdown-header">WP2 - Methodische Grundlagen</h6></li>
+                            <li><a class="dropdown-item" href="framework.html">
+                                <i class="bi bi-diagram-3 me-2"></i>Gemeinsamer Padagogischer Rahmen
+                            </a></li>
+                            <li><a class="dropdown-item" href="itinerary.html">
+                                <i class="bi bi-signpost-split me-2"></i>Lernpfade
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="toolkit.html">
+                                <i class="bi bi-tools me-2"></i>Toolkit fur Lehrkrafte
+                            </a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            <i class="bi bi-rocket-takeoff"></i> Pilotprojekte
+                            <span class="badge bg-warning text-dark nav-wp-badge">WP3</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><h6 class="dropdown-header">WP3 - InfiniteLearner Pilotprojekte</h6></li>
+                            <li><a class="dropdown-item" href="diagnostic.html">
+                                <i class="bi bi-clipboard2-pulse me-2"></i>Eingangsdiagnose
+                            </a></li>
+                            <li><a class="dropdown-item" href="activities.html">
+                                <i class="bi bi-puzzle me-2"></i>Lernaktivitaten
+                            </a></li>
+                            <li><a class="dropdown-item" href="evaluation.html">
+                                <i class="bi bi-check2-square me-2"></i>Formative Bewertung
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="students.html">
+                                <i class="bi bi-people me-2"></i>Schulerprofile
+                            </a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            <i class="bi bi-speedometer2"></i> Dashboards
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><h6 class="dropdown-header">Beobachtbare Lernsignale</h6></li>
+                            <li><a class="dropdown-item" href="dashboard_teacher.html">
+                                <i class="bi bi-person-workspace me-2"></i>Lehrkrafte-Dashboard
+                            </a></li>
+                            <li><a class="dropdown-item" href="dashboard_student.html">
+                                <i class="bi bi-mortarboard me-2"></i>Schuler-Dashboard
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="recommendations.html">
+                                <i class="bi bi-lightbulb me-2"></i>KI-Empfehlungen
+                            </a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="consolidation.html">
+                            <i class="bi bi-file-earmark-check"></i> Ergebnisse
+                            <span class="badge bg-success nav-wp-badge">WP4</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="simulation.html">
+                            <i class="bi bi-cpu"></i> RL-Simulation
+                        </a>
+                    </li>
+                </ul>
+                <span class="navbar-text">
+                    <span class="badge bg-light text-primary">
+                        <i class="bi bi-shield-check"></i> Digitale + Burgerschaftliche Kompetenzen
+                    </span>
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="hero-title mb-3">
+                        <i class="bi bi-infinity"></i> InfiniteLearner
+                    </h1>
+                    <p class="hero-subtitle mb-4">
+                        KI-gesteuerte personalisierte Lernpfade fur Grundkompetenzen
+                    </p>
+                    <p class="lead mb-4">
+                        Entwicklung und Validierung eines evidenzbasierten, ethischen und inklusiven Rahmens
+                        fur den Einsatz KI-gesteuerter personalisierter Lernpfade zur Forderung des Erwerbs
+                        von Grundkompetenzen in der Sekundarstufe und der beruflichen Erstausbildung (EQF-Stufen 2-4).
+                    </p>
+                    <div class="d-flex flex-wrap gap-3">
+                        <span class="badge bg-light text-primary p-3 fs-6">
+                            <i class="bi bi-calendar-event me-2"></i>Frist: 8. April 2026
+                        </span>
+                        <span class="badge bg-warning text-dark p-3 fs-6">
+                            <i class="bi bi-clock me-2"></i>36 Monate
+                        </span>
+                        <span class="badge bg-success p-3 fs-6">
+                            <i class="bi bi-currency-euro me-2"></i>Bis zu 1.000.000 EUR
+                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-4 text-center mt-4 mt-lg-0">
+                    <div class="bg-white rounded-4 p-4 text-dark">
+                        <h5 class="text-primary mb-3">Erasmus+ KA3</h5>
+                        <p class="mb-2"><strong>Europaische Politikexperimentierungen</strong></p>
+                        <p class="small text-muted mb-3">TOPIC 3: ERASMUS-EDU-2026-POL-EXP-T03-DIGITAL-BS</p>
+                        <hr>
+                        <p class="small mb-0">
+                            <i class="bi bi-info-circle me-1"></i>
+                            EU-Kofinanzierung: 80% des Gesamtbudgets
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Stats -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-number">4</div>
+                        <p class="mb-0">Grundkompetenzen</p>
+                        <small class="text-muted">Digital, Burgerschaftlich, Lesen, Rechnen</small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-number">EQF 2-4</div>
+                        <p class="mb-0">Bildungsstufen</p>
+                        <small class="text-muted">Sekundarstufe & Berufliche Erstausbildung</small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-number">5</div>
+                        <p class="mb-0">Arbeitspakete</p>
+                        <small class="text-muted">Methodik, Pilotprojekte, Konsolidierung</small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-number">3+</div>
+                        <p class="mb-0">EU-Lander</p>
+                        <small class="text-muted">Internationales Konsortium</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Context & Objectives -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 mb-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0"><i class="bi bi-globe-europe-africa me-2"></i>Europaischer Kontext</h5>
+                        </div>
+                        <div class="card-body">
+                            <p>Europaische Bildungssysteme befinden sich in einem Kontext beschleunigter digitaler Transformation,
+                            die durch die COVID-19-Krise und das rasche Aufkommen generativer KI intensiviert wurde.</p>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="bi bi-exclamation-triangle text-warning me-2"></i>
+                                    Anhaltende Lucken beim Erwerb von Grundkompetenzen</li>
+                                <li class="mb-2"><i class="bi bi-people text-info me-2"></i>
+                                    Insbesondere bei Lernenden aus benachteiligten Verhaltnissen</li>
+                                <li class="mb-2"><i class="bi bi-shield-exclamation text-danger me-2"></i>
+                                    Risiko der Verstarkung von Ungleichheiten ohne klare padagogische Rahmen</li>
+                                <li class="mb-2"><i class="bi bi-person-workspace text-primary me-2"></i>
+                                    Lehrkrafte mit KI-Erfahrung, aber begrenzter Vorbereitung</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0"><i class="bi bi-bullseye me-2"></i>Hauptziel</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="lead text-primary">Entwicklung und Validierung eines evidenzbasierten, ethischen und inklusiven Rahmens</p>
+                            <p>Fur den Einsatz KI-gesteuerter personalisierter Lernpfade zur Forderung des Erwerbs
+                            von Grundkompetenzen in der Sekundarstufe und der beruflichen Erstausbildung (EQF 2-4),
+                            ohne bestehende Ungleichheiten zu verstarken und unter Starkung (nicht Ersetzung) der
+                            padagogischen Rolle der Lehrkrafte.</p>
+                            <div class="alert alert-info mb-0">
+                                <i class="bi bi-lightbulb me-2"></i>
+                                <strong>Zentrale Erkenntnis:</strong> Der effektive Einsatz von PLPs hangt weniger von technologischer
+                                Raffinesse ab als von padagogischer Integration, Lehrkrafteautonomie, ethischer Steuerung
+                                und kontextueller Anpassung.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Basic Skills Focus -->
+    <section class="py-5">
+        <div class="container">
+            <h3 class="text-center mb-4"><i class="bi bi-stars me-2"></i>Behandelte Grundkompetenzen</h3>
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    <h5 class="text-primary"><i class="bi bi-cpu me-2"></i>Primarer Fokus: Digital + Burgerschaftlich</h5>
+                                    <p>Medienkompetenz, kritisches Denken und informierte Teilhabe am demokratischen Leben.</p>
+                                    <div class="d-flex flex-wrap">
+                                        <span class="skill-badge text-white" style="background: #9C27B0;">
+                                            <i class="bi bi-laptop me-1"></i>Digitale Kompetenzen
+                                        </span>
+                                        <span class="skill-badge bg-warning text-dark">
+                                            <i class="bi bi-flag me-1"></i>Burgerschaftliche Kompetenz
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <h5 class="text-secondary"><i class="bi bi-arrows-expand me-2"></i>Grundlegende Kompetenzen</h5>
+                                    <p>Lesen und Rechnen als grundlegende Kompetenzen, die effektives Lernen in den Bereichen Digital und Burgerschaftlichkeit ermoglichen.</p>
+                                    <div class="d-flex flex-wrap">
+                                        <span class="skill-badge bg-success text-white">
+                                            <i class="bi bi-book me-1"></i>Lesekompetenz
+                                        </span>
+                                        <span class="skill-badge bg-primary text-white">
+                                            <i class="bi bi-calculator me-1"></i>Rechenkompetenz
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="alert alert-secondary mb-0">
+                                <i class="bi bi-info-circle me-2"></i>
+                                Die Fahigkeit der Lernenden, sich kritisch mit Online-Informationen, digitalen Inhalten
+                                oder burgerschaftsbezogenen Aufgaben auseinanderzusetzen, hangt oft von ihrer Fahigkeit ab,
+                                Texte zu lesen und zu interpretieren, quantitative Informationen zu verstehen oder logischem
+                                und numerischem Denken zu folgen.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Work Packages -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h3 class="text-center mb-4"><i class="bi bi-diagram-3 me-2"></i>Arbeitspakete</h3>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 wp-card wp1">
+                        <div class="card-body">
+                            <span class="badge bg-secondary mb-2">WP1</span>
+                            <h5>Projektmanagement</h5>
+                            <p class="text-muted small">Qualitaetssicherung und Monitoring</p>
+                            <ul class="small">
+                                <li>Konsortiumkoordination</li>
+                                <li>Qualitaetssicherung</li>
+                                <li>Monitoring und Evaluation</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 wp-card wp2">
+                        <div class="card-body">
+                            <span class="badge bg-primary mb-2">WP2</span>
+                            <h5>Methodische Grundlagen</h5>
+                            <p class="text-muted small">Ko-Kreation des Rahmens</p>
+                            <ul class="small">
+                                <li>Desk- & Feldforschung</li>
+                                <li>Ko-Kreations-Labor</li>
+                                <li>Gemeinsamer Padagogischer Rahmen</li>
+                                <li>Toolkit fur Lehrkrafte (Beta)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 wp-card wp3">
+                        <div class="card-body">
+                            <span class="badge bg-warning text-dark mb-2">WP3</span>
+                            <h5>InfiniteLearner Pilotprojekte</h5>
+                            <p class="text-muted small">Implementierung & Bewertung</p>
+                            <ul class="small">
+                                <li>Konfiguration der digitalen Plattform</li>
+                                <li>Workshop zur Pilotbereitschaft</li>
+                                <li>Internationale mehrsprachige Pilotprojekte</li>
+                                <li>Begleitende und nachgelagerte Bewertung</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-6">
+                    <div class="card h-100 wp-card wp4">
+                        <div class="card-body">
+                            <span class="badge bg-success mb-2">WP4</span>
+                            <h5>Konsolidierung & Empfehlungen</h5>
+                            <p class="text-muted small">Evidenzsynthese</p>
+                            <ul class="small">
+                                <li>Feinabstimmung des Gemeinsamen Padagogischen Rahmens</li>
+                                <li>Konsolidierung des Toolkits fur Lehrkrafte</li>
+                                <li>Politikempfehlungen</li>
+                                <li>Replikationsrichtlinien</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-6">
+                    <div class="card h-100 wp-card wp5">
+                        <div class="card-body">
+                            <span class="badge bg-danger mb-2">WP5</span>
+                            <h5>Kommunikation & Nachhaltigkeit</h5>
+                            <p class="text-muted small">Bewusstseinsbildung</p>
+                            <ul class="small">
+                                <li>Kommunikationsstrategie</li>
+                                <li>Ergebnisverbreitung</li>
+                                <li>Nachhaltigkeitsplan</li>
+                                <li>Politiktransfer</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Platform Modules -->
+    <section class="py-5">
+        <div class="container">
+            <h3 class="text-center mb-4"><i class="bi bi-grid-3x3-gap me-2"></i>Plattformmodule</h3>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <div class="rounded-circle bg-info bg-opacity-10 d-inline-flex p-3 mb-3">
+                                <i class="bi bi-clipboard2-pulse text-info fs-2"></i>
+                            </div>
+                            <h5>Eingangsdiagnose</h5>
+                            <p class="small text-muted">Fragebogen und diagnostische Tests zur Bedarfsermittlung,
+                            Starken- und Schwachenanalyse und Initiierung des PLP.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <div class="rounded-circle bg-success bg-opacity-10 d-inline-flex p-3 mb-3">
+                                <i class="bi bi-puzzle text-success fs-2"></i>
+                            </div>
+                            <h5>Lernaktivitaten</h5>
+                            <p class="small text-muted">Kurze Ubungen, Mikro-Aufgaben, angeleitete Reflexionen
+                            und digitale Herausforderungen wahrend des Lernpfads.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <div class="rounded-circle bg-warning bg-opacity-10 d-inline-flex p-3 mb-3">
+                                <i class="bi bi-graph-up-arrow text-warning fs-2"></i>
+                            </div>
+                            <h5>Formative Bewertung</h5>
+                            <p class="small text-muted">Kontinuierliche Fortschrittsverfolgung zur Beobachtung
+                            der Entwicklung und Identifizierung anhaltender Schwierigkeiten.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <div class="rounded-circle bg-primary bg-opacity-10 d-inline-flex p-3 mb-3">
+                                <i class="bi bi-speedometer2 text-primary fs-2"></i>
+                            </div>
+                            <h5>Dashboards</h5>
+                            <p class="small text-muted">Visualisierung beobachtbarer Lernsignale:
+                            Antworten, Versuche, Zeitaufwand, Fortschritt, Lernmuster.</p>
+                            <div class="d-flex justify-content-center gap-2">
+                                <span class="badge bg-primary">Lehrkrafte</span>
+                                <span class="badge bg-secondary">Schuler</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <div class="rounded-circle bg-danger bg-opacity-10 d-inline-flex p-3 mb-3">
+                                <i class="bi bi-lightbulb text-danger fs-2"></i>
+                            </div>
+                            <h5>KI-Empfehlungen</h5>
+                            <p class="small text-muted">Vorschlage fur nachste Schritte, Schwierigkeitswarnungen,
+                            Verstarkung- oder Tempoanpassungsempfehlungen.</p>
+                            <div class="alert alert-warning small py-1 mb-0">
+                                <i class="bi bi-person-check me-1"></i>Endgultige Entscheidung stets bei den Lehrkraften
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call for Partners -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="cta-section">
+                <div class="row align-items-center">
+                    <div class="col-lg-8">
+                        <h3 class="text-primary mb-3"><i class="bi bi-people-fill me-2"></i>Partnersuche</h3>
+                        <p class="lead">Treten Sie dem InfiniteLearner-Konsortium bei</p>
+                        <p>Wir suchen europaische Institutionen, die an dieser bildungspolitischen Experimentierung teilnehmen mochten:</p>
+                        <ul>
+                            <li><strong>Universitaten</strong> mit Expertise in Bildungstechnologie, KI und Padagogik</li>
+                            <li><strong>Sekundarschulen und Berufsbildungszentren</strong> zur Durchfuhrung von Pilotprojekten</li>
+                            <li><strong>Organisationen</strong> spezialisiert auf die berufliche Weiterentwicklung von Lehrkraften</li>
+                            <li><strong>Einrichtungen</strong> mit Erfahrung in europaischer Bildungspolitik</li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="partner-card">
+                            <i class="bi bi-building display-4 text-primary mb-3"></i>
+                            <h5>Anforderungen</h5>
+                            <ul class="list-unstyled small text-start">
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Gultiger PIC</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Administrative Informationen</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Bedarfsanalyse</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Assoziierte Partner</li>
+                            </ul>
+                            <a href="mailto:mchaves@upo.es" class="btn btn-primary mt-3">
+                                <i class="bi bi-envelope me-2"></i>Kontaktieren Sie uns
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Current Consortium -->
+    <section class="py-5" id="partners">
+        <div class="container">
+            <h3 class="text-center mb-4"><i class="bi bi-diagram-2 me-2"></i>Aktuelles Konsortium</h3>
+            <div class="row justify-content-center g-4">
+                <div class="col-md-3">
+                    <div class="card h-100 text-center border-primary">
+                        <div class="card-header bg-primary text-white">
+                            <span class="badge bg-warning text-dark">Hauptantragsteller</span>
+                        </div>
+                        <div class="card-body">
+                            <a href="https://www.upo.es/" target="_blank" rel="noopener noreferrer">
+                                <img src="../static/img/upo.jpg" alt="UPO" class="mb-3" style="max-height: 60px;"
+                                     onerror="this.outerHTML='<i class=\'bi bi-mortarboard display-3 text-primary\'></i>'">
+                            </a>
+                            <h5><a href="https://www.upo.es/" target="_blank" rel="noopener noreferrer" class="text-decoration-none text-dark">Pablo de Olavide Universitat</a></h5>
+                            <p class="text-muted small mb-0">Sevilla, Spanien</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card h-100 text-center">
+                        <div class="card-header bg-info text-white">Partner</div>
+                        <div class="card-body">
+                            <a href="https://www.earlall.eu/" target="_blank" rel="noopener noreferrer">
+                                <img src="../static/img/logo-earlall.png" alt="EARLALL" class="mb-3" style="max-height: 60px; max-width: 100%; object-fit: contain;"
+                                     onerror="this.outerHTML='<i class=\'bi bi-building display-3 text-info\'></i>'">
+                            </a>
+                            <h5><a href="https://www.earlall.eu/" target="_blank" rel="noopener noreferrer" class="text-decoration-none text-dark">EARLALL</a></h5>
+                            <p class="text-muted small mb-0">Europaischer Verband regionaler und lokaler Behorden fur lebenslanges Lernen</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card h-100 text-center">
+                        <div class="card-header bg-info text-white">Partner</div>
+                        <div class="card-body">
+                            <a href="https://mic.scv.si/" target="_blank" rel="noopener noreferrer">
+                                <img src="../static/img/medpodjetniski.png" alt="MIC" class="mb-3" style="max-height: 60px; max-width: 100%; object-fit: contain;"
+                                     onerror="this.outerHTML='<i class=\'bi bi-building display-3 text-info\'></i>'">
+                            </a>
+                            <h5><a href="https://mic.scv.si/" target="_blank" rel="noopener noreferrer" class="text-decoration-none text-dark">Medpodjetniski izobrazevalni center</a></h5>
+                            <p class="text-muted small mb-0">Slowenien</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card h-100 text-center">
+                        <div class="card-header bg-info text-white">Partner</div>
+                        <div class="card-body">
+                            <a href="https://www.evta.eu/" target="_blank" rel="noopener noreferrer">
+                                <img src="../static/img/evta.png" alt="EVTA" class="mb-3" style="max-height: 60px; max-width: 100%; object-fit: contain;"
+                                     onerror="this.outerHTML='<i class=\'bi bi-building display-3 text-info\'></i>'">
+                            </a>
+                            <h5><a href="https://www.evta.eu/" target="_blank" rel="noopener noreferrer" class="text-decoration-none text-dark">EVTA</a></h5>
+                            <p class="text-muted small mb-0">Europaischer Verband fur Berufsbildung</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card h-100 text-center">
+                        <div class="card-header bg-info text-white">Partner</div>
+                        <div class="card-body">
+                            <a href="https://www.us.es/" target="_blank" rel="noopener noreferrer">
+                                <img src="../static/img/us.png" alt="Universidad de Sevilla" class="mb-3" style="max-height: 60px; max-width: 100%; object-fit: contain;"
+                                     onerror="this.outerHTML='<i class=\'bi bi-mortarboard display-3 text-info\'></i>'">
+                            </a>
+                            <h5><a href="https://www.us.es/" target="_blank" rel="noopener noreferrer" class="text-decoration-none text-dark">Universidad de Sevilla</a></h5>
+                            <p class="text-muted small mb-0">Sevilla, Spanien</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card h-100 text-center">
+                        <div class="card-header bg-info text-white">Partner</div>
+                        <div class="card-body">
+                            <a href="https://www.internetwebsolutions.es/" target="_blank" rel="noopener noreferrer">
+                                <img src="../static/img/internet.png" alt="Internet Web Solutions" class="mb-3" style="max-height: 60px; max-width: 100%; object-fit: contain;"
+                                     onerror="this.outerHTML='<i class=\'bi bi-globe display-3 text-info\'></i>'">
+                            </a>
+                            <h5><a href="https://www.internetwebsolutions.es/" target="_blank" rel="noopener noreferrer" class="text-decoration-none text-dark">Internet Web Solutions</a></h5>
+                            <p class="text-muted small mb-0">Spanien</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card h-100 text-center border-dashed">
+                        <div class="card-header bg-light">Noch zu bestatigen</div>
+                        <div class="card-body d-flex flex-column justify-content-center">
+                            <a href="mailto:mchaves@upo.es?subject=Interesse%20am%20InfiniteLearner-Projekt&body=Wir%20kontaktieren%20Sie%2C%20weil%20wir%20an%20dem%20Projekt%20interessiert%20sind.%20Wir%20glauben%2C%20dass%20wir%20unsere%20Erfahrung%20einbringen%20k%C3%B6nnen%20und%20bitten%20um%20ein%20Treffen%2C%20um%20dies%20zu%20besprechen." class="text-decoration-none">
+                                <i class="bi bi-plus-circle display-3 text-muted mb-3"></i>
+                                <h5 class="text-muted">Ihre Institution?</h5>
+                            </a>
+                            <p class="small text-muted">Weitere EU-Lander</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <h3 class="text-center mb-4"><i class="bi bi-calendar3 me-2"></i>Zeitplan</h3>
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <div class="timeline-item">
+                                <strong class="text-danger">8. April 2026</strong>
+                                <p class="mb-0">Einreichungsfrist</p>
+                            </div>
+                            <div class="timeline-item">
+                                <strong class="text-primary">Monate 1-6</strong>
+                                <p class="mb-0">WP2: Methodische Grundlagen und Ko-Kreation des Rahmens</p>
+                            </div>
+                            <div class="timeline-item">
+                                <strong class="text-warning">Monate 7-24</strong>
+                                <p class="mb-0">WP3: Implementierung der internationalen Pilotprojekte</p>
+                            </div>
+                            <div class="timeline-item">
+                                <strong class="text-success">Monate 25-36</strong>
+                                <p class="mb-0">WP4: Konsolidierung, Empfehlungen und Replikation</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GitHub CTA -->
+    <section class="py-5">
+        <div class="container">
+            <div class="card bg-dark text-white">
+                <div class="card-body text-center py-5">
+                    <i class="bi bi-github display-3 mb-3"></i>
+                    <h3>Die gesamte Plattform erkunden</h3>
+                    <p class="lead mb-4">Zugriff auf den vollstandigen Quellcode, die Dokumentation und die interaktive Demo auf GitHub.</p>
+                    <a href="https://github.com/upocuantitativo/plaip" class="btn btn-light btn-lg">
+                        <i class="bi bi-github me-2"></i>Auf GitHub ansehen
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-light py-4 mt-auto">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-4 text-center text-md-start footer-logos">
+                    <img src="../static/img/upo.jpg" alt="UPO" onerror="this.style.display='none'">
+                </div>
+                <div class="col-md-4 text-center">
+                    <p class="mb-1"><strong>InfiniteLearner</strong></p>
+                    <small class="text-muted">
+                        ERASMUS-EDU-2026-POL-EXP-T03-DIGITAL-BS
+                    </small>
+                </div>
+                <div class="col-md-4 text-center text-md-end">
+                    <img src="../static/img/erasmus.jpg" alt="EU" style="max-height: 35px;" onerror="this.style.display='none'">
+                </div>
+            </div>
+            <div class="eu-disclaimer text-center mt-3">
+                <small>
+                    Kofinanziert von der Europaischen Union. Die geausserten Ansichten und Meinungen entsprechen jedoch ausschliesslich denen des Autors bzw. der Autoren und spiegeln nicht zwingend die der Europaischen Union oder der Europaischen Exekutivagentur fur Bildung und Kultur (EACEA) wider. Weder die Europaische Union noch die EACEA konnen dafur verantwortlich gemacht werden.
+                </small>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

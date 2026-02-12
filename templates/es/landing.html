@@ -1,0 +1,549 @@
+{% extends "base.html" %}
+
+{% block title %}InfiniteLearner - Proyecto{% endblock %}
+
+{% block head %}
+<style>
+    .hero-section {
+        background: linear-gradient(135deg, #003399 0%, #0066cc 50%, #0099ff 100%);
+        color: white;
+        padding: 60px 0;
+        margin: -1.5rem -0.75rem 2rem -0.75rem;
+    }
+    .hero-title { font-size: 3rem; font-weight: 700; }
+    .hero-subtitle { font-size: 1.3rem; opacity: 0.9; }
+    .stat-card {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        text-align: center;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        transition: transform 0.3s;
+    }
+    .stat-card:hover { transform: translateY(-5px); }
+    .stat-number { font-size: 2.5rem; font-weight: 700; color: #003399; }
+    .wp-card { border-left: 4px solid; transition: all 0.3s; }
+    .wp-card:hover { box-shadow: 0 5px 20px rgba(0,0,0,0.15); }
+    .wp1 { border-color: #6c757d; }
+    .wp2 { border-color: #0d6efd; }
+    .wp3 { border-color: #ffc107; }
+    .wp4 { border-color: #198754; }
+    .wp5 { border-color: #dc3545; }
+    .skill-badge {
+        display: inline-block;
+        padding: 8px 16px;
+        border-radius: 25px;
+        margin: 5px;
+        font-weight: 500;
+    }
+    .partner-card {
+        border: 2px dashed #dee2e6;
+        border-radius: 15px;
+        padding: 30px;
+        text-align: center;
+        transition: all 0.3s;
+    }
+    .partner-card:hover { border-color: #003399; background: #f8f9fa; }
+    .timeline-item {
+        position: relative;
+        padding-left: 30px;
+        margin-bottom: 20px;
+    }
+    .timeline-item::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 5px;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        background: #003399;
+    }
+    .timeline-item::after {
+        content: '';
+        position: absolute;
+        left: 7px;
+        top: 20px;
+        width: 2px;
+        height: calc(100% + 5px);
+        background: #dee2e6;
+    }
+    .timeline-item:last-child::after { display: none; }
+    .cta-section {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 20px;
+        padding: 40px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="hero-title mb-3">
+                    <i class="bi bi-infinity"></i> InfiniteLearner
+                </h1>
+                <p class="hero-subtitle mb-4">
+                    Itinerarios de Aprendizaje Personalizados con IA para Competencias Basicas
+                </p>
+                <p class="lead mb-4">
+                    Desarrollo y validacion de un marco basado en evidencias, etico e inclusivo
+                    para el uso de itinerarios de aprendizaje personalizados impulsados por IA para apoyar la adquisicion
+                    de competencias basicas en educacion secundaria y FP inicial (niveles EQF 2-4).
+                </p>
+                <div class="d-flex flex-wrap gap-3">
+                    <span class="badge bg-light text-primary p-3 fs-6">
+                        <i class="bi bi-calendar-event me-2"></i>Fecha limite: 8 de abril de 2026
+                    </span>
+                    <span class="badge bg-warning text-dark p-3 fs-6">
+                        <i class="bi bi-clock me-2"></i>36 meses
+                    </span>
+                    <span class="badge bg-success p-3 fs-6">
+                        <i class="bi bi-currency-euro me-2"></i>Hasta 1.000.000 EUR
+                    </span>
+                </div>
+            </div>
+            <div class="col-lg-4 text-center mt-4 mt-lg-0">
+                <div class="bg-white rounded-4 p-4 text-dark">
+                    <h5 class="text-primary mb-3">Erasmus+ KA3</h5>
+                    <p class="mb-2"><strong>Experimentaciones de Politica Europea</strong></p>
+                    <p class="small text-muted mb-3">TOPIC 3: ERASMUS-EDU-2026-POL-EXP-T03-DIGITAL-BS</p>
+                    <hr>
+                    <p class="small mb-0">
+                        <i class="bi bi-info-circle me-1"></i>
+                        Cofinanciacion de la UE: 80% del presupuesto total
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Key Stats -->
+<section class="mb-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="stat-number">4</div>
+                    <p class="mb-0">Competencias Basicas</p>
+                    <small class="text-muted">Digital, Ciudadania, Lectoescritura, Calculo</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="stat-number">EQF 2-4</div>
+                    <p class="mb-0">Niveles Educativos</p>
+                    <small class="text-muted">Educacion Secundaria y FP Inicial</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="stat-number">5</div>
+                    <p class="mb-0">Paquetes de Trabajo</p>
+                    <small class="text-muted">Metodologia, Pilotos, Consolidacion</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="stat-number">3+</div>
+                    <p class="mb-0">Paises de la UE</p>
+                    <small class="text-muted">Consorcio internacional</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Context & Objectives -->
+<section class="mb-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="bi bi-globe-europe-africa me-2"></i>Contexto Europeo</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Los sistemas educativos europeos operan en un contexto de transformacion digital acelerada,
+                        intensificada por la crisis del COVID-19 y la rapida emergencia de la IA generativa.</p>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="bi bi-exclamation-triangle text-warning me-2"></i>
+                                Brechas persistentes en la adquisicion de competencias basicas</li>
+                            <li class="mb-2"><i class="bi bi-people text-info me-2"></i>
+                                Especialmente entre estudiantes de entornos desfavorecidos</li>
+                            <li class="mb-2"><i class="bi bi-shield-exclamation text-danger me-2"></i>
+                                Riesgo de amplificar desigualdades sin marcos pedagogicos claros</li>
+                            <li class="mb-2"><i class="bi bi-person-workspace text-primary me-2"></i>
+                                Docentes con exposicion a la IA pero preparacion limitada</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0"><i class="bi bi-bullseye me-2"></i>Objetivo Principal</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="lead text-primary">Desarrollar y validar un marco basado en evidencias, etico e inclusivo</p>
+                        <p>Para el uso de itinerarios de aprendizaje personalizados impulsados por IA para apoyar la adquisicion
+                        de competencias basicas en educacion secundaria y FP inicial (EQF 2-4), sin exacerbar
+                        las desigualdades existentes y reforzando (no reemplazando) el rol pedagogico del profesorado.</p>
+                        <div class="alert alert-info mb-0">
+                            <i class="bi bi-lightbulb me-2"></i>
+                            <strong>Idea clave:</strong> El uso efectivo de los PLP depende menos de la sofisticacion tecnologica
+                            que de la integracion pedagogica, la agencia docente, la gobernanza etica y la adaptacion contextual.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Basic Skills Focus -->
+<section class="mb-5">
+    <div class="container">
+        <h3 class="text-center mb-4"><i class="bi bi-stars me-2"></i>Competencias Basicas Abordadas</h3>
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <h5 class="text-primary"><i class="bi bi-cpu me-2"></i>Enfoque Principal: Digital + Ciudadania</h5>
+                                <p>Alfabetizacion mediatica, pensamiento critico y participacion informada en la vida democratica.</p>
+                                <div class="d-flex flex-wrap">
+                                    <span class="skill-badge text-white" style="background: #9C27B0;">
+                                        <i class="bi bi-laptop me-1"></i>Competencia Digital
+                                    </span>
+                                    <span class="skill-badge bg-warning text-dark">
+                                        <i class="bi bi-flag me-1"></i>Ciudadania
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <h5 class="text-secondary"><i class="bi bi-arrows-expand me-2"></i>Competencias Habilitadoras</h5>
+                                <p>Lectoescritura y Calculo como competencias fundamentales que permiten un aprendizaje efectivo en los ambitos digital y de ciudadania.</p>
+                                <div class="d-flex flex-wrap">
+                                    <span class="skill-badge bg-success text-white">
+                                        <i class="bi bi-book me-1"></i>Lectoescritura
+                                    </span>
+                                    <span class="skill-badge bg-primary text-white">
+                                        <i class="bi bi-calculator me-1"></i>Calculo
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="alert alert-secondary mb-0">
+                            <i class="bi bi-info-circle me-2"></i>
+                            La capacidad de los estudiantes para interactuar criticamente con la informacion en linea, el contenido digital
+                            o las tareas relacionadas con la ciudadania esta a menudo condicionada por su capacidad para leer e interpretar textos,
+                            comprender informacion cuantitativa o seguir razonamientos logicos y numericos.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Work Packages -->
+<section class="mb-5">
+    <div class="container">
+        <h3 class="text-center mb-4"><i class="bi bi-diagram-3 me-2"></i>Paquetes de Trabajo</h3>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 wp-card wp1">
+                    <div class="card-body">
+                        <span class="badge bg-secondary mb-2">WP1</span>
+                        <h5>Gestion del Proyecto</h5>
+                        <p class="text-muted small">Aseguramiento de la Calidad y Seguimiento</p>
+                        <ul class="small">
+                            <li>Coordinacion del consorcio</li>
+                            <li>Aseguramiento de la calidad</li>
+                            <li>Seguimiento y evaluacion</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 wp-card wp2">
+                    <div class="card-body">
+                        <span class="badge bg-primary mb-2">WP2</span>
+                        <h5>Fundamento Metodologico</h5>
+                        <p class="text-muted small">Co-creacion del Marco</p>
+                        <ul class="small">
+                            <li>Investigacion documental y de campo</li>
+                            <li>Laboratorio de co-creacion</li>
+                            <li>Marco Pedagogico Compartido</li>
+                            <li>Kit de Herramientas para Docentes (beta)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 wp-card wp3">
+                    <div class="card-body">
+                        <span class="badge bg-warning text-dark mb-2">WP3</span>
+                        <h5>Pilotos InfiniteLearner</h5>
+                        <p class="text-muted small">Implementacion y Evaluacion</p>
+                        <ul class="small">
+                            <li>Configuracion de la plataforma digital</li>
+                            <li>Taller de Preparacion para el Piloto</li>
+                            <li>Pilotos internacionales multilingues</li>
+                            <li>Evaluacion in itinere y ex-post</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-6">
+                <div class="card h-100 wp-card wp4">
+                    <div class="card-body">
+                        <span class="badge bg-success mb-2">WP4</span>
+                        <h5>Consolidacion y Recomendaciones</h5>
+                        <p class="text-muted small">Sintesis de Evidencias</p>
+                        <ul class="small">
+                            <li>Ajuste fino del Marco Pedagogico Compartido</li>
+                            <li>Consolidacion del Kit de Herramientas para Docentes</li>
+                            <li>Recomendaciones de politica</li>
+                            <li>Guias de replicacion</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-6">
+                <div class="card h-100 wp-card wp5">
+                    <div class="card-body">
+                        <span class="badge bg-danger mb-2">WP5</span>
+                        <h5>Comunicacion y Sostenibilidad</h5>
+                        <p class="text-muted small">Sensibilizacion</p>
+                        <ul class="small">
+                            <li>Estrategia de comunicacion</li>
+                            <li>Difusion de resultados</li>
+                            <li>Plan de sostenibilidad</li>
+                            <li>Transferencia de politicas</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Platform Modules -->
+<section class="mb-5">
+    <div class="container">
+        <h3 class="text-center mb-4"><i class="bi bi-grid-3x3-gap me-2"></i>Modulos de la Plataforma</h3>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <div class="rounded-circle bg-info bg-opacity-10 d-inline-flex p-3 mb-3">
+                            <i class="bi bi-clipboard2-pulse text-info fs-2"></i>
+                        </div>
+                        <h5>Diagnostico Inicial</h5>
+                        <p class="small text-muted">Cuestionarios y pruebas diagnosticas para identificar necesidades,
+                        mapear fortalezas y debilidades, e iniciar el PLP.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <div class="rounded-circle bg-success bg-opacity-10 d-inline-flex p-3 mb-3">
+                            <i class="bi bi-puzzle text-success fs-2"></i>
+                        </div>
+                        <h5>Actividades de Aprendizaje</h5>
+                        <p class="small text-muted">Ejercicios breves, microtareas, reflexiones guiadas
+                        y desafios digitales durante el itinerario.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <div class="rounded-circle bg-warning bg-opacity-10 d-inline-flex p-3 mb-3">
+                            <i class="bi bi-graph-up-arrow text-warning fs-2"></i>
+                        </div>
+                        <h5>Evaluacion Formativa</h5>
+                        <p class="small text-muted">Seguimiento continuo del progreso para observar
+                        la evolucion e identificar dificultades persistentes.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-6">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <div class="rounded-circle bg-primary bg-opacity-10 d-inline-flex p-3 mb-3">
+                            <i class="bi bi-speedometer2 text-primary fs-2"></i>
+                        </div>
+                        <h5>Paneles de Control</h5>
+                        <p class="small text-muted">Visualizacion de senales de aprendizaje observables:
+                        respuestas, intentos, tiempo empleado, progresion, patrones de aprendizaje.</p>
+                        <div class="d-flex justify-content-center gap-2">
+                            <span class="badge bg-primary">Docentes</span>
+                            <span class="badge bg-secondary">Estudiantes</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-6">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <div class="rounded-circle bg-danger bg-opacity-10 d-inline-flex p-3 mb-3">
+                            <i class="bi bi-lightbulb text-danger fs-2"></i>
+                        </div>
+                        <h5>Recomendaciones de IA</h5>
+                        <p class="small text-muted">Sugerencias de proximos pasos, alertas de dificultad,
+                        recomendaciones de refuerzo o ritmo.</p>
+                        <div class="alert alert-warning small py-1 mb-0">
+                            <i class="bi bi-person-check me-1"></i>La decision final siempre corresponde al profesorado
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call for Partners -->
+<section class="mb-5">
+    <div class="container">
+        <div class="cta-section">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h3 class="text-primary mb-3"><i class="bi bi-people-fill me-2"></i>Buscamos Socios</h3>
+                    <p class="lead">Unete al consorcio InfiniteLearner</p>
+                    <p>Buscamos instituciones europeas interesadas en participar en esta experimentacion de politica educativa:</p>
+                    <ul>
+                        <li><strong>Universidades</strong> con experiencia en tecnologia educativa, IA y pedagogia</li>
+                        <li><strong>Centros de educacion secundaria y FP</strong> para implementar pilotos</li>
+                        <li><strong>Organizaciones</strong> especializadas en desarrollo profesional docente</li>
+                        <li><strong>Entidades</strong> con experiencia en politica educativa europea</li>
+                    </ul>
+                </div>
+                <div class="col-lg-4">
+                    <div class="partner-card">
+                        <i class="bi bi-building display-4 text-primary mb-3"></i>
+                        <h5>Requisitos</h5>
+                        <ul class="list-unstyled small text-start">
+                            <li><i class="bi bi-check-circle text-success me-2"></i>PIC valido</li>
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Informacion administrativa</li>
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Analisis de necesidades</li>
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Socios Asociados</li>
+                        </ul>
+                        <a href="mailto:mchaves@upo.es" class="btn btn-primary mt-3">
+                            <i class="bi bi-envelope me-2"></i>Contactanos
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Current Consortium -->
+<section class="mb-5">
+    <div class="container">
+        <h3 class="text-center mb-4"><i class="bi bi-diagram-2 me-2"></i>Consorcio Actual</h3>
+        <div class="row justify-content-center g-4">
+            <div class="col-md-3">
+                <div class="card h-100 text-center border-primary">
+                    <div class="card-header bg-primary text-white">
+                        <span class="badge bg-warning text-dark">Solicitante Principal</span>
+                    </div>
+                    <div class="card-body">
+                        <img src="{{ url_for('static', filename='img/upo.jpg') }}" alt="UPO" class="mb-3" style="max-height: 60px;"
+                             onerror="this.outerHTML='<i class=\'bi bi-mortarboard display-3 text-primary\'></i>'">
+                        <h5>Universidad Pablo de Olavide</h5>
+                        <p class="text-muted small mb-0">Sevilla, Espana</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card h-100 text-center">
+                    <div class="card-header bg-info text-white">Socio</div>
+                    <div class="card-body">
+                        <img src="{{ url_for('static', filename='img/logo-earlall.png') }}" alt="EARLALL" class="mb-3" style="max-height: 60px; max-width: 100%; object-fit: contain;"
+                             onerror="this.outerHTML='<i class=\'bi bi-building display-3 text-info\'></i>'">
+                        <h5>EARLALL</h5>
+                        <p class="text-muted small mb-0">European Association of Regional & Local Authorities for Lifelong Learning</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card h-100 text-center">
+                    <div class="card-header bg-info text-white">Socio</div>
+                    <div class="card-body">
+                        <img src="{{ url_for('static', filename='img/medpodjetniski.png') }}" alt="MIC" class="mb-3" style="max-height: 60px; max-width: 100%; object-fit: contain;"
+                             onerror="this.outerHTML='<i class=\'bi bi-building display-3 text-info\'></i>'">
+                        <h5>Medpodjetniski izobrazevalni center</h5>
+                        <p class="text-muted small mb-0">Eslovenia</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card h-100 text-center">
+                    <div class="card-header bg-info text-white">Socio</div>
+                    <div class="card-body">
+                        <a href="https://akmi-international.com/" target="_blank" rel="noopener noreferrer">
+                            <img src="{{ url_for('static', filename='img/akmi-international-final-logo.png') }}" alt="AKMI International" class="mb-3" style="max-height: 60px; max-width: 100%; object-fit: contain;"
+                                 onerror="this.outerHTML='<i class=\'bi bi-building display-3 text-info\'></i>'">
+                        </a>
+                        <h5><a href="https://akmi-international.com/" target="_blank" rel="noopener noreferrer" class="text-decoration-none text-dark">AKMI International</a></h5>
+                        <p class="text-muted small mb-0">Grecia</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card h-100 text-center border-dashed">
+                    <div class="card-header bg-light">Por confirmar</div>
+                    <div class="card-body d-flex flex-column justify-content-center">
+                        <a href="mailto:mchaves@upo.es?subject=Interested%20in%20the%20InfiniteLearner%20project&body=We%20are%20contacting%20you%20because%20we%20are%20interested%20in%20the%20project.%20We%20believe%20we%20can%20contribute%20our%20experience%20and%20we%20request%20a%20meeting%20to%20discuss%20this%20matter." class="text-decoration-none">
+                            <i class="bi bi-plus-circle display-3 text-muted mb-3"></i>
+                            <h5 class="text-muted">Tu institucion?</h5>
+                        </a>
+                        <p class="small text-muted">Otros paises de la UE</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Timeline -->
+<section class="mb-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h3 class="text-center mb-4"><i class="bi bi-calendar3 me-2"></i>Cronograma</h3>
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="timeline-item">
+                            <strong class="text-danger">8 de abril de 2026</strong>
+                            <p class="mb-0">Fecha limite de presentacion</p>
+                        </div>
+                        <div class="timeline-item">
+                            <strong class="text-primary">Meses 1-6</strong>
+                            <p class="mb-0">WP2: Fundamentos metodologicos y co-creacion del marco</p>
+                        </div>
+                        <div class="timeline-item">
+                            <strong class="text-warning">Meses 7-24</strong>
+                            <p class="mb-0">WP3: Implementacion de pilotos internacionales</p>
+                        </div>
+                        <div class="timeline-item">
+                            <strong class="text-success">Meses 25-36</strong>
+                            <p class="mb-0">WP4: Consolidacion, recomendaciones y replicacion</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

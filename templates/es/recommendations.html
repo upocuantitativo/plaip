@@ -1,0 +1,531 @@
+{% extends "base.html" %}
+
+{% block title %}Recomendaciones IA{% endblock %}
+
+{% block head %}
+<style>
+    .ai-hero {
+        background: linear-gradient(135deg, #dc3545 0%, #fd7e14 100%);
+        color: white;
+        padding: 40px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+    }
+    .recommendation-card {
+        border: none;
+        border-radius: 15px;
+        transition: all 0.3s;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        position: relative;
+        overflow: hidden;
+    }
+    .recommendation-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    .recommendation-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+    }
+    .rec-high::before { background: #dc3545; }
+    .rec-medium::before { background: #ffc107; }
+    .rec-low::before { background: #28a745; }
+    .confidence-meter {
+        width: 100%;
+        height: 8px;
+        background: #e9ecef;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+    .confidence-fill {
+        height: 100%;
+        border-radius: 4px;
+        transition: width 0.5s ease;
+    }
+    .ai-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        background: linear-gradient(135deg, #dc3545 0%, #fd7e14 100%);
+        color: white;
+    }
+    .teacher-note {
+        background: #fff3cd;
+        border-left: 4px solid #ffc107;
+        padding: 15px;
+        border-radius: 0 10px 10px 0;
+        margin-top: 15px;
+    }
+    .action-buttons .btn {
+        margin: 3px;
+    }
+    .reasoning-section {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 15px;
+        font-size: 0.9rem;
+    }
+    .student-context {
+        background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+        border-radius: 10px;
+        padding: 15px;
+    }
+    .priority-high { color: #dc3545; }
+    .priority-medium { color: #ffc107; }
+    .priority-low { color: #28a745; }
+    .explainability-toggle {
+        cursor: pointer;
+        color: #6c757d;
+        transition: color 0.2s;
+    }
+    .explainability-toggle:hover {
+        color: #0d6efd;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('landing', lang=lang) }}">Proyecto</a></li>
+                <li class="breadcrumb-item"><span class="badge bg-warning text-dark">WP3</span> Pilotos</li>
+                <li class="breadcrumb-item active">Recomendaciones IA</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<!-- Seccion Principal -->
+<div class="ai-hero">
+    <div class="row align-items-center">
+        <div class="col-lg-8">
+            <h1><i class="bi bi-lightbulb me-3"></i>Recomendaciones IA</h1>
+            <p class="lead mb-0">
+                Sugerencias inteligentes para los siguientes pasos de aprendizaje, alertas de dificultad,
+                recomendaciones de refuerzo y ritmo basadas en senales de aprendizaje observables.
+            </p>
+        </div>
+        <div class="col-lg-4 text-center">
+            <div class="bg-white bg-opacity-10 rounded-3 p-3">
+                <h5 class="mb-2">Estado de la IA</h5>
+                {% if has_agent %}
+                <span class="badge bg-success fs-6">Agente Entrenado</span>
+                <p class="small mb-0 mt-2 opacity-75">Listo para recomendaciones</p>
+                {% else %}
+                <span class="badge bg-warning text-dark fs-6">Sin Entrenar</span>
+                <p class="small mb-0 mt-2 opacity-75">
+                    <a href="{{ url_for('simulation', lang=lang) }}" class="text-white">Entrena el agente primero</a>
+                </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Aviso Importante -->
+<div class="alert alert-danger mb-4">
+    <div class="row align-items-center">
+        <div class="col-auto">
+            <i class="bi bi-exclamation-triangle fs-3"></i>
+        </div>
+        <div class="col">
+            <strong>Recordatorio de Autonomia del Profesor:</strong> Todas las recomendaciones a continuacion son <em>sugerencias</em> basadas en el analisis de la IA.
+            Tienes plena autoridad para aceptar, modificar o rechazar cualquier recomendacion. La decision pedagogica final
+            siempre es tuya.
+        </div>
+    </div>
+</div>
+
+<!-- Seleccion de Estudiante -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-person-check me-2"></i>Seleccionar Estudiante</h5>
+            </div>
+            <div class="card-body">
+                <select class="form-select" id="student-select" onchange="loadRecommendations()">
+                    <option value="">-- Selecciona un estudiante para ver recomendaciones --</option>
+                    {% for student in students %}
+                    <option value="{{ student.id }}">{{ student.name }} ({{ student.demographics.education_stage.name }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body student-context" id="student-context" style="display: none;">
+                <h6><i class="bi bi-person-lines-fill me-2"></i>Contexto del Estudiante</h6>
+                <div class="row small">
+                    <div class="col-4">
+                        <strong>Perfil:</strong>
+                        <span id="context-profile">-</span>
+                    </div>
+                    <div class="col-4">
+                        <strong>Motivacion:</strong>
+                        <span id="context-motivation">-</span>
+                    </div>
+                    <div class="col-4">
+                        <strong>Progreso:</strong>
+                        <span id="context-progress">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Contenedor de Recomendaciones -->
+<div id="recommendations-container">
+    <!-- Recomendaciones de Alta Prioridad -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h4 class="mb-3">
+                <i class="bi bi-exclamation-circle text-danger me-2"></i>
+                Recomendaciones de Alta Prioridad
+            </h4>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card recommendation-card rec-high h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <span class="ai-badge mb-2">
+                                <i class="bi bi-robot me-1"></i> Sugerencia IA
+                            </span>
+                            <h5 class="mt-2">Proporcionar Apoyo Adicional en Numeracy</h5>
+                        </div>
+                        <span class="badge bg-danger">Alta Prioridad</span>
+                    </div>
+
+                    <p class="text-muted">El estudiante muestra dificultades constantes con las actividades
+                    de interpretacion de datos. El rendimiento ha disminuido un 15% durante la ultima semana.</p>
+
+                    <div class="reasoning-section mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <strong><i class="bi bi-cpu me-2"></i>Razonamiento de la IA</strong>
+                            <span class="explainability-toggle" onclick="toggleExplanation(this)">
+                                <i class="bi bi-info-circle"></i> Por que esta recomendacion?
+                            </span>
+                        </div>
+                        <ul class="mb-0 small explanation-content" style="display: none;">
+                            <li>3 intentos fallidos en la actividad "Interpretacion de Graficos"</li>
+                            <li>Tiempo medio 2.5 veces superior al del grupo de iguales</li>
+                            <li>El patron sugiere carencias en la comprension de porcentajes basicos</li>
+                            <li>Perfiles similares se beneficiaron de un refuerzo dirigido (+23% de mejora)</li>
+                        </ul>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small">Confianza de la IA</label>
+                        <div class="confidence-meter">
+                            <div class="confidence-fill bg-success" style="width: 87%;"></div>
+                        </div>
+                        <small class="text-muted">87% de confianza basado en el analisis de senales de aprendizaje</small>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn btn-success btn-sm">
+                            <i class="bi bi-check-lg me-1"></i> Aceptar
+                        </button>
+                        <button class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-pencil me-1"></i> Modificar
+                        </button>
+                        <button class="btn btn-outline-danger btn-sm">
+                            <i class="bi bi-x-lg me-1"></i> Rechazar
+                        </button>
+                    </div>
+
+                    <div class="teacher-note">
+                        <i class="bi bi-chat-left-text me-2"></i>
+                        <strong>Anadir Nota:</strong>
+                        <input type="text" class="form-control form-control-sm mt-2"
+                               placeholder="Tu razonamiento pedagogico...">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card recommendation-card rec-high h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <span class="ai-badge mb-2">
+                                <i class="bi bi-robot me-1"></i> Sugerencia IA
+                            </span>
+                            <h5 class="mt-2">Programar Tutoria Individual</h5>
+                        </div>
+                        <span class="badge bg-danger">Alta Prioridad</span>
+                    </div>
+
+                    <p class="text-muted">Los patrones de participacion sugieren una motivacion decreciente.
+                    La tasa de completado de actividades bajo del 85% al 45% en dos semanas.</p>
+
+                    <div class="reasoning-section mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <strong><i class="bi bi-cpu me-2"></i>Razonamiento de la IA</strong>
+                            <span class="explainability-toggle" onclick="toggleExplanation(this)">
+                                <i class="bi bi-info-circle"></i> Por que esta recomendacion?
+                            </span>
+                        </div>
+                        <ul class="mb-0 small explanation-content" style="display: none;">
+                            <li>Disminucion significativa en la frecuencia de sesiones (5/semana a 2/semana)</li>
+                            <li>Aumento en la tasa de abandono de actividades</li>
+                            <li>Indicadores de autoeficacia en descenso en las respuestas recientes</li>
+                            <li>La intervencion personal suele restaurar la participacion en casos similares</li>
+                        </ul>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small">Confianza de la IA</label>
+                        <div class="confidence-meter">
+                            <div class="confidence-fill bg-success" style="width: 72%;"></div>
+                        </div>
+                        <small class="text-muted">72% de confianza - pueden influir factores externos</small>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn btn-success btn-sm">
+                            <i class="bi bi-check-lg me-1"></i> Aceptar
+                        </button>
+                        <button class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-pencil me-1"></i> Modificar
+                        </button>
+                        <button class="btn btn-outline-danger btn-sm">
+                            <i class="bi bi-x-lg me-1"></i> Rechazar
+                        </button>
+                    </div>
+
+                    <div class="teacher-note">
+                        <i class="bi bi-chat-left-text me-2"></i>
+                        <strong>Anadir Nota:</strong>
+                        <input type="text" class="form-control form-control-sm mt-2"
+                               placeholder="Tu razonamiento pedagogico...">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recomendaciones de Prioridad Media -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h4 class="mb-3">
+                <i class="bi bi-dash-circle text-warning me-2"></i>
+                Ajustes de Itinerario
+            </h4>
+        </div>
+
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card recommendation-card rec-medium h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h6 class="mb-0">Ajustar Nivel de Dificultad</h6>
+                        <span class="badge bg-warning text-dark">Media</span>
+                    </div>
+                    <p class="text-muted small">Las actividades de Competencias Digitales pueden ser demasiado exigentes.
+                    Considera reducir la dificultad del Nivel 3 al Nivel 2.</p>
+                    <div class="mb-2">
+                        <div class="confidence-meter">
+                            <div class="confidence-fill bg-warning" style="width: 65%;"></div>
+                        </div>
+                        <small class="text-muted">65% de confianza</small>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn btn-sm btn-outline-success"><i class="bi bi-check"></i></button>
+                        <button class="btn btn-sm btn-outline-danger"><i class="bi bi-x"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card recommendation-card rec-medium h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h6 class="mb-0">Anadir Actividad de Refuerzo</h6>
+                        <span class="badge bg-warning text-dark">Media</span>
+                    </div>
+                    <p class="text-muted small">Antes de avanzar a "Lectura Critica", anade una
+                    actividad de refuerzo sobre comprension literal.</p>
+                    <div class="mb-2">
+                        <div class="confidence-meter">
+                            <div class="confidence-fill bg-warning" style="width: 78%;"></div>
+                        </div>
+                        <small class="text-muted">78% de confianza</small>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn btn-sm btn-outline-success"><i class="bi bi-check"></i></button>
+                        <button class="btn btn-sm btn-outline-danger"><i class="bi bi-x"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card recommendation-card rec-medium h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h6 class="mb-0">Cambiar Modalidad de Aprendizaje</h6>
+                        <span class="badge bg-warning text-dark">Media</span>
+                    </div>
+                    <p class="text-muted small">El estudiante muestra mejor participacion con contenido en video.
+                    Considera cambiar a actividades de citizenship basadas en video.</p>
+                    <div class="mb-2">
+                        <div class="confidence-meter">
+                            <div class="confidence-fill bg-warning" style="width: 61%;"></div>
+                        </div>
+                        <small class="text-muted">61% de confianza</small>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn btn-sm btn-outline-success"><i class="bi bi-check"></i></button>
+                        <button class="btn btn-sm btn-outline-danger"><i class="bi bi-x"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Perspectivas Positivas -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h4 class="mb-3">
+                <i class="bi bi-star text-success me-2"></i>
+                Perspectivas Positivas
+            </h4>
+        </div>
+
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card recommendation-card rec-low h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h6 class="mb-0">Listo para Contenido Avanzado</h6>
+                        <span class="badge bg-success">Oportunidad</span>
+                    </div>
+                    <p class="text-muted small">Excelente rendimiento en el modulo de Seguridad Digital.
+                    El estudiante esta preparado para avanzar a temas avanzados.</p>
+                    <button class="btn btn-sm btn-outline-success w-100">
+                        <i class="bi bi-arrow-up-right me-1"></i> Avanzar Itinerario
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card recommendation-card rec-low h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h6 class="mb-0">Candidato a Tutoria entre Pares</h6>
+                        <span class="badge bg-success">Oportunidad</span>
+                    </div>
+                    <p class="text-muted small">Fuerte rendimiento en literacy. Podria beneficiarse de
+                    ayudar a companeros con dificultades (estrategia de tutoria entre pares).</p>
+                    <button class="btn btn-sm btn-outline-success w-100">
+                        <i class="bi bi-people me-1"></i> Asignar Rol de Tutor
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card recommendation-card rec-low h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h6 class="mb-0">Hito de Logro</h6>
+                        <span class="badge bg-success">Reconocimiento</span>
+                    </div>
+                    <p class="text-muted small">El estudiante ha completado 10 actividades esta semana
+                    con puntuaciones superiores al 80%. Considera un reconocimiento positivo.</p>
+                    <button class="btn btn-sm btn-outline-success w-100">
+                        <i class="bi bi-award me-1"></i> Enviar Reconocimiento
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Acciones Masivas -->
+<div class="row">
+    <div class="col-12">
+        <div class="card bg-light">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h5 class="mb-0"><i class="bi bi-list-check me-2"></i>Acciones Masivas</h5>
+                        <small class="text-muted">Aplica decisiones a multiples recomendaciones</small>
+                    </div>
+                    <div class="col-md-6 text-md-end mt-3 mt-md-0">
+                        <button class="btn btn-success me-2">
+                            <i class="bi bi-check-all me-1"></i> Aceptar Todas de Alta Prioridad
+                        </button>
+                        <button class="btn btn-outline-secondary">
+                            <i class="bi bi-clock-history me-1"></i> Revisar Mas Tarde
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function toggleExplanation(element) {
+    const content = element.closest('.reasoning-section').querySelector('.explanation-content');
+    if (content.style.display === 'none') {
+        content.style.display = 'block';
+        element.innerHTML = '<i class="bi bi-chevron-up"></i> Ocultar razonamiento';
+    } else {
+        content.style.display = 'none';
+        element.innerHTML = '<i class="bi bi-info-circle"></i> Por que esta recomendacion?';
+    }
+}
+
+function loadRecommendations() {
+    const studentId = document.getElementById('student-select').value;
+    if (!studentId) return;
+
+    // Show student context
+    fetch(`/api/students/${studentId}`)
+        .then(response => response.json())
+        .then(student => {
+            document.getElementById('student-context').style.display = 'block';
+
+            const avgKnowledge = (student.cognitive.prior_knowledge.literacy +
+                                  student.cognitive.prior_knowledge.numeracy +
+                                  student.cognitive.prior_knowledge.digital +
+                                  student.cognitive.prior_knowledge.citizenship) / 4;
+
+            let profile = 'Medio';
+            if (avgKnowledge > 65) profile = 'Alto Rendimiento';
+            else if (avgKnowledge < 40) profile = 'Necesita Apoyo';
+
+            document.getElementById('context-profile').textContent = profile;
+            document.getElementById('context-motivation').textContent =
+                Math.round(student.emotional.intrinsic_motivation) + '%';
+            document.getElementById('context-progress').textContent =
+                Math.round(avgKnowledge) + '%';
+        });
+}
+
+// Auto-seleccionar primer estudiante si esta disponible
+const select = document.getElementById('student-select');
+if (select.options.length > 1) {
+    select.selectedIndex = 1;
+    loadRecommendations();
+}
+</script>
+{% endblock %}

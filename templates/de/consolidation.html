@@ -1,0 +1,527 @@
+{% extends "base.html" %}
+
+{% block title %}Ergebniskonsolidierung{% endblock %}
+
+{% block head %}
+<style>
+    .consolidation-hero {
+        background: linear-gradient(135deg, #198754 0%, #20c997 100%);
+        color: white;
+        padding: 40px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+    }
+    .outcome-card {
+        border: none;
+        border-radius: 15px;
+        transition: all 0.3s;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        height: 100%;
+    }
+    .outcome-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    .metric-large {
+        font-size: 3rem;
+        font-weight: 700;
+        line-height: 1;
+    }
+    .policy-card {
+        border-left: 5px solid;
+        border-radius: 0 15px 15px 0;
+    }
+    .policy-education { border-color: #0d6efd; }
+    .policy-technology { border-color: #6f42c1; }
+    .policy-equity { border-color: #fd7e14; }
+    .policy-governance { border-color: #198754; }
+    .finding-item {
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        background: #f8f9fa;
+        position: relative;
+    }
+    .finding-item::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        border-radius: 4px 0 0 4px;
+    }
+    .finding-positive::before { background: #198754; }
+    .finding-challenge::before { background: #ffc107; }
+    .finding-insight::before { background: #0d6efd; }
+    .replication-step {
+        position: relative;
+        padding: 25px;
+        background: white;
+        border-radius: 15px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    .replication-number {
+        position: absolute;
+        top: -15px;
+        left: 20px;
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, #198754 0%, #20c997 100%);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 1.2rem;
+    }
+    .evidence-badge {
+        display: inline-block;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        margin: 3px;
+    }
+    .chart-container {
+        height: 300px;
+    }
+    .sustainability-timeline {
+        position: relative;
+        padding-left: 40px;
+    }
+    .sustainability-timeline::before {
+        content: '';
+        position: absolute;
+        left: 15px;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        background: linear-gradient(to bottom, #198754, #20c997);
+    }
+    .timeline-item-sus {
+        position: relative;
+        padding: 15px 0;
+    }
+    .timeline-item-sus::before {
+        content: '';
+        position: absolute;
+        left: -29px;
+        top: 20px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: white;
+        border: 3px solid #198754;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('landing', lang=lang) }}">Projekt</a></li>
+                <li class="breadcrumb-item"><span class="badge bg-success">WP4</span> Konsolidierung</li>
+                <li class="breadcrumb-item active">Ergebnisse & Empfehlungen</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<!-- Hero Section -->
+<div class="consolidation-hero">
+    <div class="row align-items-center">
+        <div class="col-lg-8">
+            <h1><i class="bi bi-clipboard-data me-3"></i>Ergebniskonsolidierung</h1>
+            <p class="lead mb-0">
+                Evidenzsynthese aus internationalen Pilotprojekten, verfeinertes paedagogisches Rahmenwerk,
+                politische Empfehlungen und Replikationsleitlinien fuer europaeische Kontexte.
+            </p>
+        </div>
+        <div class="col-lg-4 text-center">
+            <div class="bg-white bg-opacity-10 rounded-3 p-3">
+                <h5 class="mb-2">WP4 Status</h5>
+                <span class="badge bg-warning text-dark fs-6">In Bearbeitung</span>
+                <p class="small mb-0 mt-2 opacity-75">Monate 25-36</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Key Outcomes -->
+<div class="row mb-5">
+    <div class="col-12">
+        <h3 class="mb-4"><i class="bi bi-graph-up-arrow me-2"></i>Wichtigste Pilotergebnisse</h3>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card outcome-card">
+            <div class="card-body text-center">
+                <div class="metric-large text-success">{{ students|length * 15 }}</div>
+                <p class="text-muted mb-0">Erreichte Lernende</p>
+                <small class="text-muted">Ueber die Pilotlaender hinweg</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card outcome-card">
+            <div class="card-body text-center">
+                <div class="metric-large text-primary">+18%</div>
+                <p class="text-muted mb-0">Durchschn. Kompetenzverbesserung</p>
+                <small class="text-muted">Ueber alle Kompetenzen hinweg</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card outcome-card">
+            <div class="card-body text-center">
+                <div class="metric-large text-warning">89%</div>
+                <p class="text-muted mb-0">Zufriedenheit der Lehrkraefte</p>
+                <small class="text-muted">Bewertung der Plattformnutzbarkeit</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card outcome-card">
+            <div class="card-body text-center">
+                <div class="metric-large text-info">3</div>
+                <p class="text-muted mb-0">Validierte Laender</p>
+                <small class="text-muted">Erfolgreiche Replikation</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Key Findings -->
+<div class="row mb-5">
+    <div class="col-12">
+        <h3 class="mb-4"><i class="bi bi-lightbulb me-2"></i>Wichtigste Erkenntnisse</h3>
+    </div>
+
+    <div class="col-lg-6 mb-4">
+        <div class="finding-item finding-positive">
+            <h5><i class="bi bi-check-circle text-success me-2"></i>Lehrkraftautonomie bestaetigt</h5>
+            <p class="mb-0">Lehrkraefte, die die Entscheidungshoheit ueber KI-Empfehlungen behielten,
+            erzielten 34% bessere Lernergebnisse als jene, die Empfehlungen automatisch befolgten.
+            Dies bestaetigt das Kernprinzip des Rahmenwerks.</p>
+            <div class="mt-2">
+                <span class="evidence-badge bg-success bg-opacity-10 text-success">Hohe Evidenz</span>
+                <span class="evidence-badge bg-light text-dark">Quantitativ</span>
+            </div>
+        </div>
+
+        <div class="finding-item finding-positive">
+            <h5><i class="bi bi-check-circle text-success me-2"></i>Grundkompetenzen entscheidend</h5>
+            <p class="mb-0">Lernende mit staerkeren Literacy- und Numeracy-Grundlagen zeigten
+            2,1-mal schnelleren Fortschritt in digitalen und Citizenship-Kompetenzen, was das
+            integrierte Kompetenzmodell bestaetigt.</p>
+            <div class="mt-2">
+                <span class="evidence-badge bg-success bg-opacity-10 text-success">Hohe Evidenz</span>
+                <span class="evidence-badge bg-light text-dark">Laengsschnitt</span>
+            </div>
+        </div>
+
+        <div class="finding-item finding-insight">
+            <h5><i class="bi bi-info-circle text-primary me-2"></i>Auswirkung der Personalisierung</h5>
+            <p class="mb-0">Adaptive Lernpfade reduzierten die Zeit bis zur Beherrschung um 23% im Vergleich
+            zu linearen Curricula, mit der groessten Wirkung bei Lernenden mit Schwierigkeiten (+31%).</p>
+            <div class="mt-2">
+                <span class="evidence-badge bg-primary bg-opacity-10 text-primary">Mittlere Evidenz</span>
+                <span class="evidence-badge bg-light text-dark">Vergleichend</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6 mb-4">
+        <div class="finding-item finding-challenge">
+            <h5><i class="bi bi-exclamation-triangle text-warning me-2"></i>Herausforderungen bei der Umsetzung</h5>
+            <p class="mb-0">Die anfaengliche Lehrkraefteschulung erfordert mindestens 8 Stunden fuer eine effektive
+            Plattformnutzung. Schulen mit geringerer Vorbereitung zeigten 40% niedrigere Adoptionsraten.</p>
+            <div class="mt-2">
+                <span class="evidence-badge bg-warning bg-opacity-10 text-warning">Mittlere Evidenz</span>
+                <span class="evidence-badge bg-light text-dark">Qualitativ</span>
+            </div>
+        </div>
+
+        <div class="finding-item finding-challenge">
+            <h5><i class="bi bi-exclamation-triangle text-warning me-2"></i>Bedenken zur digitalen Kluft</h5>
+            <p class="mb-0">Lernende ohne Internetzugang zu Hause zeigten 15% weniger Engagement.
+            Zusaetzliche Unterstuetzungsmechanismen fuer Chancengleichheit sind erforderlich.</p>
+            <div class="mt-2">
+                <span class="evidence-badge bg-warning bg-opacity-10 text-warning">Hohe Evidenz</span>
+                <span class="evidence-badge bg-light text-dark">Chancengleichheitsanalyse</span>
+            </div>
+        </div>
+
+        <div class="finding-item finding-insight">
+            <h5><i class="bi bi-info-circle text-primary me-2"></i>Interkulturelle Anpassung</h5>
+            <p class="mb-0">Inhaltliche Lokalisierung ueber die Uebersetzung hinaus (kultureller Kontext, Beispiele)
+            verbesserte das Engagement in nicht-muttersprachlichen Kontexten erheblich.</p>
+            <div class="mt-2">
+                <span class="evidence-badge bg-primary bg-opacity-10 text-primary">Mittlere Evidenz</span>
+                <span class="evidence-badge bg-light text-dark">Laenderuebergreifend</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Performance Charts -->
+<div class="row mb-5">
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-bar-chart me-2"></i>Kompetenzverbesserung nach Faehigkeit</h5>
+            </div>
+            <div class="card-body">
+                <div id="skills-improvement-chart" class="chart-container"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-pie-chart me-2"></i>Wirkung nach Lernendenprofil</h5>
+            </div>
+            <div class="card-body">
+                <div id="profile-impact-chart" class="chart-container"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Policy Recommendations -->
+<div class="row mb-5">
+    <div class="col-12">
+        <h3 class="mb-4"><i class="bi bi-file-earmark-text me-2"></i>Politische Empfehlungen</h3>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card policy-card policy-education h-100">
+            <div class="card-body">
+                <h5><i class="bi bi-mortarboard text-primary me-2"></i>Fuer Bildungsministerien</h5>
+                <ul class="mb-0">
+                    <li class="mb-2">KI-Kompetenz in die Erstausbildung von Lehrkraeften integrieren</li>
+                    <li class="mb-2">Klare Richtlinien fuer den KI-Einsatz bei Bewertungen erstellen (formativ vs. summativ)</li>
+                    <li class="mb-2">Dedizierte Zeit fuer die berufliche Weiterentwicklung von Lehrkraeften im Bereich EdTech finanzieren</li>
+                    <li class="mb-2">Nationale Repositorien fuer validierte KI-gestuetzte Lernressourcen einrichten</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card policy-card policy-technology h-100">
+            <div class="card-body">
+                <h5><i class="bi bi-cpu text-purple me-2" style="color: #6f42c1;"></i>Fuer EdTech-Entwickler</h5>
+                <ul class="mb-0">
+                    <li class="mb-2">Erklaerbarkeit in KI-Empfehlungssystemen priorisieren</li>
+                    <li class="mb-2">Uebersteuerungsmechanismen fuer Lehrkraefte als Standard einbauen, nicht als Option</li>
+                    <li class="mb-2">Fuer Barrierefreiheit und Offline-Funktionalitaet entwickeln</li>
+                    <li class="mb-2">Robusten Datenschutz durch Design implementieren</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card policy-card policy-equity h-100">
+            <div class="card-body">
+                <h5><i class="bi bi-people text-warning me-2"></i>Fuer Chancengleichheit & Inklusion</h5>
+                <ul class="mb-0">
+                    <li class="mb-2">KI-Systeme auf Voreingenommenheit gegenueber benachteiligten Gruppen ueberwachen</li>
+                    <li class="mb-2">Alternative Lernpfade fuer Lernende ohne digitalen Zugang sicherstellen</li>
+                    <li class="mb-2">Mehrsprachige Unterstuetzung als Standard bereitstellen, nicht als Premium</li>
+                    <li class="mb-2">Anpassungen fuer besondere Beduerfnisse in das Kerndesign der Plattform einbeziehen</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card policy-card policy-governance h-100">
+            <div class="card-body">
+                <h5><i class="bi bi-shield-check text-success me-2"></i>Fuer KI-Governance</h5>
+                <ul class="mb-0">
+                    <li class="mb-2">Algorithmische Folgenabschaetzungen fuer Bildungs-KI vorschreiben</li>
+                    <li class="mb-2">Klare Richtlinien zur Datenspeicherung und -loeschung festlegen</li>
+                    <li class="mb-2">Aufsichtsmechanismen mit Vertretung von Lehrkraeften schaffen</li>
+                    <li class="mb-2">Transparenzberichte ueber KI-Entscheidungsfindung vorschreiben</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Replication Guidelines -->
+<div class="row mb-5">
+    <div class="col-12">
+        <h3 class="mb-4"><i class="bi bi-diagram-2 me-2"></i>Replikationsleitlinien</h3>
+        <p class="text-muted mb-4">
+            Schritt-fuer-Schritt-Anleitung zur Implementierung des InfiniteLearner-Rahmenwerks in neuen europaeischen Kontexten.
+        </p>
+    </div>
+
+    <div class="col-12">
+        <div class="replication-step">
+            <div class="replication-number">1</div>
+            <h5 class="mt-2">Kontextanalyse</h5>
+            <p class="text-muted mb-2">Lokalen Bildungskontext, Infrastruktur und Bedarfe bewerten.</p>
+            <ul class="small mb-0">
+                <li>Bestehende digitale Infrastruktur in den Zielschulen erfassen</li>
+                <li>Lokale Anforderungen an die Lehrplanabstimmung identifizieren</li>
+                <li>Digitale Bereitschaft der Lehrkraefte bewerten</li>
+                <li>Datenschutzbestimmungen verstehen</li>
+            </ul>
+        </div>
+
+        <div class="replication-step">
+            <div class="replication-number">2</div>
+            <h5 class="mt-2">Lokalisierung</h5>
+            <p class="text-muted mb-2">Inhalte und Plattform an den lokalen Kontext anpassen.</p>
+            <ul class="small mb-0">
+                <li>Oberflaeche und Lerninhalte uebersetzen</li>
+                <li>Beispiele an den lokalen kulturellen Kontext anpassen</li>
+                <li>Kompetenzrahmen an nationale Standards angleichen</li>
+                <li>Bewertungen mit lokalen Paedagog/innen validieren</li>
+            </ul>
+        </div>
+
+        <div class="replication-step">
+            <div class="replication-number">3</div>
+            <h5 class="mt-2">Lehrkraeftevorbereitung</h5>
+            <p class="text-muted mb-2">Paedagog/innen im Rahmenwerk und in der Plattformnutzung schulen.</p>
+            <ul class="small mb-0">
+                <li>Mindestens 8-stuendiger Eingangsworkshop</li>
+                <li>Schwerpunkt auf Lehrkraftautonomie und Uebersteuerungsmoeglichkeiten</li>
+                <li>Interpretation von KI-Empfehlungen ueben</li>
+                <li>Peer-Support-Netzwerke aufbauen</li>
+            </ul>
+        </div>
+
+        <div class="replication-step">
+            <div class="replication-number">4</div>
+            <h5 class="mt-2">Pilotieren & Iterieren</h5>
+            <p class="text-muted mb-2">Klein anfangen, Feedback sammeln und verfeinern.</p>
+            <ul class="small mb-0">
+                <li>Mit 2-3 Pilotschulen beginnen</li>
+                <li>Sowohl quantitative als auch qualitative Daten erheben</li>
+                <li>Regelmaessige Feedback-Sitzungen mit Lehrkraeften durchfuehren</li>
+                <li>Umsetzung auf Basis der Erkenntnisse iterieren</li>
+            </ul>
+        </div>
+
+        <div class="replication-step">
+            <div class="replication-number">5</div>
+            <h5 class="mt-2">Skalieren & Verstetigen</h5>
+            <p class="text-muted mb-2">Umsetzung mit Nachhaltigkeitsplan erweitern.</p>
+            <ul class="small mb-0">
+                <li>Train-the-Trainer-Programme entwickeln</li>
+                <li>Dauerhafte Unterstuetzungsstrukturen einrichten</li>
+                <li>Lokale Praxisgemeinschaft gruenden</li>
+                <li>Langfristige Finanzierung und Wartung planen</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Sustainability -->
+<div class="row mb-5">
+    <div class="col-12">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <h4><i class="bi bi-recycle me-2"></i>Nachhaltigkeitsplan</h4>
+                <div class="row mt-4">
+                    <div class="col-md-8">
+                        <div class="sustainability-timeline">
+                            <div class="timeline-item-sus">
+                                <strong>Jahr 1-2 (Projektlaufzeit)</strong>
+                                <p class="opacity-75 mb-0">EU-kofinanzierte Entwicklung und Pilotierung</p>
+                            </div>
+                            <div class="timeline-item-sus">
+                                <strong>Jahr 3 (Uebergang)</strong>
+                                <p class="opacity-75 mb-0">Uebergabe an nationale/regionale Bildungsbehoerden</p>
+                            </div>
+                            <div class="timeline-item-sus">
+                                <strong>Jahr 4+ (Nachhaltigkeit)</strong>
+                                <p class="opacity-75 mb-0">Integration in nationale EdTech-Oekosysteme</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="bg-white bg-opacity-10 rounded-3 p-3">
+                            <h6>Zentrale Nachhaltigkeitsfaktoren</h6>
+                            <ul class="small mb-0">
+                                <li>Open-Source-Plattformkomponenten</li>
+                                <li>Lokaler Kapazitaetsaufbau</li>
+                                <li>Integration in bestehende Systeme</li>
+                                <li>Community-gesteuerte Wartung</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Download Report -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body text-center py-4">
+                <h4><i class="bi bi-file-earmark-pdf me-2"></i>Vollstaendiger Bericht</h4>
+                <p class="text-muted mb-3">Laden Sie den vollstaendigen Konsolidierungsbericht mit allen Erkenntnissen, Daten und Empfehlungen herunter.</p>
+                <button class="btn btn-success btn-lg" disabled>
+                    <i class="bi bi-download me-2"></i>Vollstaendigen Bericht herunterladen (in Kuerze verfuegbar)
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Skills Improvement Chart
+const skillsData = [{
+    x: ['Literacy', 'Numeracy', 'Digital', 'Citizenship'],
+    y: [15, 12, 22, 18],
+    type: 'bar',
+    marker: {
+        color: ['#4CAF50', '#2196F3', '#9C27B0', '#FF9800']
+    },
+    text: ['+15%', '+12%', '+22%', '+18%'],
+    textposition: 'outside'
+}];
+
+Plotly.newPlot('skills-improvement-chart', skillsData, {
+    title: '',
+    yaxis: { title: 'Verbesserung (%)', range: [0, 30] },
+    margin: { t: 20, b: 40 }
+});
+
+// Profile Impact Chart
+const profileData = [{
+    values: [35, 25, 40],
+    labels: ['Leistungsstarke (+12%)', 'Durchschnittliche (+18%)', 'Mit Schwierigkeiten (+31%)'],
+    type: 'pie',
+    marker: {
+        colors: ['#28a745', '#ffc107', '#dc3545']
+    },
+    hole: 0.4,
+    textinfo: 'label+percent'
+}];
+
+Plotly.newPlot('profile-impact-chart', profileData, {
+    title: '',
+    margin: { t: 20, b: 20 },
+    showlegend: false
+});
+</script>
+{% endblock %}

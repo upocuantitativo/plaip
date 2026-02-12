@@ -1,0 +1,556 @@
+{% extends "base.html" %}
+
+{% block title %}Toolkit für Lehrkräfte{% endblock %}
+
+{% block head %}
+<style>
+    .toolkit-hero {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: white;
+        padding: 40px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+    }
+    .resource-card {
+        border: none;
+        border-radius: 15px;
+        transition: all 0.3s;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        height: 100%;
+    }
+    .resource-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    .resource-icon {
+        width: 70px;
+        height: 70px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+    }
+    .guide-item {
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        background: #f8f9fa;
+        border-left: 4px solid;
+        transition: all 0.2s;
+    }
+    .guide-item:hover {
+        background: #e9ecef;
+    }
+    .guide-step {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: white;
+        flex-shrink: 0;
+    }
+    .module-badge {
+        display: inline-block;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+    .download-card {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 15px;
+        padding: 25px;
+        text-align: center;
+        transition: all 0.3s;
+        border: 2px dashed #dee2e6;
+    }
+    .download-card:hover {
+        border-color: #28a745;
+        background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    }
+    .faq-item {
+        border: none;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        overflow: hidden;
+    }
+    .faq-item .accordion-button {
+        background: #f8f9fa;
+        font-weight: 500;
+    }
+    .faq-item .accordion-button:not(.collapsed) {
+        background: #e9ecef;
+        color: #28a745;
+    }
+    .video-placeholder {
+        background: #212529;
+        border-radius: 10px;
+        padding: 60px 20px;
+        text-align: center;
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('landing', lang=lang) }}">Projekt</a></li>
+                <li class="breadcrumb-item"><span class="badge bg-primary">WP2</span> Methodische Grundlagen</li>
+                <li class="breadcrumb-item active">Toolkit für Lehrkräfte</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<!-- Hero Section -->
+<div class="toolkit-hero">
+    <div class="row align-items-center">
+        <div class="col-lg-8">
+            <h1><i class="bi bi-tools me-3"></i>Toolkit für Lehrkräfte</h1>
+            <p class="lead mb-0">
+                Praktische Ressourcen, Leitfäden und Schulungsmaterialien für die effektive Umsetzung
+                KI-gestützter personalisierter Lernpfade in Ihrem Unterricht.
+            </p>
+        </div>
+        <div class="col-lg-4 text-center">
+            <div class="bg-white bg-opacity-10 rounded-3 p-3">
+                <h5 class="mb-2">Toolkit-Status</h5>
+                <span class="badge bg-warning text-dark fs-6">Beta-Version</span>
+                <p class="small mb-0 mt-2 opacity-75">Aktualisiert: Januar 2026</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Access Resources -->
+<div class="row mb-5">
+    <div class="col-12">
+        <h3 class="mb-4"><i class="bi bi-grid-3x3-gap me-2"></i>Schnellzugriff auf Ressourcen</h3>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card resource-card">
+            <div class="card-body text-center p-4">
+                <div class="resource-icon bg-primary bg-opacity-10 mx-auto">
+                    <i class="bi bi-book text-primary"></i>
+                </div>
+                <h5>Benutzerhandbuch</h5>
+                <p class="text-muted small">Vollständiges Plattformhandbuch mit Schritt-für-Schritt-Anleitungen</p>
+                <a href="#user-guide" class="btn btn-outline-primary btn-sm">Handbuch ansehen</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card resource-card">
+            <div class="card-body text-center p-4">
+                <div class="resource-icon bg-success bg-opacity-10 mx-auto">
+                    <i class="bi bi-play-circle text-success"></i>
+                </div>
+                <h5>Video-Tutorials</h5>
+                <p class="text-muted small">Kurze Videos zur Erklärung der wichtigsten Plattformfunktionen</p>
+                <a href="#videos" class="btn btn-outline-success btn-sm">Videos ansehen</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card resource-card">
+            <div class="card-body text-center p-4">
+                <div class="resource-icon bg-warning bg-opacity-10 mx-auto">
+                    <i class="bi bi-file-earmark-text text-warning"></i>
+                </div>
+                <h5>Vorlagen</h5>
+                <p class="text-muted small">Sofort einsetzbare Aktivitätsvorlagen und Unterrichtspläne</p>
+                <a href="#templates" class="btn btn-outline-warning btn-sm">Vorlagen herunterladen</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card resource-card">
+            <div class="card-body text-center p-4">
+                <div class="resource-icon bg-info bg-opacity-10 mx-auto">
+                    <i class="bi bi-question-circle text-info"></i>
+                </div>
+                <h5>FAQ</h5>
+                <p class="text-muted small">Antworten auf häufig gestellte Fragen</p>
+                <a href="#faq" class="btn btn-outline-info btn-sm">FAQ ansehen</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- User Guide Section -->
+<div class="row mb-5" id="user-guide">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="bi bi-book me-2"></i>Plattform-Benutzerhandbuch</h4>
+            </div>
+            <div class="card-body">
+                <p class="text-muted mb-4">
+                    Befolgen Sie diese Schritte, um die InfiniteLearner-Plattform effektiv mit Ihren Schülerinnen und Schülern zu nutzen.
+                </p>
+
+                <div class="guide-item" style="border-color: #4CAF50;">
+                    <div class="d-flex align-items-start">
+                        <div class="guide-step bg-success me-3">1</div>
+                        <div>
+                            <h5>Ersteinrichtung</h5>
+                            <p class="mb-2">Konfigurieren Sie Ihre Klasse und registrieren Sie Lernende auf der Plattform.</p>
+                            <ul class="small text-muted mb-0">
+                                <li>Rufen Sie den Bereich <a href="{{ url_for('students_page', lang=lang) }}">Lernendenverwaltung</a> auf</li>
+                                <li>Erstellen Sie individuelle Profile oder nutzen Sie den Massenimport</li>
+                                <li>Geben Sie demografische und erste Kompetenzinformationen ein</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="guide-item" style="border-color: #2196F3;">
+                    <div class="d-flex align-items-start">
+                        <div class="guide-step bg-primary me-3">2</div>
+                        <div>
+                            <h5>Eingangsdiagnostik durchführen</h5>
+                            <p class="mb-2">Bewerten Sie das Ausgangsniveau der Lernenden in allen Kompetenzen.</p>
+                            <ul class="small text-muted mb-0">
+                                <li>Rufen Sie das Modul <a href="{{ url_for('diagnostic', lang=lang) }}">Diagnostik</a> auf</li>
+                                <li>Weisen Sie den Lernenden diagnostische Tests zu</li>
+                                <li>Überprüfen Sie die Ergebnisse, um das Ausgangsniveau zu verstehen</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="guide-item" style="border-color: #9C27B0;">
+                    <div class="d-flex align-items-start">
+                        <div class="guide-step me-3" style="background: #9C27B0;">3</div>
+                        <div>
+                            <h5>Lernaktivitäten zuweisen</h5>
+                            <p class="mb-2">Begleiten Sie Lernende durch personalisierte Lernpfade.</p>
+                            <ul class="small text-muted mb-0">
+                                <li>Überprüfen Sie KI-vorgeschlagene Aktivitäten im Modul <a href="{{ url_for('activities', lang=lang) }}">Aktivitäten</a></li>
+                                <li>Genehmigen, ändern oder überschreiben Sie Empfehlungen</li>
+                                <li>Überwachen Sie den Fortschritt der Lernenden in Echtzeit</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="guide-item" style="border-color: #FF9800;">
+                    <div class="d-flex align-items-start">
+                        <div class="guide-step bg-warning me-3">4</div>
+                        <div>
+                            <h5>Überwachen & Eingreifen</h5>
+                            <p class="mb-2">Nutzen Sie Dashboards, um den Fortschritt zu verfolgen und Lernende zu identifizieren, die Unterstützung benötigen.</p>
+                            <ul class="small text-muted mb-0">
+                                <li>Überprüfen Sie regelmäßig das <a href="{{ url_for('dashboard_teacher', lang=lang) }}">Lehrkräfte-Dashboard</a></li>
+                                <li>Beachten Sie Warnmeldungen für Lernende mit Schwierigkeiten</li>
+                                <li>Nutzen Sie KI-Empfehlungen und wenden Sie dabei Ihr professionelles Urteil an</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="guide-item" style="border-color: #E91E63;">
+                    <div class="d-flex align-items-start">
+                        <div class="guide-step me-3" style="background: #E91E63;">5</div>
+                        <div>
+                            <h5>Formative Bewertung</h5>
+                            <p class="mb-2">Bewerten Sie kontinuierlich das Lernen und passen Sie die Lernpfade bei Bedarf an.</p>
+                            <ul class="small text-muted mb-0">
+                                <li>Verwenden Sie die integrierten formativen Bewertungsinstrumente</li>
+                                <li>Überprüfen Sie die Lernanalytik</li>
+                                <li>Passen Sie Schwierigkeitsgrad und Lerntempo des Pfades an</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Video Tutorials -->
+<div class="row mb-5" id="videos">
+    <div class="col-12">
+        <h3 class="mb-4"><i class="bi bi-play-circle me-2"></i>Video-Tutorials</h3>
+    </div>
+
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100">
+            <div class="video-placeholder">
+                <i class="bi bi-play-btn fs-1 mb-3"></i>
+                <p class="mb-0">Plattformübersicht</p>
+                <small class="opacity-50">5:30 Min.</small>
+            </div>
+            <div class="card-body">
+                <h6>Erste Schritte</h6>
+                <p class="small text-muted mb-0">Einführung in die InfiniteLearner-Plattform und ihre wichtigsten Funktionen.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100">
+            <div class="video-placeholder">
+                <i class="bi bi-play-btn fs-1 mb-3"></i>
+                <p class="mb-0">Lernendenverwaltung</p>
+                <small class="opacity-50">4:15 Min.</small>
+            </div>
+            <div class="card-body">
+                <h6>Lernende verwalten</h6>
+                <p class="small text-muted mb-0">Wie Sie Lernenden-Profile erstellen, bearbeiten und verwalten.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100">
+            <div class="video-placeholder">
+                <i class="bi bi-play-btn fs-1 mb-3"></i>
+                <p class="mb-0">Dashboard verwenden</p>
+                <small class="opacity-50">6:45 Min.</small>
+            </div>
+            <div class="card-body">
+                <h6>Lehrkräfte-Dashboard</h6>
+                <p class="small text-muted mb-0">Beobachtbare Lernsignale und Fortschritte der Lernenden verstehen.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100">
+            <div class="video-placeholder">
+                <i class="bi bi-play-btn fs-1 mb-3"></i>
+                <p class="mb-0">KI-Empfehlungen</p>
+                <small class="opacity-50">5:00 Min.</small>
+            </div>
+            <div class="card-body">
+                <h6>Mit KI arbeiten</h6>
+                <p class="small text-muted mb-0">Wie Sie KI-generierte Empfehlungen interpretieren und darauf reagieren.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100">
+            <div class="video-placeholder">
+                <i class="bi bi-play-btn fs-1 mb-3"></i>
+                <p class="mb-0">Lernpfade</p>
+                <small class="opacity-50">7:20 Min.</small>
+            </div>
+            <div class="card-body">
+                <h6>Lernpfade navigieren</h6>
+                <p class="small text-muted mb-0">Den Lernbaum verstehen und Lernpfade anpassen.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100">
+            <div class="video-placeholder">
+                <i class="bi bi-play-btn fs-1 mb-3"></i>
+                <p class="mb-0">Bewertungsinstrumente</p>
+                <small class="opacity-50">4:50 Min.</small>
+            </div>
+            <div class="card-body">
+                <h6>Formative Bewertung</h6>
+                <p class="small text-muted mb-0">Nutzung von diagnostischen und formativen Bewertungsfunktionen.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Downloadable Templates -->
+<div class="row mb-5" id="templates">
+    <div class="col-12">
+        <h3 class="mb-4"><i class="bi bi-file-earmark-text me-2"></i>Herunterladbare Ressourcen</h3>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="download-card h-100">
+            <i class="bi bi-file-earmark-pdf text-danger fs-1 mb-3"></i>
+            <h6>Schnellstartanleitung</h6>
+            <p class="small text-muted">2-seitige Zusammenfassung für den Einstieg</p>
+            <span class="module-badge bg-primary text-white">PDF</span>
+            <button class="btn btn-sm btn-outline-success mt-3 w-100" disabled>
+                <i class="bi bi-download me-1"></i> Demnächst verfügbar
+            </button>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="download-card h-100">
+            <i class="bi bi-file-earmark-excel text-success fs-1 mb-3"></i>
+            <h6>Vorlage für Lernenden-Import</h6>
+            <p class="small text-muted">Excel-Vorlage für den Massenimport von Lernenden</p>
+            <span class="module-badge bg-success text-white">XLSX</span>
+            <button class="btn btn-sm btn-outline-success mt-3 w-100" disabled>
+                <i class="bi bi-download me-1"></i> Demnächst verfügbar
+            </button>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="download-card h-100">
+            <i class="bi bi-file-earmark-word text-primary fs-1 mb-3"></i>
+            <h6>Unterrichtsplanvorlagen</h6>
+            <p class="small text-muted">Bearbeitbare Unterrichtsplanvorlagen</p>
+            <span class="module-badge bg-primary text-white">DOCX</span>
+            <button class="btn btn-sm btn-outline-success mt-3 w-100" disabled>
+                <i class="bi bi-download me-1"></i> Demnächst verfügbar
+            </button>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="download-card h-100">
+            <i class="bi bi-file-earmark-ppt text-warning fs-1 mb-3"></i>
+            <h6>Schulungspräsentation</h6>
+            <p class="small text-muted">Folien für Lehrkräfte-Schulungen</p>
+            <span class="module-badge bg-warning text-dark">PPTX</span>
+            <button class="btn btn-sm btn-outline-success mt-3 w-100" disabled>
+                <i class="bi bi-download me-1"></i> Demnächst verfügbar
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- FAQ Section -->
+<div class="row mb-5" id="faq">
+    <div class="col-12">
+        <h3 class="mb-4"><i class="bi bi-question-circle me-2"></i>Häufig gestellte Fragen</h3>
+
+        <div class="accordion" id="faqAccordion">
+            <div class="accordion-item faq-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                        Wie erstellt die KI Empfehlungen?
+                    </button>
+                </h2>
+                <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Die KI analysiert beobachtbare Lernsignale wie Antwortmuster, die für Aktivitäten aufgewendete Zeit,
+                        die Anzahl der Versuche und Fortschrittsmuster. Sie nutzt verstärkendes Lernen, um optimale
+                        Lernpfade basierend auf ähnlichen Lernprofilen zu identifizieren. Alle Empfehlungen sind jedoch
+                        Vorschläge - die endgültige Entscheidung liegt immer bei der Lehrkraft.
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item faq-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                        Kann ich KI-Empfehlungen überschreiben?
+                    </button>
+                </h2>
+                <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Ja, absolut. Die Plattform wurde mit der Handlungsfähigkeit der Lehrkräfte als Kernprinzip entwickelt.
+                        Sie können jede KI-Empfehlung annehmen, ändern oder vollständig überschreiben. Das System lernt aus
+                        Ihren Entscheidungen, um zukünftige Vorschläge zu verbessern.
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item faq-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                        Wie werden die Daten der Lernenden geschützt?
+                    </button>
+                </h2>
+                <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Die Plattform folgt den DSGVO-Richtlinien und dem Grundsatz der Datenminimierung. Es werden nur
+                        notwendige Lerndaten erhoben, und alle personenbezogenen Daten werden verschlüsselt. Lernende können
+                        zu Analysezwecken anonymisiert werden, und Daten werden niemals ohne ausdrückliche Zustimmung an
+                        Dritte weitergegeben.
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item faq-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                        Was ist, wenn ein Lernender erhebliche Schwierigkeiten hat?
+                    </button>
+                </h2>
+                <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Das Dashboard informiert Sie über Lernende, die möglicherweise zusätzliche Unterstützung benötigen,
+                        im Bereich "Aufmerksamkeit erforderlich". Sie können dann die Lernhistorie überprüfen, den
+                        Schwierigkeitsgrad des Pfades anpassen, Förderaktivitäten zuweisen oder direkt eingreifen. Die KI
+                        schlägt spezifische Strategien basierend auf dem Profil des Lernenden vor.
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item faq-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+                        Wie interpretiere ich die Lernsignale auf dem Dashboard?
+                    </button>
+                </h2>
+                <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Beobachtbare Lernsignale umfassen:
+                        <ul class="mb-0 mt-2">
+                            <li><strong>Richtige/falsche Antworten:</strong> Gesamtgenauigkeitsrate</li>
+                            <li><strong>Anzahl der Versuche:</strong> Ausdauer und Engagement</li>
+                            <li><strong>Aufgewendete Zeit:</strong> Tiefe des Engagements (zu schnell kann auf Raten hindeuten, zu langsam auf Schwierigkeiten)</li>
+                            <li><strong>Antwortüberarbeitungen:</strong> Selbstkorrektur und metakognitive Aktivität</li>
+                            <li><strong>Fortschrittsmuster:</strong> Lernverlauf über die Zeit</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item faq-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq6">
+                        Kann ich die Lernpfade anpassen?
+                    </button>
+                </h2>
+                <div id="faq6" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Ja. Während die Plattform einen Standard-Lernbaum basierend auf dem gemeinsamen pädagogischen
+                        Rahmenwerk bereitstellt, können Lehrkräfte Aktivitäten anpassen, Schwierigkeitsgrade justieren,
+                        ergänzende Materialien hinzufügen und die Reihenfolge der Lernknoten für einzelne Lernende oder
+                        Gruppen ändern.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Support Section -->
+<div class="row">
+    <div class="col-12">
+        <div class="card bg-success text-white">
+            <div class="card-body text-center py-4">
+                <h4><i class="bi bi-headset me-2"></i>Benötigen Sie weitere Hilfe?</h4>
+                <p class="mb-3">Kontaktieren Sie unser Support-Team oder treten Sie dem Lehrkräfte-Community-Forum bei</p>
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    <a href="mailto:support@infinitelearnerai.eu" class="btn btn-light">
+                        <i class="bi bi-envelope me-2"></i>E-Mail-Support
+                    </a>
+                    <button class="btn btn-outline-light" disabled>
+                        <i class="bi bi-chat-dots me-2"></i>Community-Forum (Demnächst verfügbar)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

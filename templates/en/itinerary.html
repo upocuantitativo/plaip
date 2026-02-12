@@ -1,0 +1,997 @@
+{% extends "base.html" %}
+
+{% block title %}Itinerarios{% endblock %}
+
+{% block head %}
+<style>
+    #tree-container {
+        width: 100%;
+        height: 900px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        overflow: hidden;
+    }
+
+    .node circle {
+        stroke-width: 3px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .node circle:hover {
+        stroke-width: 5px;
+        filter: brightness(1.1);
+    }
+
+    .node text {
+        font-size: 10px;
+        font-weight: 500;
+        pointer-events: none;
+    }
+
+    .node-label {
+        font-size: 9px;
+        fill: #666;
+    }
+
+    .node-title {
+        font-size: 10px;
+        font-weight: bold;
+    }
+
+    .node-title-group text {
+        fill: #333;
+    }
+
+    .perf-indicator {
+        font-size: 9px;
+        font-weight: bold;
+    }
+
+    .link {
+        fill: none;
+        stroke: #adb5bd;
+        stroke-width: 2px;
+        stroke-opacity: 0.7;
+    }
+
+    .tooltip-tree {
+        position: absolute;
+        padding: 15px;
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        pointer-events: none;
+        z-index: 1000;
+        max-width: 350px;
+        font-size: 13px;
+    }
+
+    .tooltip-tree h6 {
+        margin-bottom: 8px;
+        padding-bottom: 8px;
+        border-bottom: 2px solid;
+    }
+
+    .tooltip-tree ul {
+        margin: 0;
+        padding-left: 18px;
+    }
+
+    .tooltip-tree li {
+        margin-bottom: 4px;
+    }
+
+    .legend-item {
+        display: inline-flex;
+        align-items: center;
+        margin-right: 20px;
+        padding: 5px 10px;
+        background: #f8f9fa;
+        border-radius: 20px;
+    }
+
+    .legend-color {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        margin-right: 8px;
+        border: 2px solid rgba(0,0,0,0.2);
+    }
+
+    .difficulty-badge {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 10px;
+        font-weight: bold;
+        color: white;
+    }
+
+    .diff-1 { background: #28a745; }
+    .diff-2 { background: #17a2b8; }
+    .diff-3 { background: #ffc107; color: #333; }
+    .diff-4 { background: #dc3545; }
+
+    .filter-section {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+    }
+
+    .node-details-panel {
+        max-height: 550px;
+        overflow-y: auto;
+    }
+
+    .strategy-tag {
+        display: inline-block;
+        padding: 3px 8px;
+        margin: 2px;
+        background: #e9ecef;
+        border-radius: 4px;
+        font-size: 11px;
+    }
+
+    .objective-item {
+        padding: 5px 0;
+        border-bottom: 1px dashed #dee2e6;
+    }
+
+    .objective-item:last-child {
+        border-bottom: none;
+    }
+
+    .accordion-button {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+
+    .accordion-body {
+        padding: 10px;
+    }
+
+    .form-range {
+        cursor: pointer;
+    }
+
+    .spacing-controls .form-label {
+        white-space: nowrap;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-3">
+    <div class="col-12">
+        <h1><i class="bi bi-diagram-3 text-primary"></i> Arbol de Itinerarios de Aprendizaje</h1>
+        <p class="text-muted">{{ path.description }}</p>
+    </div>
+</div>
+
+<!-- Filters -->
+<div class="row mb-3">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header py-2">
+                <h6 class="mb-0"><i class="bi bi-funnel"></i> Filtros de Visualizacion</h6>
+            </div>
+            <div class="card-body py-3">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label small fw-bold">Tipologia de Perfil</label>
+                        <select class="form-select form-select-sm" id="filter-profile" onchange="applyFilters()">
+                            <option value="all">Todos los perfiles</option>
+                            <option value="high_performer">Alto rendimiento</option>
+                            <option value="average">Rendimiento medio</option>
+                            <option value="struggling">Con dificultades</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label small fw-bold">Sexo</label>
+                        <select class="form-select form-select-sm" id="filter-gender" onchange="applyFilters()">
+                            <option value="all">Todos</option>
+                            <option value="female">Mujer</option>
+                            <option value="male">Hombre</option>
+                            <option value="non_binary">No binario</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label small fw-bold">Franja de Edad</label>
+                        <select class="form-select form-select-sm" id="filter-age" onchange="applyFilters()">
+                            <option value="all">Todas las edades</option>
+                            <option value="12-14">12-14 anos (ESO inicial)</option>
+                            <option value="15-16">15-16 anos (ESO final)</option>
+                            <option value="17-18">17-18 anos (Bachillerato)</option>
+                            <option value="19+">19+ anos (FP/Universidad)</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label small fw-bold">Competencia</label>
+                        <select class="form-select form-select-sm" id="filter-skill" onchange="applyFilters()">
+                            <option value="all">Todas las competencias</option>
+                            <option value="literacy">Literacy</option>
+                            <option value="numeracy">Numeracy</option>
+                            <option value="digital">Digital Skills</option>
+                            <option value="citizenship">Citizenship</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Legend -->
+<div class="row mb-3">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body py-2">
+                <div class="d-flex flex-wrap align-items-center">
+                    <strong class="me-3">Competencias:</strong>
+                    <span class="legend-item">
+                        <span class="legend-color" style="background: #4CAF50;"></span> Literacy
+                    </span>
+                    <span class="legend-item">
+                        <span class="legend-color" style="background: #2196F3;"></span> Numeracy
+                    </span>
+                    <span class="legend-item">
+                        <span class="legend-color" style="background: #9C27B0;"></span> Digital
+                    </span>
+                    <span class="legend-item">
+                        <span class="legend-color" style="background: #FF9800;"></span> Citizenship
+                    </span>
+                    <span class="ms-auto">
+                        <strong class="me-2">Dificultad:</strong>
+                        <span class="difficulty-badge diff-1">Basico</span>
+                        <span class="difficulty-badge diff-2">Elemental</span>
+                        <span class="difficulty-badge diff-3">Intermedio</span>
+                        <span class="difficulty-badge diff-4">Avanzado</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tree Visualization -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h5 class="mb-0"><i class="bi bi-bezier2"></i> Visualizacion del Itinerario</h5>
+                    <div>
+                        <button class="btn btn-sm btn-outline-secondary me-2" onclick="expandAll()">
+                            <i class="bi bi-arrows-expand"></i> Expandir
+                        </button>
+                        <button class="btn btn-sm btn-outline-secondary me-2" onclick="collapseAll()">
+                            <i class="bi bi-arrows-collapse"></i> Colapsar
+                        </button>
+                        <button class="btn btn-sm btn-outline-primary me-2" onclick="resetZoom()">
+                            <i class="bi bi-arrows-fullscreen"></i> Reset Vista
+                        </button>
+                        <button class="btn btn-sm btn-success" onclick="autoAdjustSpacing()">
+                            <i class="bi bi-magic"></i> Ajustar Visual
+                        </button>
+                    </div>
+                </div>
+                <div class="row g-2 align-items-center">
+                    <div class="col-auto">
+                        <label class="form-label small mb-0 me-2">Espaciado Horizontal:</label>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="range" class="form-range" id="spacing-horizontal" min="150" max="400" value="220" onchange="updateSpacing()">
+                    </div>
+                    <div class="col-auto">
+                        <span id="spacing-h-value" class="badge bg-secondary">220px</span>
+                    </div>
+                    <div class="col-auto ms-3">
+                        <label class="form-label small mb-0 me-2">Espaciado Vertical:</label>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="range" class="form-range" id="spacing-vertical" min="1" max="5" step="0.5" value="2" onchange="updateSpacing()">
+                    </div>
+                    <div class="col-auto">
+                        <span id="spacing-v-value" class="badge bg-secondary">2x</span>
+                    </div>
+                    <div class="col-auto ms-3">
+                        <label class="form-label small mb-0 me-2">Tamano Nodos:</label>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="range" class="form-range" id="node-size" min="8" max="25" value="12" onchange="updateSpacing()">
+                    </div>
+                    <div class="col-auto">
+                        <span id="node-size-value" class="badge bg-secondary">12px</span>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div id="tree-container"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Node Details -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-info-circle"></i> Detalle del Nodo</h5>
+            </div>
+            <div class="card-body node-details-panel" id="node-details">
+                <div class="text-center text-muted py-4">
+                    <i class="bi bi-hand-index display-4"></i>
+                    <p class="mt-2">Haz clic en un nodo del arbol para ver sus detalles</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-bar-chart"></i> Indicadores de Rendimiento</h5>
+            </div>
+            <div class="card-body node-details-panel" id="performance-details">
+                <div class="text-center text-muted py-4">
+                    <i class="bi bi-graph-up display-4"></i>
+                    <p class="mt-2">Selecciona un nodo para ver sus metricas</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tooltip -->
+<div class="tooltip-tree" id="tooltip" style="display: none;"></div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const treeData = {{ tree_data | safe }};
+
+// Configuration variables for spacing
+let horizontalSpacing = 220;
+let verticalSeparation = 2;
+let baseNodeSize = 12;
+
+// SVG setup with larger dimensions
+const container = document.getElementById('tree-container');
+const width = 2000;
+const height = 1200;
+const margin = {top: 80, right: 300, bottom: 80, left: 200};
+
+const svg = d3.select('#tree-container')
+    .append('svg')
+    .attr('width', '100%')
+    .attr('height', height)
+    .attr('viewBox', `0 0 ${width} ${height}`);
+
+const g = svg.append('g')
+    .attr('transform', `translate(${margin.left},${margin.top})`);
+
+// Zoom behavior
+const zoom = d3.zoom()
+    .scaleExtent([0.1, 5])
+    .on('zoom', (event) => g.attr('transform', event.transform));
+
+svg.call(zoom);
+
+// Initial zoom to fit
+svg.call(zoom.transform, d3.zoomIdentity.translate(margin.left, margin.top).scale(0.6));
+
+// Tree layout with more spacing
+let treeLayout = d3.tree()
+    .size([height - margin.top - margin.bottom, width - margin.left - margin.right - 400])
+    .separation((a, b) => (a.parent === b.parent ? verticalSeparation : verticalSeparation * 1.5));
+
+// Process data
+const root = d3.hierarchy(treeData);
+root.x0 = height / 2;
+root.y0 = 0;
+
+// Color mapping
+const skillColors = {
+    'literacy': '#4CAF50',
+    'numeracy': '#2196F3',
+    'digital': '#9C27B0',
+    'citizenship': '#FF9800'
+};
+
+const difficultyLabels = ['', 'Basico', 'Elemental', 'Intermedio', 'Avanzado'];
+
+let i = 0;
+const duration = 750;
+
+// Helper function to wrap text in multiple lines
+function wrapText(text, width) {
+    text.each(function() {
+        const textEl = d3.select(this);
+        const words = textEl.text().split(/\s+/).reverse();
+        const lineHeight = 1.1;
+        const y = textEl.attr("y") || 0;
+        const dy = parseFloat(textEl.attr("dy")) || 0;
+
+        let word;
+        let line = [];
+        let lineNumber = 0;
+        let tspan = textEl.text(null)
+            .append("tspan")
+            .attr("x", 0)
+            .attr("y", y)
+            .attr("dy", dy + "em");
+
+        while (word = words.pop()) {
+            line.push(word);
+            tspan.text(line.join(" "));
+            if (tspan.node().getComputedTextLength() > width && line.length > 1) {
+                line.pop();
+                tspan.text(line.join(" "));
+                line = [word];
+                tspan = textEl.append("tspan")
+                    .attr("x", 0)
+                    .attr("y", y)
+                    .attr("dy", ++lineNumber * lineHeight + dy + "em")
+                    .text(word);
+            }
+        }
+    });
+}
+
+function update(source) {
+    // Recalculate tree layout with current separation
+    treeLayout.separation((a, b) => (a.parent === b.parent ? verticalSeparation : verticalSeparation * 1.5));
+
+    const treeDataLayout = treeLayout(root);
+    const nodes = treeDataLayout.descendants();
+    const links = treeDataLayout.links();
+
+    // Normalize for fixed-depth with configurable horizontal spacing
+    nodes.forEach(d => {
+        d.y = d.depth * horizontalSpacing;
+    });
+
+    // Nodes
+    const node = g.selectAll('g.node')
+        .data(nodes, d => d.id || (d.id = ++i));
+
+    // Enter new nodes
+    const nodeEnter = node.enter().append('g')
+        .attr('class', 'node')
+        .attr('transform', d => `translate(${source.y0},${source.x0})`)
+        .on('click', (event, d) => {
+            if (d.children) {
+                d._children = d.children;
+                d.children = null;
+            } else {
+                d.children = d._children;
+                d._children = null;
+            }
+            update(d);
+            showNodeDetails(event, d);
+        })
+        .on('mouseover', showTooltip)
+        .on('mouseout', hideTooltip);
+
+    // Circle for each node
+    nodeEnter.append('circle')
+        .attr('r', 1e-6)
+        .style('fill', d => d._children ? '#fff' : (skillColors[d.data.skill] || '#666'))
+        .style('stroke', d => skillColors[d.data.skill] || '#666')
+        .style('stroke-width', '3px');
+
+    // Node title (name) - with text wrapping
+    const titleGroup = nodeEnter.append('g')
+        .attr('class', 'node-title-group')
+        .attr('transform', `translate(0, ${-baseNodeSize - 20})`);
+
+    titleGroup.append('text')
+        .attr('class', 'node-title')
+        .attr('text-anchor', 'middle')
+        .attr('dy', '0em')
+        .text(d => {
+            const name = d.data.name || d.data.id;
+            // Truncate if too long and add tooltip indicator
+            return name.length > 25 ? name.substring(0, 22) + '...' : name;
+        })
+        .style('fill', '#333')
+        .style('font-weight', 'bold')
+        .style('font-size', '10px')
+        .call(wrapText, 120);
+
+    // Skill label
+    nodeEnter.append('text')
+        .attr('dy', `${baseNodeSize + 15}px`)
+        .attr('text-anchor', 'middle')
+        .attr('class', 'node-label')
+        .text(d => d.data.skill ? d.data.skill.toUpperCase() : '')
+        .style('font-size', '8px')
+        .style('font-weight', 'bold')
+        .style('fill', d => skillColors[d.data.skill] || '#666');
+
+    // Difficulty badge
+    nodeEnter.append('text')
+        .attr('dy', `${baseNodeSize + 28}px`)
+        .attr('text-anchor', 'middle')
+        .attr('class', 'node-label')
+        .text(d => difficultyLabels[d.data.difficulty] || '')
+        .style('font-size', '7px')
+        .style('fill', '#999');
+
+    // Performance indicator
+    nodeEnter.append('text')
+        .attr('class', 'perf-indicator')
+        .attr('dy', `${-baseNodeSize - 35}px`)
+        .attr('text-anchor', 'middle')
+        .text(d => {
+            if (d.data.performance && d.data.performance.averageScore > 0) {
+                return Math.round(d.data.performance.averageScore) + '%';
+            }
+            return '';
+        })
+        .style('font-size', '9px')
+        .style('font-weight', 'bold')
+        .style('fill', d => {
+            const score = d.data.performance?.averageScore || 0;
+            if (score >= 70) return '#28a745';
+            if (score >= 50) return '#ffc107';
+            return '#dc3545';
+        });
+
+    // Update nodes
+    const nodeUpdate = nodeEnter.merge(node);
+
+    nodeUpdate.transition()
+        .duration(duration)
+        .attr('transform', d => `translate(${d.y},${d.x})`);
+
+    nodeUpdate.select('circle')
+        .attr('r', d => baseNodeSize + (d.data.difficulty || 1) * 3)
+        .style('fill', d => d._children ? '#fff' : (skillColors[d.data.skill] || '#666'))
+        .style('stroke', d => skillColors[d.data.skill] || '#666');
+
+    // Remove exiting nodes
+    const nodeExit = node.exit().transition()
+        .duration(duration)
+        .attr('transform', d => `translate(${source.y},${source.x})`)
+        .remove();
+
+    nodeExit.select('circle').attr('r', 1e-6);
+    nodeExit.select('text').style('fill-opacity', 1e-6);
+
+    // Links
+    const link = g.selectAll('path.link')
+        .data(links, d => d.target.id);
+
+    // Enter new links
+    const linkEnter = link.enter().insert('path', 'g')
+        .attr('class', 'link')
+        .attr('d', d => {
+            const o = {x: source.x0, y: source.y0};
+            return diagonal(o, o);
+        });
+
+    // Update links
+    const linkUpdate = linkEnter.merge(link);
+
+    linkUpdate.transition()
+        .duration(duration)
+        .attr('d', d => diagonal(d.source, d.target));
+
+    // Remove exiting links
+    link.exit().transition()
+        .duration(duration)
+        .attr('d', d => {
+            const o = {x: source.x, y: source.y};
+            return diagonal(o, o);
+        })
+        .remove();
+
+    // Store old positions
+    nodes.forEach(d => {
+        d.x0 = d.x;
+        d.y0 = d.y;
+    });
+}
+
+// Diagonal path generator
+function diagonal(s, d) {
+    return `M ${s.y} ${s.x}
+            C ${(s.y + d.y) / 2} ${s.x},
+              ${(s.y + d.y) / 2} ${d.x},
+              ${d.y} ${d.x}`;
+}
+
+// Initial render
+update(root);
+
+// Tooltip functions
+const tooltip = document.getElementById('tooltip');
+
+function showTooltip(event, d) {
+    const perf = d.data.performance || {};
+    const objectives = d.data.objectives || [];
+    const strategies = d.data.strategies || [];
+
+    let objectivesHtml = '';
+    if (objectives.length > 0) {
+        objectivesHtml = `
+            <p class="mb-1"><strong>Objetivos:</strong></p>
+            <ul class="mb-2">
+                ${objectives.map(o => `<li>${o}</li>`).join('')}
+            </ul>
+        `;
+    }
+
+    let strategiesHtml = '';
+    if (strategies.length > 0) {
+        strategiesHtml = `
+            <p class="mb-1"><strong>Estrategias EAI:</strong></p>
+            <div class="mb-2">
+                ${strategies.map(s => `<span class="strategy-tag">${s}</span>`).join('')}
+            </div>
+        `;
+    }
+
+    tooltip.innerHTML = `
+        <h6 style="border-color: ${skillColors[d.data.skill] || '#666'}">${d.data.name || d.data.id}</h6>
+        <div class="mb-2">
+            <span class="badge" style="background: ${skillColors[d.data.skill] || '#666'}">${d.data.skill || 'N/A'}</span>
+            <span class="difficulty-badge diff-${d.data.difficulty || 1}">${difficultyLabels[d.data.difficulty] || 'N/A'}</span>
+        </div>
+        <p class="small text-muted mb-2">${d.data.description || ''}</p>
+        ${objectivesHtml}
+        ${strategiesHtml}
+        <hr class="my-2">
+        <div class="row small">
+            <div class="col-6">
+                <i class="bi bi-check-circle text-success"></i> Completado: <strong>${Math.round(perf.completionRate || 0)}%</strong>
+            </div>
+            <div class="col-6">
+                <i class="bi bi-star text-warning"></i> Puntuacion: <strong>${Math.round(perf.averageScore || 0)}</strong>
+            </div>
+            <div class="col-6">
+                <i class="bi bi-clock text-info"></i> Tiempo: <strong>${Math.round(perf.timeSpent || 0)} min</strong>
+            </div>
+            <div class="col-6">
+                <i class="bi bi-arrow-repeat text-secondary"></i> Intentos: <strong>${perf.attempts || 0}</strong>
+            </div>
+        </div>
+    `;
+    tooltip.style.display = 'block';
+    tooltip.style.left = (event.pageX + 20) + 'px';
+    tooltip.style.top = (event.pageY - 10) + 'px';
+}
+
+function hideTooltip() {
+    tooltip.style.display = 'none';
+}
+
+// Show node details in panel
+function showNodeDetails(event, d) {
+    const data = d.data;
+    const perf = data.performance || {};
+    const objectives = data.objectives || [];
+    const strategies = data.strategies || [];
+    const activities = data.activities || {};
+    const currentProfile = getCurrentProfile();
+
+    let objectivesHtml = '<p class="text-muted small">Sin objetivos definidos</p>';
+    if (objectives.length > 0) {
+        objectivesHtml = `<ul class="list-unstyled mb-0">
+            ${objectives.map(o => `<li class="objective-item"><i class="bi bi-check2 text-success me-2"></i>${o}</li>`).join('')}
+        </ul>`;
+    }
+
+    let strategiesHtml = '<p class="text-muted small">Sin estrategias definidas</p>';
+    if (strategies.length > 0) {
+        strategiesHtml = `<div>${strategies.map(s => `<span class="strategy-tag"><i class="bi bi-lightbulb me-1"></i>${s}</span>`).join('')}</div>`;
+    }
+
+    // Activities based on selected profile
+    let activitiesHtml = '';
+    const profileLabels = {
+        'all': 'Todos los perfiles',
+        'high_performer': 'Alto Rendimiento',
+        'average': 'Rendimiento Medio',
+        'struggling': 'Con Dificultades'
+    };
+
+    if (currentProfile === 'all') {
+        // Show activities for all profiles
+        activitiesHtml = `
+            <div class="accordion" id="activitiesAccordion">
+                ${Object.entries(activities).map(([profile, acts], idx) => `
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button ${idx > 0 ? 'collapsed' : ''} py-2" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#collapse${profile}">
+                                <span class="badge ${profile === 'high_performer' ? 'bg-success' : profile === 'average' ? 'bg-warning' : 'bg-danger'} me-2">
+                                    ${profileLabels[profile] || profile}
+                                </span>
+                            </button>
+                        </h2>
+                        <div id="collapse${profile}" class="accordion-collapse collapse ${idx === 0 ? 'show' : ''}">
+                            <div class="accordion-body py-2">
+                                <ul class="list-unstyled mb-0 small">
+                                    ${acts.map(a => `<li class="mb-1"><i class="bi bi-play-circle text-primary me-1"></i>${a}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    } else if (activities[currentProfile]) {
+        // Show activities for selected profile only
+        activitiesHtml = `
+            <div class="alert alert-light py-2 mb-2">
+                <strong><i class="bi bi-person-badge me-1"></i>Perfil: ${profileLabels[currentProfile]}</strong>
+            </div>
+            <ul class="list-unstyled mb-0">
+                ${activities[currentProfile].map(a => `
+                    <li class="mb-2 p-2 bg-light rounded">
+                        <i class="bi bi-play-circle text-primary me-1"></i>${a}
+                    </li>
+                `).join('')}
+            </ul>
+        `;
+    } else {
+        activitiesHtml = '<p class="text-muted small">Sin actividades definidas para este perfil</p>';
+    }
+
+    document.getElementById('node-details').innerHTML = `
+        <div class="d-flex align-items-center mb-3">
+            <div class="rounded-circle me-3" style="width: 50px; height: 50px; background: ${skillColors[data.skill] || '#666'}; display: flex; align-items: center; justify-content: center;">
+                <i class="bi bi-book text-white fs-4"></i>
+            </div>
+            <div>
+                <h5 class="mb-0">${data.name || data.id}</h5>
+                <span class="badge" style="background: ${skillColors[data.skill] || '#666'}">${data.skill || 'N/A'}</span>
+                <span class="difficulty-badge diff-${data.difficulty || 1}">${difficultyLabels[data.difficulty] || ''}</span>
+            </div>
+        </div>
+
+        <p class="text-muted">${data.description || 'Sin descripcion disponible'}</p>
+
+        <hr>
+
+        <div class="row mb-3">
+            <div class="col-6">
+                <small class="text-muted d-block">Duracion estimada</small>
+                <strong><i class="bi bi-clock me-1"></i>${data.estimatedDuration || 30} minutos</strong>
+            </div>
+            <div class="col-6">
+                <small class="text-muted d-block">Metodologia</small>
+                <strong><i class="bi bi-gear me-1"></i>${data.methodology || 'Tutorial adaptativo'}</strong>
+            </div>
+        </div>
+
+        <h6 class="text-primary"><i class="bi bi-bullseye me-2"></i>Objetivos de Aprendizaje</h6>
+        ${objectivesHtml}
+
+        <hr>
+
+        <h6 class="text-info"><i class="bi bi-list-task me-2"></i>Actividades por Perfil</h6>
+        ${activitiesHtml}
+
+        <hr>
+
+        <h6 class="text-warning"><i class="bi bi-lightning me-2"></i>Estrategias de Alto Impacto (EAI)</h6>
+        ${strategiesHtml}
+    `;
+
+    document.getElementById('performance-details').innerHTML = `
+        <div class="row text-center g-3 mb-4">
+            <div class="col-6">
+                <div class="p-3 rounded" style="background: ${perf.completionRate >= 70 ? '#d4edda' : perf.completionRate >= 50 ? '#fff3cd' : '#f8d7da'}">
+                    <div class="h2 mb-0">${Math.round(perf.completionRate || 0)}%</div>
+                    <small class="text-muted">Tasa de Completado</small>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="p-3 rounded" style="background: ${perf.averageScore >= 70 ? '#d4edda' : perf.averageScore >= 50 ? '#fff3cd' : '#f8d7da'}">
+                    <div class="h2 mb-0">${Math.round(perf.averageScore || 0)}</div>
+                    <small class="text-muted">Puntuacion Media</small>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="p-3 bg-light rounded">
+                    <div class="h2 mb-0 text-info">${Math.round(perf.timeSpent || 0)}</div>
+                    <small class="text-muted">Minutos Promedio</small>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="p-3 bg-light rounded">
+                    <div class="h2 mb-0 text-secondary">${perf.attempts || 0}</div>
+                    <small class="text-muted">Intentos Totales</small>
+                </div>
+            </div>
+        </div>
+
+        <h6><i class="bi bi-memory me-2"></i>Tasa de Retencion a Largo Plazo</h6>
+        <div class="progress mb-2" style="height: 30px;">
+            <div class="progress-bar ${perf.retentionRate >= 70 ? 'bg-success' : perf.retentionRate >= 50 ? 'bg-warning' : 'bg-danger'}"
+                 style="width: ${perf.retentionRate || 0}%">
+                ${Math.round(perf.retentionRate || 0)}%
+            </div>
+        </div>
+        <small class="text-muted">Medida de la capacidad de recordar conocimientos tras un periodo</small>
+    `;
+}
+
+function resetZoom() {
+    svg.transition()
+        .duration(750)
+        .call(zoom.transform, d3.zoomIdentity
+            .translate(margin.left, margin.top)
+            .scale(0.9));
+}
+
+function expandAll() {
+    root.descendants().forEach(d => {
+        if (d._children) {
+            d.children = d._children;
+            d._children = null;
+        }
+    });
+    update(root);
+}
+
+function collapseAll() {
+    root.descendants().forEach(d => {
+        if (d.children && d.depth > 0) {
+            d._children = d.children;
+            d.children = null;
+        }
+    });
+    update(root);
+}
+
+async function applyFilters() {
+    const profile = document.getElementById('filter-profile').value;
+    const gender = document.getElementById('filter-gender').value;
+    const age = document.getElementById('filter-age').value;
+    const skill = document.getElementById('filter-skill').value;
+
+    // Show loading indicator
+    document.getElementById('tree-container').style.opacity = '0.5';
+
+    try {
+        // Fetch new tree data from API with filters
+        const response = await fetch(`/api/tree?profile=${profile}&gender=${gender}&age=${age}&skill=${skill}`);
+        const newTreeData = await response.json();
+
+        // Clear existing tree
+        g.selectAll('*').remove();
+
+        // Update root with new data
+        const newRoot = d3.hierarchy(newTreeData);
+        newRoot.x0 = height / 2;
+        newRoot.y0 = 0;
+
+        // Reassign to global root
+        Object.assign(root, newRoot);
+        root.children = newRoot.children;
+        root.data = newRoot.data;
+
+        // Re-render tree
+        update(root);
+
+        // Update filter info display
+        updateFilterInfo(newTreeData.appliedFilters);
+
+    } catch (error) {
+        console.error('Error loading filtered tree:', error);
+        alert('Error al cargar el arbol filtrado');
+    }
+
+    document.getElementById('tree-container').style.opacity = '1';
+}
+
+function updateFilterInfo(filters) {
+    const profileLabels = {
+        'all': 'Todos',
+        'high_performer': 'Alto rendimiento',
+        'average': 'Rendimiento medio',
+        'struggling': 'Con dificultades'
+    };
+    const genderLabels = {
+        'all': 'Todos',
+        'female': 'Mujer',
+        'male': 'Hombre',
+        'non_binary': 'No binario'
+    };
+    const ageLabels = {
+        'all': 'Todas',
+        '12-14': '12-14 anos',
+        '15-16': '15-16 anos',
+        '17-18': '17-18 anos',
+        '19+': '19+ anos'
+    };
+
+    console.log('Arbol actualizado para:', {
+        perfil: profileLabels[filters.profile],
+        sexo: genderLabels[filters.gender],
+        edad: ageLabels[filters.ageRange],
+        competencia: filters.skill === 'all' ? 'Todas' : filters.skill
+    });
+}
+
+// Spacing control functions
+function updateSpacing() {
+    horizontalSpacing = parseInt(document.getElementById('spacing-horizontal').value);
+    verticalSeparation = parseFloat(document.getElementById('spacing-vertical').value);
+    baseNodeSize = parseInt(document.getElementById('node-size').value);
+
+    // Update display values
+    document.getElementById('spacing-h-value').textContent = horizontalSpacing + 'px';
+    document.getElementById('spacing-v-value').textContent = verticalSeparation + 'x';
+    document.getElementById('node-size-value').textContent = baseNodeSize + 'px';
+
+    // Recalculate tree layout
+    treeLayout.separation((a, b) => (a.parent === b.parent ? verticalSeparation : verticalSeparation * 1.5));
+
+    // Redraw
+    g.selectAll('*').remove();
+    i = 0;
+    update(root);
+}
+
+function autoAdjustSpacing() {
+    // Count nodes to determine optimal spacing
+    const nodeCount = root.descendants().length;
+    const maxDepth = d3.max(root.descendants(), d => d.depth);
+
+    // Auto-calculate optimal values based on tree size
+    if (nodeCount > 15) {
+        horizontalSpacing = Math.max(180, Math.min(350, 400 - nodeCount * 8));
+        verticalSeparation = Math.max(1.5, Math.min(4, nodeCount / 6));
+        baseNodeSize = Math.max(8, Math.min(15, 20 - nodeCount / 4));
+    } else {
+        horizontalSpacing = 280;
+        verticalSeparation = 2.5;
+        baseNodeSize = 14;
+    }
+
+    // Update slider values
+    document.getElementById('spacing-horizontal').value = horizontalSpacing;
+    document.getElementById('spacing-vertical').value = verticalSeparation;
+    document.getElementById('node-size').value = baseNodeSize;
+
+    // Update display
+    document.getElementById('spacing-h-value').textContent = horizontalSpacing + 'px';
+    document.getElementById('spacing-v-value').textContent = verticalSeparation.toFixed(1) + 'x';
+    document.getElementById('node-size-value').textContent = baseNodeSize + 'px';
+
+    // Redraw
+    g.selectAll('*').remove();
+    i = 0;
+    update(root);
+
+    // Auto-fit zoom
+    setTimeout(() => {
+        const bounds = g.node().getBBox();
+        const fullWidth = bounds.width + margin.left + margin.right;
+        const fullHeight = bounds.height + margin.top + margin.bottom;
+        const scale = Math.min(0.9, Math.min(width / fullWidth, height / fullHeight) * 0.8);
+
+        svg.transition()
+            .duration(750)
+            .call(zoom.transform, d3.zoomIdentity
+                .translate(margin.left, margin.top + 50)
+                .scale(scale));
+    }, 800);
+}
+
+// Get current profile from filter
+function getCurrentProfile() {
+    return document.getElementById('filter-profile').value || 'all';
+}
+</script>
+{% endblock %}

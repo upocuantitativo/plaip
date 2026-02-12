@@ -1,0 +1,449 @@
+{% extends "base.html" %}
+
+{% block title %}Initial Diagnostic{% endblock %}
+
+{% block head %}
+<style>
+    .diagnostic-card {
+        border-left: 4px solid;
+        transition: all 0.3s;
+    }
+    .diagnostic-card:hover {
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+    .skill-literacy { border-color: #4CAF50; }
+    .skill-numeracy { border-color: #2196F3; }
+    .skill-digital { border-color: #9C27B0; }
+    .skill-citizenship { border-color: #FF9800; }
+    .question-item {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 10px;
+    }
+    .question-item:hover {
+        background: #e9ecef;
+    }
+    .progress-ring {
+        width: 80px;
+        height: 80px;
+    }
+    .test-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('landing', lang=lang) }}">Project</a></li>
+                <li class="breadcrumb-item"><span class="badge bg-warning text-dark">WP3</span> Pilots</li>
+                <li class="breadcrumb-item active">Initial Diagnostic</li>
+            </ol>
+        </nav>
+        <h1><i class="bi bi-clipboard2-pulse text-info"></i> Initial Diagnostic</h1>
+        <p class="text-muted lead">
+            Questionnaires and diagnostic tests to identify needs, map strengths and weaknesses,
+            and initiate the Personalised Learning Pathway (PLP).
+        </p>
+    </div>
+</div>
+
+<!-- Info Alert -->
+<div class="alert alert-info mb-4">
+    <div class="row align-items-center">
+        <div class="col-auto">
+            <i class="bi bi-info-circle fs-3"></i>
+        </div>
+        <div class="col">
+            <strong>Diagnostic objective:</strong> Identify the student's initial level in each competence
+            to design a personalised pathway. Results feed the AI system to recommend
+            the optimal entry point in each branch of the learning tree.
+        </div>
+    </div>
+</div>
+
+<!-- Student Selection -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-person-check me-2"></i>Select Student</h5>
+            </div>
+            <div class="card-body">
+                <select class="form-select" id="student-select">
+                    <option value="">-- Select student --</option>
+                    {% for student in students %}
+                    <option value="{{ student.id }}">{{ student.name }} ({{ student.demographics.education_stage.name }})</option>
+                    {% endfor %}
+                </select>
+                <div id="student-info" class="mt-3" style="display: none;">
+                    <div class="row text-center">
+                        <div class="col-4">
+                            <small class="text-muted">Age</small>
+                            <p class="mb-0 fw-bold" id="student-age">-</p>
+                        </div>
+                        <div class="col-4">
+                            <small class="text-muted">Level</small>
+                            <p class="mb-0 fw-bold" id="student-level">-</p>
+                        </div>
+                        <div class="col-4">
+                            <small class="text-muted">Digital Comp.</small>
+                            <p class="mb-0 fw-bold" id="student-digital">-</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card bg-light">
+            <div class="card-body">
+                <h6><i class="bi bi-lightbulb text-warning me-2"></i>Types of diagnostic assessment</h6>
+                <ul class="mb-0 small">
+                    <li><strong>Critical reading:</strong> Understanding short texts</li>
+                    <li><strong>Digital interpretation:</strong> Navigation and evaluation of online information</li>
+                    <li><strong>Data comprehension:</strong> Graphs, percentages, simple statistics</li>
+                    <li><strong>Civic attitudes:</strong> Positioning on civic issues</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Diagnostic Tests by Skill -->
+<div class="row g-4">
+    <!-- Digital Skills -->
+    <div class="col-md-6">
+        <div class="card h-100 diagnostic-card skill-digital position-relative">
+            <span class="badge bg-purple test-badge" style="background: #9C27B0;">Primary</span>
+            <div class="card-header bg-white">
+                <h5 class="mb-0"><i class="bi bi-laptop me-2" style="color: #9C27B0;"></i>Digital Competence</h5>
+            </div>
+            <div class="card-body">
+                <p class="text-muted small">Assesses the ability to use digital technologies safely, critically, and responsibly.</p>
+
+                <div class="question-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>D1. Navigation and search</strong>
+                            <p class="mb-0 small text-muted">Finding and evaluating online information</p>
+                        </div>
+                        <span class="badge bg-secondary">5 items</span>
+                    </div>
+                </div>
+
+                <div class="question-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>D2. Digital communication</strong>
+                            <p class="mb-0 small text-muted">Interaction and collaboration in digital environments</p>
+                        </div>
+                        <span class="badge bg-secondary">4 items</span>
+                    </div>
+                </div>
+
+                <div class="question-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>D3. Digital security</strong>
+                            <p class="mb-0 small text-muted">Data protection and privacy</p>
+                        </div>
+                        <span class="badge bg-secondary">4 items</span>
+                    </div>
+                </div>
+
+                <button class="btn btn-outline-primary w-100 mt-3" onclick="startDiagnostic('digital')">
+                    <i class="bi bi-play-circle me-2"></i>Start Digital Diagnostic
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Citizenship -->
+    <div class="col-md-6">
+        <div class="card h-100 diagnostic-card skill-citizenship position-relative">
+            <span class="badge bg-warning text-dark test-badge">Primary</span>
+            <div class="card-header bg-white">
+                <h5 class="mb-0"><i class="bi bi-flag me-2" style="color: #FF9800;"></i>Citizenship Competence</h5>
+            </div>
+            <div class="card-body">
+                <p class="text-muted small">Assesses knowledge about democracy, rights, and civic participation.</p>
+
+                <div class="question-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>C1. Democratic values</strong>
+                            <p class="mb-0 small text-muted">Knowledge of fundamental rights</p>
+                        </div>
+                        <span class="badge bg-secondary">5 items</span>
+                    </div>
+                </div>
+
+                <div class="question-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>C2. Media Literacy</strong>
+                            <p class="mb-0 small text-muted">Critical analysis of media and disinformation</p>
+                        </div>
+                        <span class="badge bg-secondary">6 items</span>
+                    </div>
+                </div>
+
+                <div class="question-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>C3. Sustainability</strong>
+                            <p class="mb-0 small text-muted">Climate change and environmental responsibility</p>
+                        </div>
+                        <span class="badge bg-secondary">4 items</span>
+                    </div>
+                </div>
+
+                <button class="btn btn-outline-warning w-100 mt-3" onclick="startDiagnostic('citizenship')">
+                    <i class="bi bi-play-circle me-2"></i>Start Citizenship Diagnostic
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Literacy -->
+    <div class="col-md-6">
+        <div class="card h-100 diagnostic-card skill-literacy position-relative">
+            <span class="badge bg-success test-badge">Enabling</span>
+            <div class="card-header bg-white">
+                <h5 class="mb-0"><i class="bi bi-book me-2" style="color: #4CAF50;"></i>Literacy Competence</h5>
+            </div>
+            <div class="card-body">
+                <p class="text-muted small">Assesses reading comprehension as an enabling competence for digital and citizenship learning.</p>
+
+                <div class="question-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>L1. Literal comprehension</strong>
+                            <p class="mb-0 small text-muted">Identifying explicit information</p>
+                        </div>
+                        <span class="badge bg-secondary">4 items</span>
+                    </div>
+                </div>
+
+                <div class="question-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>L2. Inferential comprehension</strong>
+                            <p class="mb-0 small text-muted">Deducing implicit meanings</p>
+                        </div>
+                        <span class="badge bg-secondary">4 items</span>
+                    </div>
+                </div>
+
+                <div class="question-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>L3. Critical reading</strong>
+                            <p class="mb-0 small text-muted">Evaluating and questioning texts</p>
+                        </div>
+                        <span class="badge bg-secondary">5 items</span>
+                    </div>
+                </div>
+
+                <button class="btn btn-outline-success w-100 mt-3" onclick="startDiagnostic('literacy')">
+                    <i class="bi bi-play-circle me-2"></i>Start Literacy Diagnostic
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Numeracy -->
+    <div class="col-md-6">
+        <div class="card h-100 diagnostic-card skill-numeracy position-relative">
+            <span class="badge bg-primary test-badge">Enabling</span>
+            <div class="card-header bg-white">
+                <h5 class="mb-0"><i class="bi bi-calculator me-2" style="color: #2196F3;"></i>Numeracy Competence</h5>
+            </div>
+            <div class="card-body">
+                <p class="text-muted small">Assesses numerical reasoning as an enabling competence for interpreting data and statistics.</p>
+
+                <div class="question-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>N1. Data interpretation</strong>
+                            <p class="mb-0 small text-muted">Reading graphs and tables</p>
+                        </div>
+                        <span class="badge bg-secondary">5 items</span>
+                    </div>
+                </div>
+
+                <div class="question-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>N2. Percentages and proportions</strong>
+                            <p class="mb-0 small text-muted">Calculation and interpretation</p>
+                        </div>
+                        <span class="badge bg-secondary">4 items</span>
+                    </div>
+                </div>
+
+                <div class="question-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>N3. Logical reasoning</strong>
+                            <p class="mb-0 small text-muted">Patterns and sequences</p>
+                        </div>
+                        <span class="badge bg-secondary">4 items</span>
+                    </div>
+                </div>
+
+                <button class="btn btn-outline-primary w-100 mt-3" onclick="startDiagnostic('numeracy')">
+                    <i class="bi bi-play-circle me-2"></i>Start Numeracy Diagnostic
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Complete Diagnostic Button -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card bg-primary text-white">
+            <div class="card-body text-center py-4">
+                <h4><i class="bi bi-lightning-charge me-2"></i>Complete Diagnostic</h4>
+                <p class="mb-3">Take the diagnostic for all 4 competences to get a complete profile and personalised pathway recommendations.</p>
+                <button class="btn btn-light btn-lg" onclick="startFullDiagnostic()">
+                    <i class="bi bi-play-fill me-2"></i>Start Complete Diagnostic (approx. 25 min)
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Diagnostic -->
+<div class="modal fade" id="diagnosticModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-clipboard2-check me-2"></i>Diagnostic Test</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="diagnostic-content">
+                    <!-- Dynamic content loaded here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="submit-diagnostic">Submit Answers</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const studentSelect = document.getElementById('student-select');
+const studentInfo = document.getElementById('student-info');
+
+studentSelect.addEventListener('change', async function() {
+    if (this.value) {
+        const response = await fetch(`/api/students/${this.value}`);
+        const student = await response.json();
+
+        document.getElementById('student-age').textContent = student.demographics.age + ' years';
+        document.getElementById('student-level').textContent = student.demographics.education_stage;
+        document.getElementById('student-digital').textContent = Math.round(student.demographics.digital_competence_score) + '%';
+        studentInfo.style.display = 'block';
+    } else {
+        studentInfo.style.display = 'none';
+    }
+});
+
+function startDiagnostic(skill) {
+    if (!studentSelect.value) {
+        alert('Please select a student first.');
+        return;
+    }
+
+    const skillNames = {
+        'digital': 'Digital Competence',
+        'citizenship': 'Citizenship Competence',
+        'literacy': 'Literacy Competence',
+        'numeracy': 'Numeracy Competence'
+    };
+
+    document.getElementById('diagnostic-content').innerHTML = `
+        <div class="text-center py-4">
+            <div class="spinner-border text-primary mb-3" role="status"></div>
+            <h5>Loading ${skillNames[skill]} test...</h5>
+            <p class="text-muted">The diagnostic will contain questions adapted to the student's level.</p>
+        </div>
+    `;
+
+    const modal = new bootstrap.Modal(document.getElementById('diagnosticModal'));
+    modal.show();
+
+    // Simulate loading diagnostic questions
+    setTimeout(() => {
+        document.getElementById('diagnostic-content').innerHTML = generateDiagnosticQuestions(skill);
+    }, 1500);
+}
+
+function startFullDiagnostic() {
+    if (!studentSelect.value) {
+        alert('Please select a student first.');
+        return;
+    }
+    alert('Starting complete diagnostic for all 4 competences...');
+}
+
+function generateDiagnosticQuestions(skill) {
+    const questions = {
+        'digital': [
+            {q: 'When searching for information online, what is the best way to verify its reliability?', options: ['Trust the first result', 'Verify across multiple sources', 'Only use Wikipedia', 'Ask friends']},
+            {q: 'What information should you NOT share on public social media?', options: ['Your favourite music', 'Your home address', 'Your favourite movies', 'Your sports team']},
+            {q: 'What is phishing?', options: ['A type of social network', 'An attempt to steal personal data', 'A web browser', 'A file type']}
+        ],
+        'citizenship': [
+            {q: 'Which of these is a fundamental right recognised by the EU?', options: ['Having a car', 'Freedom of expression', 'Winning the lottery', 'Having a pet']},
+            {q: 'How can you identify fake news?', options: ['If it has many likes', 'By verifying the source and date', 'If a celebrity shares it', 'If it has photos']},
+            {q: 'What are the SDGs?', options: ['Sustainable Development Goals', 'Security Data Groups', 'Safe Digital Guidelines', 'Service Delivery Options']}
+        ],
+        'literacy': [
+            {q: 'Read the following paragraph and answer: "Climate change affects all ecosystems..." What is the main idea?', options: ['Ecosystems are important', 'Climate change has global impact', 'Climate always changes', 'Animals migrate']},
+            {q: 'What does "interpret" a text mean?', options: ['Read it aloud', 'Understand its deeper meaning', 'Memorise it', 'Translate it']},
+            {q: 'In an argumentative text, what is a fallacy?', options: ['An absolute truth', 'A flawed reasoning', 'A statistical datum', 'A conclusion']}
+        ],
+        'numeracy': [
+            {q: 'If a graph shows that 40% of students prefer maths, and there are 200 students, how many prefer maths?', options: ['40', '80', '120', '160']},
+            {q: 'What type of graph is best for showing proportions of a total?', options: ['Line graph', 'Pie chart', 'Bar graph', 'Histogram']},
+            {q: 'If the data shows: 5, 7, 8, 8, 12, what is the median?', options: ['5', '7', '8', '12']}
+        ]
+    };
+
+    const skillQuestions = questions[skill] || [];
+    let html = `<form id="diagnostic-form">`;
+
+    skillQuestions.forEach((item, idx) => {
+        html += `
+            <div class="mb-4">
+                <p class="fw-bold">${idx + 1}. ${item.q}</p>
+                ${item.options.map((opt, i) => `
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="q${idx}" id="q${idx}_${i}" value="${i}">
+                        <label class="form-check-label" for="q${idx}_${i}">${opt}</label>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    });
+
+    html += `</form>`;
+    return html;
+}
+</script>
+{% endblock %}

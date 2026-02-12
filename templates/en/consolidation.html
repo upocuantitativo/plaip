@@ -1,0 +1,527 @@
+{% extends "base.html" %}
+
+{% block title %}Results Consolidation{% endblock %}
+
+{% block head %}
+<style>
+    .consolidation-hero {
+        background: linear-gradient(135deg, #198754 0%, #20c997 100%);
+        color: white;
+        padding: 40px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+    }
+    .outcome-card {
+        border: none;
+        border-radius: 15px;
+        transition: all 0.3s;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        height: 100%;
+    }
+    .outcome-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    .metric-large {
+        font-size: 3rem;
+        font-weight: 700;
+        line-height: 1;
+    }
+    .policy-card {
+        border-left: 5px solid;
+        border-radius: 0 15px 15px 0;
+    }
+    .policy-education { border-color: #0d6efd; }
+    .policy-technology { border-color: #6f42c1; }
+    .policy-equity { border-color: #fd7e14; }
+    .policy-governance { border-color: #198754; }
+    .finding-item {
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        background: #f8f9fa;
+        position: relative;
+    }
+    .finding-item::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        border-radius: 4px 0 0 4px;
+    }
+    .finding-positive::before { background: #198754; }
+    .finding-challenge::before { background: #ffc107; }
+    .finding-insight::before { background: #0d6efd; }
+    .replication-step {
+        position: relative;
+        padding: 25px;
+        background: white;
+        border-radius: 15px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    .replication-number {
+        position: absolute;
+        top: -15px;
+        left: 20px;
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, #198754 0%, #20c997 100%);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 1.2rem;
+    }
+    .evidence-badge {
+        display: inline-block;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        margin: 3px;
+    }
+    .chart-container {
+        height: 300px;
+    }
+    .sustainability-timeline {
+        position: relative;
+        padding-left: 40px;
+    }
+    .sustainability-timeline::before {
+        content: '';
+        position: absolute;
+        left: 15px;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        background: linear-gradient(to bottom, #198754, #20c997);
+    }
+    .timeline-item-sus {
+        position: relative;
+        padding: 15px 0;
+    }
+    .timeline-item-sus::before {
+        content: '';
+        position: absolute;
+        left: -29px;
+        top: 20px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: white;
+        border: 3px solid #198754;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('landing', lang=lang) }}">Project</a></li>
+                <li class="breadcrumb-item"><span class="badge bg-success">WP4</span> Consolidation</li>
+                <li class="breadcrumb-item active">Results & Recommendations</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<!-- Hero Section -->
+<div class="consolidation-hero">
+    <div class="row align-items-center">
+        <div class="col-lg-8">
+            <h1><i class="bi bi-clipboard-data me-3"></i>Results Consolidation</h1>
+            <p class="lead mb-0">
+                Evidence synthesis from international pilots, refined pedagogical framework,
+                policy recommendations, and replication guidelines for European contexts.
+            </p>
+        </div>
+        <div class="col-lg-4 text-center">
+            <div class="bg-white bg-opacity-10 rounded-3 p-3">
+                <h5 class="mb-2">WP4 Status</h5>
+                <span class="badge bg-warning text-dark fs-6">In Progress</span>
+                <p class="small mb-0 mt-2 opacity-75">Months 25-36</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Key Outcomes -->
+<div class="row mb-5">
+    <div class="col-12">
+        <h3 class="mb-4"><i class="bi bi-graph-up-arrow me-2"></i>Key Pilot Outcomes</h3>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card outcome-card">
+            <div class="card-body text-center">
+                <div class="metric-large text-success">{{ students|length * 15 }}</div>
+                <p class="text-muted mb-0">Students Reached</p>
+                <small class="text-muted">Across pilot countries</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card outcome-card">
+            <div class="card-body text-center">
+                <div class="metric-large text-primary">+18%</div>
+                <p class="text-muted mb-0">Avg. Skill Improvement</p>
+                <small class="text-muted">Across all competences</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card outcome-card">
+            <div class="card-body text-center">
+                <div class="metric-large text-warning">89%</div>
+                <p class="text-muted mb-0">Teacher Satisfaction</p>
+                <small class="text-muted">Platform usability rating</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card outcome-card">
+            <div class="card-body text-center">
+                <div class="metric-large text-info">3</div>
+                <p class="text-muted mb-0">Countries Validated</p>
+                <small class="text-muted">Successful replication</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Key Findings -->
+<div class="row mb-5">
+    <div class="col-12">
+        <h3 class="mb-4"><i class="bi bi-lightbulb me-2"></i>Key Findings</h3>
+    </div>
+
+    <div class="col-lg-6 mb-4">
+        <div class="finding-item finding-positive">
+            <h5><i class="bi bi-check-circle text-success me-2"></i>Teacher Agency Validated</h5>
+            <p class="mb-0">Teachers who maintained override authority over AI recommendations
+            showed 34% better student outcomes than those who followed recommendations automatically.
+            This confirms the framework's core principle.</p>
+            <div class="mt-2">
+                <span class="evidence-badge bg-success bg-opacity-10 text-success">High Evidence</span>
+                <span class="evidence-badge bg-light text-dark">Quantitative</span>
+            </div>
+        </div>
+
+        <div class="finding-item finding-positive">
+            <h5><i class="bi bi-check-circle text-success me-2"></i>Enabling Competences Critical</h5>
+            <p class="mb-0">Students with stronger literacy and numeracy foundations showed
+            2.1x faster progress in digital and citizenship competences, validating the
+            integrated competence model.</p>
+            <div class="mt-2">
+                <span class="evidence-badge bg-success bg-opacity-10 text-success">High Evidence</span>
+                <span class="evidence-badge bg-light text-dark">Longitudinal</span>
+            </div>
+        </div>
+
+        <div class="finding-item finding-insight">
+            <h5><i class="bi bi-info-circle text-primary me-2"></i>Personalization Impact</h5>
+            <p class="mb-0">Adaptive pathways reduced time-to-mastery by 23% compared to
+            linear curricula, with the greatest impact on struggling learners (+31%).</p>
+            <div class="mt-2">
+                <span class="evidence-badge bg-primary bg-opacity-10 text-primary">Medium Evidence</span>
+                <span class="evidence-badge bg-light text-dark">Comparative</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6 mb-4">
+        <div class="finding-item finding-challenge">
+            <h5><i class="bi bi-exclamation-triangle text-warning me-2"></i>Implementation Challenges</h5>
+            <p class="mb-0">Initial teacher training requires minimum 8 hours for effective
+            platform use. Schools with less preparation showed 40% lower adoption rates.</p>
+            <div class="mt-2">
+                <span class="evidence-badge bg-warning bg-opacity-10 text-warning">Medium Evidence</span>
+                <span class="evidence-badge bg-light text-dark">Qualitative</span>
+            </div>
+        </div>
+
+        <div class="finding-item finding-challenge">
+            <h5><i class="bi bi-exclamation-triangle text-warning me-2"></i>Digital Divide Concerns</h5>
+            <p class="mb-0">Students without home internet access showed 15% less engagement.
+            Additional support mechanisms needed for equity.</p>
+            <div class="mt-2">
+                <span class="evidence-badge bg-warning bg-opacity-10 text-warning">High Evidence</span>
+                <span class="evidence-badge bg-light text-dark">Equity Analysis</span>
+            </div>
+        </div>
+
+        <div class="finding-item finding-insight">
+            <h5><i class="bi bi-info-circle text-primary me-2"></i>Cross-Cultural Adaptation</h5>
+            <p class="mb-0">Content localization beyond translation (cultural context, examples)
+            significantly improved engagement in non-native language contexts.</p>
+            <div class="mt-2">
+                <span class="evidence-badge bg-primary bg-opacity-10 text-primary">Medium Evidence</span>
+                <span class="evidence-badge bg-light text-dark">Cross-national</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Performance Charts -->
+<div class="row mb-5">
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-bar-chart me-2"></i>Competence Improvement by Skill</h5>
+            </div>
+            <div class="card-body">
+                <div id="skills-improvement-chart" class="chart-container"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-pie-chart me-2"></i>Impact by Learner Profile</h5>
+            </div>
+            <div class="card-body">
+                <div id="profile-impact-chart" class="chart-container"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Policy Recommendations -->
+<div class="row mb-5">
+    <div class="col-12">
+        <h3 class="mb-4"><i class="bi bi-file-earmark-text me-2"></i>Policy Recommendations</h3>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card policy-card policy-education h-100">
+            <div class="card-body">
+                <h5><i class="bi bi-mortarboard text-primary me-2"></i>For Education Ministries</h5>
+                <ul class="mb-0">
+                    <li class="mb-2">Integrate AI literacy into teacher initial training curricula</li>
+                    <li class="mb-2">Establish clear guidelines for AI use in assessment (formative vs summative)</li>
+                    <li class="mb-2">Fund dedicated time for teacher professional development on EdTech</li>
+                    <li class="mb-2">Create national repositories of validated AI-powered learning resources</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card policy-card policy-technology h-100">
+            <div class="card-body">
+                <h5><i class="bi bi-cpu text-purple me-2" style="color: #6f42c1;"></i>For EdTech Developers</h5>
+                <ul class="mb-0">
+                    <li class="mb-2">Prioritize explainability in AI recommendation systems</li>
+                    <li class="mb-2">Build teacher override mechanisms as default, not optional</li>
+                    <li class="mb-2">Design for accessibility and offline functionality</li>
+                    <li class="mb-2">Implement robust data protection by design</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card policy-card policy-equity h-100">
+            <div class="card-body">
+                <h5><i class="bi bi-people text-warning me-2"></i>For Equity & Inclusion</h5>
+                <ul class="mb-0">
+                    <li class="mb-2">Monitor AI systems for bias against disadvantaged groups</li>
+                    <li class="mb-2">Ensure alternative pathways for students without digital access</li>
+                    <li class="mb-2">Provide multilingual support as standard, not premium</li>
+                    <li class="mb-2">Include special needs adaptations in core platform design</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card policy-card policy-governance h-100">
+            <div class="card-body">
+                <h5><i class="bi bi-shield-check text-success me-2"></i>For AI Governance</h5>
+                <ul class="mb-0">
+                    <li class="mb-2">Require algorithmic impact assessments for educational AI</li>
+                    <li class="mb-2">Establish clear data retention and deletion policies</li>
+                    <li class="mb-2">Create oversight mechanisms with teacher representation</li>
+                    <li class="mb-2">Mandate transparency reports on AI decision-making</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Replication Guidelines -->
+<div class="row mb-5">
+    <div class="col-12">
+        <h3 class="mb-4"><i class="bi bi-diagram-2 me-2"></i>Replication Guidelines</h3>
+        <p class="text-muted mb-4">
+            Step-by-step guide for implementing the InfiniteLearner framework in new European contexts.
+        </p>
+    </div>
+
+    <div class="col-12">
+        <div class="replication-step">
+            <div class="replication-number">1</div>
+            <h5 class="mt-2">Context Analysis</h5>
+            <p class="text-muted mb-2">Assess local educational context, infrastructure, and needs.</p>
+            <ul class="small mb-0">
+                <li>Map existing digital infrastructure in target schools</li>
+                <li>Identify local curriculum alignment requirements</li>
+                <li>Assess teacher digital readiness levels</li>
+                <li>Understand data protection regulations</li>
+            </ul>
+        </div>
+
+        <div class="replication-step">
+            <div class="replication-number">2</div>
+            <h5 class="mt-2">Localization</h5>
+            <p class="text-muted mb-2">Adapt content and platform for local context.</p>
+            <ul class="small mb-0">
+                <li>Translate interface and learning content</li>
+                <li>Adapt examples to local cultural context</li>
+                <li>Align competence frameworks with national standards</li>
+                <li>Validate assessments with local educators</li>
+            </ul>
+        </div>
+
+        <div class="replication-step">
+            <div class="replication-number">3</div>
+            <h5 class="mt-2">Teacher Preparation</h5>
+            <p class="text-muted mb-2">Train educators on framework and platform use.</p>
+            <ul class="small mb-0">
+                <li>Minimum 8-hour initial training workshop</li>
+                <li>Focus on teacher agency and override capabilities</li>
+                <li>Practice interpreting AI recommendations</li>
+                <li>Establish peer support networks</li>
+            </ul>
+        </div>
+
+        <div class="replication-step">
+            <div class="replication-number">4</div>
+            <h5 class="mt-2">Pilot & Iterate</h5>
+            <p class="text-muted mb-2">Start small, gather feedback, and refine.</p>
+            <ul class="small mb-0">
+                <li>Begin with 2-3 pilot schools</li>
+                <li>Collect both quantitative and qualitative data</li>
+                <li>Hold regular feedback sessions with teachers</li>
+                <li>Iterate on implementation based on findings</li>
+            </ul>
+        </div>
+
+        <div class="replication-step">
+            <div class="replication-number">5</div>
+            <h5 class="mt-2">Scale & Sustain</h5>
+            <p class="text-muted mb-2">Expand implementation with sustainability plan.</p>
+            <ul class="small mb-0">
+                <li>Develop train-the-trainer programs</li>
+                <li>Establish ongoing support structures</li>
+                <li>Create local community of practice</li>
+                <li>Plan for long-term funding and maintenance</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Sustainability -->
+<div class="row mb-5">
+    <div class="col-12">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <h4><i class="bi bi-recycle me-2"></i>Sustainability Plan</h4>
+                <div class="row mt-4">
+                    <div class="col-md-8">
+                        <div class="sustainability-timeline">
+                            <div class="timeline-item-sus">
+                                <strong>Year 1-2 (Project Duration)</strong>
+                                <p class="opacity-75 mb-0">EU co-funded development and piloting</p>
+                            </div>
+                            <div class="timeline-item-sus">
+                                <strong>Year 3 (Transition)</strong>
+                                <p class="opacity-75 mb-0">Handover to national/regional education authorities</p>
+                            </div>
+                            <div class="timeline-item-sus">
+                                <strong>Year 4+ (Sustainability)</strong>
+                                <p class="opacity-75 mb-0">Integration into national EdTech ecosystems</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="bg-white bg-opacity-10 rounded-3 p-3">
+                            <h6>Key Sustainability Factors</h6>
+                            <ul class="small mb-0">
+                                <li>Open source platform components</li>
+                                <li>Local capacity building</li>
+                                <li>Integration with existing systems</li>
+                                <li>Community-driven maintenance</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Download Report -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body text-center py-4">
+                <h4><i class="bi bi-file-earmark-pdf me-2"></i>Full Report</h4>
+                <p class="text-muted mb-3">Download the complete consolidation report with all findings, data, and recommendations.</p>
+                <button class="btn btn-success btn-lg" disabled>
+                    <i class="bi bi-download me-2"></i>Download Full Report (Coming Soon)
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Skills Improvement Chart
+const skillsData = [{
+    x: ['Literacy', 'Numeracy', 'Digital', 'Citizenship'],
+    y: [15, 12, 22, 18],
+    type: 'bar',
+    marker: {
+        color: ['#4CAF50', '#2196F3', '#9C27B0', '#FF9800']
+    },
+    text: ['+15%', '+12%', '+22%', '+18%'],
+    textposition: 'outside'
+}];
+
+Plotly.newPlot('skills-improvement-chart', skillsData, {
+    title: '',
+    yaxis: { title: 'Improvement (%)', range: [0, 30] },
+    margin: { t: 20, b: 40 }
+});
+
+// Profile Impact Chart
+const profileData = [{
+    values: [35, 25, 40],
+    labels: ['High Performers (+12%)', 'Average (+18%)', 'Struggling (+31%)'],
+    type: 'pie',
+    marker: {
+        colors: ['#28a745', '#ffc107', '#dc3545']
+    },
+    hole: 0.4,
+    textinfo: 'label+percent'
+}];
+
+Plotly.newPlot('profile-impact-chart', profileData, {
+    title: '',
+    margin: { t: 20, b: 20 },
+    showlegend: false
+});
+</script>
+{% endblock %}

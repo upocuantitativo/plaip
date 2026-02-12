@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ lang|default('en') }}">
 <head>
     <meta charset="UTF-8">
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='img/favicon.svg') }}">
@@ -58,6 +58,16 @@
     {% block head %}{% endblock %}
 </head>
 <body>
+    <!-- Language Selector Sidebar -->
+    <div class="lang-sidebar">
+        <a href="{{ request.path|replace('/' ~ lang ~ '/', '/es/') }}"
+           class="lang-es {% if lang == 'es' %}active{% endif %}" title="Español">ES</a>
+        <a href="{{ request.path|replace('/' ~ lang ~ '/', '/en/') }}"
+           class="lang-en {% if lang == 'en' %}active{% endif %}" title="English">EN</a>
+        <a href="{{ request.path|replace('/' ~ lang ~ '/', '/de/') }}"
+           class="lang-de {% if lang == 'de' %}active{% endif %}" title="Deutsch">DE</a>
+    </div>
+
     <!-- Logo Bar -->
     <div class="logo-bar">
         <div class="container-fluid">
@@ -84,7 +94,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container-fluid">
-            <a class="navbar-brand navbar-brand-custom" href="{{ url_for('landing') }}">
+            <a class="navbar-brand navbar-brand-custom" href="{{ url_for('landing', lang=lang) }}">
                 <i class="bi bi-infinity"></i> InfiniteLearner
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -94,8 +104,9 @@
                 <ul class="navbar-nav me-auto">
                     <!-- Project/Landing -->
                     <li class="nav-item">
-                        <a class="nav-link {% if request.endpoint == 'landing' %}active{% endif %}" href="{{ url_for('landing') }}">
-                            <i class="bi bi-house-heart"></i> Project
+                        <a class="nav-link {% if request.endpoint == 'landing' %}active{% endif %}" href="{{ url_for('landing', lang=lang) }}">
+                            <i class="bi bi-house-heart"></i>
+                            {% if lang == 'es' %}Proyecto{% elif lang == 'de' %}Projekt{% else %}Project{% endif %}
                         </a>
                     </li>
 
@@ -103,20 +114,26 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle {% if request.endpoint in ['itinerary', 'framework'] %}active{% endif %}"
                            href="#" data-bs-toggle="dropdown">
-                            <i class="bi bi-book"></i> Foundations
+                            <i class="bi bi-book"></i>
+                            {% if lang == 'es' %}Fundamentos{% elif lang == 'de' %}Grundlagen{% else %}Foundations{% endif %}
                             <span class="badge bg-light text-primary nav-wp-badge">WP2</span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><h6 class="dropdown-header">WP2 - Methodological Foundation</h6></li>
-                            <li><a class="dropdown-item" href="{{ url_for('framework') }}">
-                                <i class="bi bi-diagram-3 me-2"></i>Shared Pedagogical Framework
+                            <li><h6 class="dropdown-header">
+                                {% if lang == 'es' %}WP2 - Fundamento Metodológico{% elif lang == 'de' %}WP2 - Methodische Grundlagen{% else %}WP2 - Methodological Foundation{% endif %}
+                            </h6></li>
+                            <li><a class="dropdown-item" href="{{ url_for('framework', lang=lang) }}">
+                                <i class="bi bi-diagram-3 me-2"></i>
+                                {% if lang == 'es' %}Marco Pedagógico Compartido{% elif lang == 'de' %}Gemeinsamer Pädagogischer Rahmen{% else %}Shared Pedagogical Framework{% endif %}
                             </a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('itinerary') }}">
-                                <i class="bi bi-signpost-split me-2"></i>Learning Pathways
+                            <li><a class="dropdown-item" href="{{ url_for('itinerary', lang=lang) }}">
+                                <i class="bi bi-signpost-split me-2"></i>
+                                {% if lang == 'es' %}Itinerarios de Aprendizaje{% elif lang == 'de' %}Lernpfade{% else %}Learning Pathways{% endif %}
                             </a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="{{ url_for('toolkit') }}">
-                                <i class="bi bi-tools me-2"></i>Toolkit for Teachers
+                            <li><a class="dropdown-item" href="{{ url_for('toolkit', lang=lang) }}">
+                                <i class="bi bi-tools me-2"></i>
+                                {% if lang == 'es' %}Kit de Herramientas para Docentes{% elif lang == 'de' %}Werkzeugkasten für Lehrkräfte{% else %}Toolkit for Teachers{% endif %}
                             </a></li>
                         </ul>
                     </li>
@@ -125,23 +142,30 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle {% if request.endpoint in ['diagnostic', 'activities', 'evaluation', 'students_page'] %}active{% endif %}"
                            href="#" data-bs-toggle="dropdown">
-                            <i class="bi bi-rocket-takeoff"></i> Pilots
+                            <i class="bi bi-rocket-takeoff"></i>
+                            {% if lang == 'es' %}Pilotos{% elif lang == 'de' %}Pilotprojekte{% else %}Pilots{% endif %}
                             <span class="badge bg-warning text-dark nav-wp-badge">WP3</span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><h6 class="dropdown-header">WP3 - InfiniteLearner Pilots</h6></li>
-                            <li><a class="dropdown-item" href="{{ url_for('diagnostic') }}">
-                                <i class="bi bi-clipboard2-pulse me-2"></i>Initial Diagnostic
+                            <li><h6 class="dropdown-header">
+                                {% if lang == 'es' %}WP3 - Pilotos InfiniteLearner{% elif lang == 'de' %}WP3 - InfiniteLearner Pilotprojekte{% else %}WP3 - InfiniteLearner Pilots{% endif %}
+                            </h6></li>
+                            <li><a class="dropdown-item" href="{{ url_for('diagnostic', lang=lang) }}">
+                                <i class="bi bi-clipboard2-pulse me-2"></i>
+                                {% if lang == 'es' %}Diagnóstico Inicial{% elif lang == 'de' %}Eingangsdiagnose{% else %}Initial Diagnostic{% endif %}
                             </a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('activities') }}">
-                                <i class="bi bi-puzzle me-2"></i>Learning Activities
+                            <li><a class="dropdown-item" href="{{ url_for('activities', lang=lang) }}">
+                                <i class="bi bi-puzzle me-2"></i>
+                                {% if lang == 'es' %}Actividades de Aprendizaje{% elif lang == 'de' %}Lernaktivitäten{% else %}Learning Activities{% endif %}
                             </a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('evaluation') }}">
-                                <i class="bi bi-check2-square me-2"></i>Formative Assessment
+                            <li><a class="dropdown-item" href="{{ url_for('evaluation', lang=lang) }}">
+                                <i class="bi bi-check2-square me-2"></i>
+                                {% if lang == 'es' %}Evaluación Formativa{% elif lang == 'de' %}Formative Bewertung{% else %}Formative Assessment{% endif %}
                             </a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="{{ url_for('students_page') }}">
-                                <i class="bi bi-people me-2"></i>Student Profiles
+                            <li><a class="dropdown-item" href="{{ url_for('students_page', lang=lang) }}">
+                                <i class="bi bi-people me-2"></i>
+                                {% if lang == 'es' %}Perfiles de Estudiantes{% elif lang == 'de' %}Schülerprofile{% else %}Student Profiles{% endif %}
                             </a></li>
                         </ul>
                     </li>
@@ -153,38 +177,46 @@
                             <i class="bi bi-speedometer2"></i> Dashboards
                         </a>
                         <ul class="dropdown-menu">
-                            <li><h6 class="dropdown-header">Observable Learning Signals</h6></li>
-                            <li><a class="dropdown-item" href="{{ url_for('dashboard_teacher') }}">
-                                <i class="bi bi-person-workspace me-2"></i>Teacher Dashboard
+                            <li><h6 class="dropdown-header">
+                                {% if lang == 'es' %}Señales Observables de Aprendizaje{% elif lang == 'de' %}Beobachtbare Lernsignale{% else %}Observable Learning Signals{% endif %}
+                            </h6></li>
+                            <li><a class="dropdown-item" href="{{ url_for('dashboard_teacher', lang=lang) }}">
+                                <i class="bi bi-person-workspace me-2"></i>
+                                {% if lang == 'es' %}Panel del Docente{% elif lang == 'de' %}Lehrkräfte-Dashboard{% else %}Teacher Dashboard{% endif %}
                             </a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('dashboard_student') }}">
-                                <i class="bi bi-mortarboard me-2"></i>Student Dashboard
+                            <li><a class="dropdown-item" href="{{ url_for('dashboard_student', lang=lang) }}">
+                                <i class="bi bi-mortarboard me-2"></i>
+                                {% if lang == 'es' %}Panel del Estudiante{% elif lang == 'de' %}Schüler-Dashboard{% else %}Student Dashboard{% endif %}
                             </a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="{{ url_for('recommendations') }}">
-                                <i class="bi bi-lightbulb me-2"></i>AI Recommendations
+                            <li><a class="dropdown-item" href="{{ url_for('recommendations', lang=lang) }}">
+                                <i class="bi bi-lightbulb me-2"></i>
+                                {% if lang == 'es' %}Recomendaciones IA{% elif lang == 'de' %}KI-Empfehlungen{% else %}AI Recommendations{% endif %}
                             </a></li>
                         </ul>
                     </li>
 
                     <!-- WP4 - Consolidation -->
                     <li class="nav-item">
-                        <a class="nav-link {% if request.endpoint == 'consolidation' %}active{% endif %}" href="{{ url_for('consolidation') }}">
-                            <i class="bi bi-file-earmark-check"></i> Results
+                        <a class="nav-link {% if request.endpoint == 'consolidation' %}active{% endif %}" href="{{ url_for('consolidation', lang=lang) }}">
+                            <i class="bi bi-file-earmark-check"></i>
+                            {% if lang == 'es' %}Resultados{% elif lang == 'de' %}Ergebnisse{% else %}Results{% endif %}
                             <span class="badge bg-success nav-wp-badge">WP4</span>
                         </a>
                     </li>
 
                     <!-- RL Simulation -->
                     <li class="nav-item">
-                        <a class="nav-link {% if request.endpoint == 'simulation' %}active{% endif %}" href="{{ url_for('simulation') }}">
-                            <i class="bi bi-cpu"></i> RL Simulation
+                        <a class="nav-link {% if request.endpoint == 'simulation' %}active{% endif %}" href="{{ url_for('simulation', lang=lang) }}">
+                            <i class="bi bi-cpu"></i>
+                            {% if lang == 'es' %}Simulación RL{% elif lang == 'de' %}RL-Simulation{% else %}RL Simulation{% endif %}
                         </a>
                     </li>
                 </ul>
                 <span class="navbar-text">
                     <span class="badge bg-light text-primary">
-                        <i class="bi bi-shield-check"></i> Digital + Citizenship Skills
+                        <i class="bi bi-shield-check"></i>
+                        {% if lang == 'es' %}Competencias Digitales + Ciudadanas{% elif lang == 'de' %}Digitale + Bürgerschaftliche Kompetenzen{% else %}Digital + Citizenship Skills{% endif %}
                     </span>
                 </span>
             </div>
@@ -217,9 +249,19 @@
             </div>
             <div class="eu-disclaimer text-center mt-3">
                 <small>
+                    {% if lang == 'es' %}
+                    Cofinanciado por la Unión Europea. Los puntos de vista y las opiniones expresados son únicamente los del autor o autores
+                    y no reflejan necesariamente los de la Unión Europea ni los de la Agencia Ejecutiva Europea de Educación y Cultura (EACEA).
+                    Ni la Unión Europea ni la EACEA pueden ser consideradas responsables de ellos.
+                    {% elif lang == 'de' %}
+                    Kofinanziert von der Europäischen Union. Die geäußerten Ansichten und Meinungen entsprechen jedoch ausschließlich denen des Autors bzw. der Autoren
+                    und spiegeln nicht zwingend die der Europäischen Union oder der Europäischen Exekutivagentur für Bildung und Kultur (EACEA) wider.
+                    Weder die Europäische Union noch die EACEA können dafür verantwortlich gemacht werden.
+                    {% else %}
                     Co-funded by the European Union. Views and opinions expressed are however those of the author(s) only
                     and do not necessarily reflect those of the European Union or the European Education and Culture Executive Agency (EACEA).
                     Neither the European Union nor EACEA can be held responsible for them.
+                    {% endif %}
                 </small>
             </div>
         </div>

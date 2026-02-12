@@ -1,0 +1,340 @@
+{% extends "base.html" %}
+
+{% block title %}RL-Simulation{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h1><i class="bi bi-cpu text-info"></i> Simulation mit Reinforcement Learning</h1>
+        <p class="text-muted">
+            Trainieren Sie den RL-Agenten durch Klonen virtueller Lernendenprofile, um
+            optimale Lernpfade zu finden.
+        </p>
+    </div>
+</div>
+
+<!-- Status Cards -->
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="card {% if has_agent %}bg-success{% else %}bg-secondary{% endif %} text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-subtitle mb-2 opacity-75">Agentenstatus</h6>
+                        <h4 class="card-title mb-0">
+                            {% if has_agent %}Trainiert{% else %}Nicht trainiert{% endif %}
+                        </h4>
+                    </div>
+                    <i class="bi bi-robot display-4 opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-subtitle mb-2 opacity-75">Basis-Lernende</h6>
+                        <h4 class="card-title mb-0">{{ num_students }}</h4>
+                    </div>
+                    <i class="bi bi-people display-4 opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-subtitle mb-2 opacity-75">Algorithmus</h6>
+                        <h4 class="card-title mb-0">Q-Learning</h4>
+                    </div>
+                    <i class="bi bi-diagram-2 display-4 opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Training Section -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-gear"></i> Agententraining</h5>
+            </div>
+            <div class="card-body">
+                <p>Konfigurieren Sie die Trainingsparameter:</p>
+
+                <div class="mb-3">
+                    <label class="form-label">Anzahl der Episoden</label>
+                    <input type="range" class="form-range" id="episodes" min="100" max="2000" value="500"
+                           oninput="document.getElementById('episodes-val').textContent = this.value">
+                    <div class="d-flex justify-content-between">
+                        <small>100</small>
+                        <span class="badge bg-primary" id="episodes-val">500</span>
+                        <small>2000</small>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Virtuelle Klone pro Lernende/n</label>
+                    <input type="range" class="form-range" id="clones" min="10" max="200" value="50"
+                           oninput="document.getElementById('clones-val').textContent = this.value">
+                    <div class="d-flex justify-content-between">
+                        <small>10</small>
+                        <span class="badge bg-primary" id="clones-val">50</span>
+                        <small>200</small>
+                    </div>
+                </div>
+
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i>
+                    Der Agent erstellt <strong id="total-clones">50</strong> virtuelle Klone
+                    mit Variationen des Basisprofils und nutzt diese, um
+                    <strong id="total-episodes">500</strong> Lernszenarien zu erkunden.
+                </div>
+
+                <button class="btn btn-primary btn-lg w-100" onclick="trainAgent()" id="train-btn">
+                    <i class="bi bi-play-circle"></i> Training starten
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-graph-up"></i> Trainingsfortschritt</h5>
+            </div>
+            <div class="card-body">
+                <div id="training-progress">
+                    <p class="text-muted text-center">
+                        Der Trainingsfortschritt wird hier angezeigt
+                    </p>
+                </div>
+                <div id="training-chart" style="height: 250px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Simulation Section -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-lightning"></i> Simulation ausfuehren</h5>
+                <button class="btn btn-success" onclick="runSimulation()" id="sim-btn" {% if not has_agent %}disabled{% endif %}>
+                    <i class="bi bi-play"></i> Szenarien simulieren
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label class="form-label">Anzahl der Simulationen</label>
+                        <input type="number" class="form-control" id="num-simulations" value="100" min="10" max="500">
+                    </div>
+                    <div class="col-md-8">
+                        <label class="form-label">Beschreibung</label>
+                        <p class="text-muted mb-0">
+                            Fuehrt mehrere Simulationen mit dem trainierten Agenten durch, um den
+                            optimalen Lernpfad zu finden und Leistungsstatistiken zu sammeln.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Results Section -->
+<div class="row" id="results-section" style="display: none;">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-trophy"></i> Simulationsergebnisse</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <div class="display-4 text-success" id="result-reward">-</div>
+                            <small class="text-muted">Durchschnittliche Belohnung</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <div class="display-4 text-primary" id="result-completion">-</div>
+                            <small class="text-muted">Abschlussrate</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <div class="display-4 text-info" id="result-frequency">-</div>
+                            <small class="text-muted">Haeufigkeit des optimalen Pfads</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <div class="display-4 text-warning" id="result-duration">-</div>
+                            <small class="text-muted">Gesamtdauer (Min.)</small>
+                        </div>
+                    </div>
+                </div>
+
+                <h6><i class="bi bi-signpost-2"></i> Optimaler Lernpfad</h6>
+                <div id="optimal-path-container" class="mb-4"></div>
+
+                <h6><i class="bi bi-bar-chart"></i> Wissenszuwachs nach Kompetenz</h6>
+                <div id="knowledge-gains-chart" style="height: 300px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Update summary when sliders change
+document.getElementById('episodes').addEventListener('input', updateSummary);
+document.getElementById('clones').addEventListener('input', updateSummary);
+
+function updateSummary() {
+    document.getElementById('total-episodes').textContent = document.getElementById('episodes').value;
+    document.getElementById('total-clones').textContent = document.getElementById('clones').value;
+}
+
+async function trainAgent() {
+    const btn = document.getElementById('train-btn');
+    const progress = document.getElementById('training-progress');
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Wird trainiert...';
+
+    progress.innerHTML = `
+        <div class="text-center">
+            <div class="spinner-border text-primary mb-3" role="status"></div>
+            <p>Agent wird mit Q-Learning trainiert...</p>
+            <p class="text-muted">Dies kann einige Sekunden dauern</p>
+        </div>
+    `;
+
+    try {
+        const response = await fetch('/api/simulation/train', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                episodes: parseInt(document.getElementById('episodes').value),
+                clones: parseInt(document.getElementById('clones').value)
+            })
+        });
+
+        const data = await response.json();
+
+        progress.innerHTML = `
+            <div class="alert alert-success">
+                <i class="bi bi-check-circle"></i> Training abgeschlossen!
+                <br><small>${data.episodes} Episoden, ${data.clones} Klone</small>
+            </div>
+        `;
+
+        // Plot training history
+        if (data.training_history && data.training_history.length > 0) {
+            const trace = {
+                x: data.training_history.map(h => h.episode),
+                y: data.training_history.map(h => h.reward),
+                type: 'scatter',
+                mode: 'lines+markers',
+                name: 'Belohnung'
+            };
+
+            Plotly.newPlot('training-chart', [trace], {
+                title: 'Trainingsverlauf',
+                xaxis: {title: 'Episode'},
+                yaxis: {title: 'Belohnung'}
+            });
+        }
+
+        document.getElementById('sim-btn').disabled = false;
+
+    } catch (error) {
+        progress.innerHTML = `
+            <div class="alert alert-danger">
+                <i class="bi bi-exclamation-circle"></i> Fehler: ${error.message}
+            </div>
+        `;
+    }
+
+    btn.disabled = false;
+    btn.innerHTML = '<i class="bi bi-play-circle"></i> Training starten';
+}
+
+async function runSimulation() {
+    const btn = document.getElementById('sim-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Wird simuliert...';
+
+    try {
+        const response = await fetch('/api/simulation/run', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                simulations: parseInt(document.getElementById('num-simulations').value)
+            })
+        });
+
+        const data = await response.json();
+
+        // Show results
+        document.getElementById('results-section').style.display = 'block';
+
+        document.getElementById('result-reward').textContent = data.average_reward.toFixed(2);
+        document.getElementById('result-completion').textContent = (data.average_completion * 100).toFixed(1) + '%';
+        document.getElementById('result-frequency').textContent = (data.optimal_path_frequency * 100).toFixed(1) + '%';
+        document.getElementById('result-duration').textContent = data.optimal_path_visualization.totalDuration;
+
+        // Show optimal path
+        const pathContainer = document.getElementById('optimal-path-container');
+        const nodes = data.optimal_path_visualization.nodes;
+        pathContainer.innerHTML = nodes.map((node, i) => `
+            <span class="badge bg-primary me-2 mb-2" style="font-size: 1rem;">
+                ${node.order}. ${node.name}
+                <small class="opacity-75">(${node.skill})</small>
+            </span>
+            ${i < nodes.length - 1 ? '<i class="bi bi-arrow-right me-2"></i>' : ''}
+        `).join('');
+
+        // Plot knowledge gains
+        const gains = data.average_knowledge_gains;
+        const trace = {
+            x: Object.keys(gains),
+            y: Object.values(gains),
+            type: 'bar',
+            marker: {
+                color: ['#4CAF50', '#2196F3', '#9C27B0', '#FF9800']
+            }
+        };
+
+        Plotly.newPlot('knowledge-gains-chart', [trace], {
+            title: 'Durchschnittlicher Wissenszuwachs',
+            xaxis: {title: 'Kompetenz'},
+            yaxis: {title: 'Zuwachs (Punkte)'}
+        });
+
+        // Scroll to results
+        document.getElementById('results-section').scrollIntoView({behavior: 'smooth'});
+
+    } catch (error) {
+        alert('Fehler: ' + error.message);
+    }
+
+    btn.disabled = false;
+    btn.innerHTML = '<i class="bi bi-play"></i> Szenarien simulieren';
+}
+</script>
+{% endblock %}

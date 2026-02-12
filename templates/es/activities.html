@@ -1,0 +1,467 @@
+{% extends "base.html" %}
+
+{% block title %}Actividades de Aprendizaje{% endblock %}
+
+{% block head %}
+<style>
+    .activity-card {
+        border-radius: 15px;
+        transition: all 0.3s;
+        border: none;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    .activity-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    .activity-type-badge {
+        position: absolute;
+        top: -10px;
+        right: 20px;
+        font-size: 0.75rem;
+    }
+    .skill-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+    }
+    .progress-mini {
+        height: 6px;
+        border-radius: 3px;
+    }
+    .activity-item {
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        background: #f8f9fa;
+        border-left: 4px solid;
+    }
+    .activity-item.literacy { border-left-color: #4CAF50; }
+    .activity-item.numeracy { border-left-color: #2196F3; }
+    .activity-item.digital { border-left-color: #9C27B0; }
+    .activity-item.citizenship { border-left-color: #FF9800; }
+    .filter-chip {
+        display: inline-block;
+        padding: 5px 15px;
+        border-radius: 20px;
+        margin: 3px;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: 2px solid transparent;
+    }
+    .filter-chip:hover {
+        border-color: currentColor;
+    }
+    .filter-chip.active {
+        color: white !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('landing', lang=lang) }}">Proyecto</a></li>
+                <li class="breadcrumb-item"><span class="badge bg-warning text-dark">WP3</span> Pilotos</li>
+                <li class="breadcrumb-item active">Actividades de Aprendizaje</li>
+            </ol>
+        </nav>
+        <h1><i class="bi bi-puzzle text-success"></i> Actividades de Aprendizaje</h1>
+        <p class="text-muted lead">
+            Ejercicios breves, microtareas, reflexiones guiadas y desafios digitales a lo largo del itinerario de aprendizaje.
+            Estas actividades forman parte del proceso de aprendizaje y permiten observar la progresion.
+        </p>
+    </div>
+</div>
+
+<!-- Info Alert -->
+<div class="alert alert-success mb-4">
+    <div class="row align-items-center">
+        <div class="col-auto">
+            <i class="bi bi-lightbulb fs-3"></i>
+        </div>
+        <div class="col">
+            <strong>Actividades intermedias:</strong> Estas no cuentan como evaluacion formal. Su proposito es
+            reforzar el aprendizaje, practicar conceptos y permitir al sistema recoger senales de aprendizaje observables
+            para ajustar el itinerario personalizado.
+        </div>
+    </div>
+</div>
+
+<!-- Filters -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body py-3">
+                <div class="row align-items-center">
+                    <div class="col-auto">
+                        <strong><i class="bi bi-funnel me-2"></i>Filtrar por:</strong>
+                    </div>
+                    <div class="col">
+                        <span class="filter-chip bg-light text-success active" data-skill="all" style="background: #4CAF50 !important;">Todas</span>
+                        <span class="filter-chip bg-light" style="color: #4CAF50;" data-skill="literacy">Lectoescritura</span>
+                        <span class="filter-chip bg-light" style="color: #2196F3;" data-skill="numeracy">Calculo</span>
+                        <span class="filter-chip bg-light" style="color: #9C27B0;" data-skill="digital">Digital</span>
+                        <span class="filter-chip bg-light" style="color: #FF9800;" data-skill="citizenship">Ciudadania</span>
+                    </div>
+                    <div class="col-auto">
+                        <select class="form-select form-select-sm" style="width: auto;">
+                            <option>Todos los tipos</option>
+                            <option>Ejercicios breves</option>
+                            <option>Microtareas</option>
+                            <option>Reflexiones guiadas</option>
+                            <option>Desafios digitales</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Activity Types Overview -->
+<div class="row mb-4 g-3">
+    <div class="col-md-3">
+        <div class="card text-center h-100" style="border-top: 4px solid #17a2b8;">
+            <div class="card-body">
+                <i class="bi bi-pencil-square fs-1 text-info"></i>
+                <h6 class="mt-2">Ejercicios Breves</h6>
+                <p class="small text-muted mb-0">Preguntas rapidas para verificar la comprension</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center h-100" style="border-top: 4px solid #28a745;">
+            <div class="card-body">
+                <i class="bi bi-list-task fs-1 text-success"></i>
+                <h6 class="mt-2">Microtareas</h6>
+                <p class="small text-muted mb-0">Actividades practicas de 5-10 minutos</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center h-100" style="border-top: 4px solid #ffc107;">
+            <div class="card-body">
+                <i class="bi bi-chat-quote fs-1 text-warning"></i>
+                <h6 class="mt-2">Reflexiones Guiadas</h6>
+                <p class="small text-muted mb-0">Preguntas abiertas para una comprension mas profunda</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center h-100" style="border-top: 4px solid #dc3545;">
+            <div class="card-body">
+                <i class="bi bi-trophy fs-1 text-danger"></i>
+                <h6 class="mt-2">Desafios Digitales</h6>
+                <p class="small text-muted mb-0">Retos interactivos gamificados</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Activities Grid -->
+<div class="row g-4" id="activities-container">
+    <!-- Digital Skills Activities -->
+    <div class="col-md-6 activity-card-wrapper" data-skill="digital">
+        <div class="card activity-card h-100 position-relative">
+            <span class="badge activity-type-badge" style="background: #9C27B0;">Digital</span>
+            <div class="card-body">
+                <div class="d-flex align-items-start mb-3">
+                    <div class="skill-icon me-3" style="background: rgba(156,39,176,0.1);">
+                        <i class="bi bi-laptop" style="color: #9C27B0;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-1">Detecta el Phishing</h5>
+                        <p class="text-muted small mb-0">Desafio Digital - 10 min</p>
+                    </div>
+                </div>
+                <p class="small">Analiza 5 correos electronicos y determina cuales son intentos de phishing. Justifica tu decision.</p>
+                <div class="d-flex flex-wrap gap-1 mb-3">
+                    <span class="badge bg-light text-dark">Seguridad</span>
+                    <span class="badge bg-light text-dark">Pensamiento critico</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="progress flex-grow-1 me-3 progress-mini">
+                        <div class="progress-bar" style="width: 0%; background: #9C27B0;"></div>
+                    </div>
+                    <button class="btn btn-sm btn-outline-primary">Iniciar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 activity-card-wrapper" data-skill="digital">
+        <div class="card activity-card h-100 position-relative">
+            <span class="badge activity-type-badge" style="background: #9C27B0;">Digital</span>
+            <div class="card-body">
+                <div class="d-flex align-items-start mb-3">
+                    <div class="skill-icon me-3" style="background: rgba(156,39,176,0.1);">
+                        <i class="bi bi-search" style="color: #9C27B0;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-1">Evaluacion de Fuentes Web</h5>
+                        <p class="text-muted small mb-0">Ejercicio Breve - 5 min</p>
+                    </div>
+                </div>
+                <p class="small">Clasifica 6 sitios web segun su fiabilidad utilizando los criterios CRAAP.</p>
+                <div class="d-flex flex-wrap gap-1 mb-3">
+                    <span class="badge bg-light text-dark">Busqueda</span>
+                    <span class="badge bg-light text-dark">Evaluacion</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="progress flex-grow-1 me-3 progress-mini">
+                        <div class="progress-bar" style="width: 30%; background: #9C27B0;"></div>
+                    </div>
+                    <button class="btn btn-sm btn-outline-primary">Continuar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Citizenship Activities -->
+    <div class="col-md-6 activity-card-wrapper" data-skill="citizenship">
+        <div class="card activity-card h-100 position-relative">
+            <span class="badge activity-type-badge bg-warning text-dark">Ciudadania</span>
+            <div class="card-body">
+                <div class="d-flex align-items-start mb-3">
+                    <div class="skill-icon me-3" style="background: rgba(255,152,0,0.1);">
+                        <i class="bi bi-newspaper" style="color: #FF9800;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-1">Detective de Noticias Falsas</h5>
+                        <p class="text-muted small mb-0">Desafio Digital - 15 min</p>
+                    </div>
+                </div>
+                <p class="small">Investiga 3 noticias y determina su veracidad utilizando herramientas de verificacion.</p>
+                <div class="d-flex flex-wrap gap-1 mb-3">
+                    <span class="badge bg-light text-dark">Alfabetizacion Mediatica</span>
+                    <span class="badge bg-light text-dark">Verificacion</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="progress flex-grow-1 me-3 progress-mini">
+                        <div class="progress-bar bg-warning" style="width: 0%;"></div>
+                    </div>
+                    <button class="btn btn-sm btn-outline-warning">Iniciar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 activity-card-wrapper" data-skill="citizenship">
+        <div class="card activity-card h-100 position-relative">
+            <span class="badge activity-type-badge bg-warning text-dark">Ciudadania</span>
+            <div class="card-body">
+                <div class="d-flex align-items-start mb-3">
+                    <div class="skill-icon me-3" style="background: rgba(255,152,0,0.1);">
+                        <i class="bi bi-globe-americas" style="color: #FF9800;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-1">Mi Huella Ecologica</h5>
+                        <p class="text-muted small mb-0">Reflexion Guiada - 10 min</p>
+                    </div>
+                </div>
+                <p class="small">Calcula tu huella de carbono semanal y propone 3 acciones para reducirla.</p>
+                <div class="d-flex flex-wrap gap-1 mb-3">
+                    <span class="badge bg-light text-dark">Sostenibilidad</span>
+                    <span class="badge bg-light text-dark">ODS</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="progress flex-grow-1 me-3 progress-mini">
+                        <div class="progress-bar bg-warning" style="width: 60%;"></div>
+                    </div>
+                    <button class="btn btn-sm btn-outline-warning">Continuar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Literacy Activities -->
+    <div class="col-md-6 activity-card-wrapper" data-skill="literacy">
+        <div class="card activity-card h-100 position-relative">
+            <span class="badge activity-type-badge bg-success">Lectoescritura</span>
+            <div class="card-body">
+                <div class="d-flex align-items-start mb-3">
+                    <div class="skill-icon me-3" style="background: rgba(76,175,80,0.1);">
+                        <i class="bi bi-book" style="color: #4CAF50;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-1">Comprension Lectora</h5>
+                        <p class="text-muted small mb-0">Ejercicio Breve - 8 min</p>
+                    </div>
+                </div>
+                <p class="small">Lee un articulo sobre IA y responde preguntas de comprension literal e inferencial.</p>
+                <div class="d-flex flex-wrap gap-1 mb-3">
+                    <span class="badge bg-light text-dark">Comprension</span>
+                    <span class="badge bg-light text-dark">Inferencia</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="progress flex-grow-1 me-3 progress-mini">
+                        <div class="progress-bar bg-success" style="width: 100%;"></div>
+                    </div>
+                    <button class="btn btn-sm btn-success" disabled>Completada</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 activity-card-wrapper" data-skill="literacy">
+        <div class="card activity-card h-100 position-relative">
+            <span class="badge activity-type-badge bg-success">Lectoescritura</span>
+            <div class="card-body">
+                <div class="d-flex align-items-start mb-3">
+                    <div class="skill-icon me-3" style="background: rgba(76,175,80,0.1);">
+                        <i class="bi bi-chat-left-text" style="color: #4CAF50;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-1">Argumenta tu Posicion</h5>
+                        <p class="text-muted small mb-0">Reflexion Guiada - 12 min</p>
+                    </div>
+                </div>
+                <p class="small">Escribe un parrafo argumentativo sobre el uso de telefonos moviles en clase.</p>
+                <div class="d-flex flex-wrap gap-1 mb-3">
+                    <span class="badge bg-light text-dark">Argumentacion</span>
+                    <span class="badge bg-light text-dark">Expresion escrita</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="progress flex-grow-1 me-3 progress-mini">
+                        <div class="progress-bar bg-success" style="width: 0%;"></div>
+                    </div>
+                    <button class="btn btn-sm btn-outline-success">Iniciar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Numeracy Activities -->
+    <div class="col-md-6 activity-card-wrapper" data-skill="numeracy">
+        <div class="card activity-card h-100 position-relative">
+            <span class="badge activity-type-badge bg-primary">Calculo</span>
+            <div class="card-body">
+                <div class="d-flex align-items-start mb-3">
+                    <div class="skill-icon me-3" style="background: rgba(33,150,243,0.1);">
+                        <i class="bi bi-bar-chart" style="color: #2196F3;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-1">Interpreta el Grafico</h5>
+                        <p class="text-muted small mb-0">Ejercicio Breve - 6 min</p>
+                    </div>
+                </div>
+                <p class="small">Analiza un grafico sobre el uso de redes sociales y responde preguntas.</p>
+                <div class="d-flex flex-wrap gap-1 mb-3">
+                    <span class="badge bg-light text-dark">Graficos</span>
+                    <span class="badge bg-light text-dark">Estadistica</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="progress flex-grow-1 me-3 progress-mini">
+                        <div class="progress-bar bg-primary" style="width: 50%;"></div>
+                    </div>
+                    <button class="btn btn-sm btn-outline-primary">Continuar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 activity-card-wrapper" data-skill="numeracy">
+        <div class="card activity-card h-100 position-relative">
+            <span class="badge activity-type-badge bg-primary">Calculo</span>
+            <div class="card-body">
+                <div class="d-flex align-items-start mb-3">
+                    <div class="skill-icon me-3" style="background: rgba(33,150,243,0.1);">
+                        <i class="bi bi-percent" style="color: #2196F3;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-1">Porcentajes en la Vida Real</h5>
+                        <p class="text-muted small mb-0">Microtarea - 7 min</p>
+                    </div>
+                </div>
+                <p class="small">Calcula descuentos, IVA y propinas en situaciones cotidianas.</p>
+                <div class="d-flex flex-wrap gap-1 mb-3">
+                    <span class="badge bg-light text-dark">Porcentajes</span>
+                    <span class="badge bg-light text-dark">Aplicacion</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="progress flex-grow-1 me-3 progress-mini">
+                        <div class="progress-bar bg-primary" style="width: 0%;"></div>
+                    </div>
+                    <button class="btn btn-sm btn-outline-primary">Iniciar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Observable Signals Info -->
+<div class="row mt-5">
+    <div class="col-12">
+        <div class="card bg-light border-0">
+            <div class="card-body">
+                <h5><i class="bi bi-broadcast me-2"></i>Senales de Aprendizaje Observables</h5>
+                <p class="text-muted">Durante las actividades, la plataforma recoge las siguientes senales para ajustar el itinerario:</p>
+                <div class="row">
+                    <div class="col-md-4">
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-check text-success me-2"></i>Respuestas correctas/incorrectas</li>
+                            <li><i class="bi bi-arrow-repeat text-info me-2"></i>Numero de intentos</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-clock text-warning me-2"></i>Tiempo empleado</li>
+                            <li><i class="bi bi-pencil text-primary me-2"></i>Revisiones de respuestas</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-graph-up text-success me-2"></i>Progresion entre actividades</li>
+                            <li><i class="bi bi-box-arrow-right text-danger me-2"></i>Abandono o persistencia</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.querySelectorAll('.filter-chip').forEach(chip => {
+    chip.addEventListener('click', function() {
+        document.querySelectorAll('.filter-chip').forEach(c => {
+            c.classList.remove('active');
+            c.style.background = '';
+        });
+
+        this.classList.add('active');
+        const skill = this.dataset.skill;
+
+        if (skill === 'all') {
+            this.style.background = '#4CAF50';
+        } else {
+            const colors = {
+                'literacy': '#4CAF50',
+                'numeracy': '#2196F3',
+                'digital': '#9C27B0',
+                'citizenship': '#FF9800'
+            };
+            this.style.background = colors[skill];
+        }
+
+        // Filter activities
+        document.querySelectorAll('.activity-card-wrapper').forEach(card => {
+            if (skill === 'all' || card.dataset.skill === skill) {
+                card.style.display = '';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,481 @@
+{% extends "base.html" %}
+
+{% block title %}Shared Pedagogical Framework{% endblock %}
+
+{% block head %}
+<style>
+    .framework-hero {
+        background: linear-gradient(135deg, #0066cc 0%, #003399 100%);
+        color: white;
+        padding: 40px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+    }
+    .principle-card {
+        border-left: 4px solid;
+        transition: all 0.3s;
+        height: 100%;
+    }
+    .principle-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    .principle-1 { border-color: #4CAF50; }
+    .principle-2 { border-color: #2196F3; }
+    .principle-3 { border-color: #9C27B0; }
+    .principle-4 { border-color: #FF9800; }
+    .principle-5 { border-color: #E91E63; }
+    .principle-6 { border-color: #00BCD4; }
+    .agora-section {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 15px;
+        padding: 30px;
+    }
+    .variable-category {
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 15px;
+    }
+    .input-vars { background: rgba(76,175,80,0.1); border-left: 4px solid #4CAF50; }
+    .process-vars { background: rgba(255,152,0,0.1); border-left: 4px solid #FF9800; }
+    .output-vars { background: rgba(33,150,243,0.1); border-left: 4px solid #2196F3; }
+    .eai-badge {
+        display: inline-block;
+        padding: 8px 15px;
+        border-radius: 25px;
+        margin: 5px;
+        background: #f8f9fa;
+        border: 2px solid;
+        font-weight: 500;
+        transition: all 0.2s;
+    }
+    .eai-badge:hover {
+        transform: scale(1.05);
+    }
+    .competence-flow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        padding: 20px;
+    }
+    .competence-box {
+        padding: 15px 25px;
+        border-radius: 10px;
+        text-align: center;
+        min-width: 120px;
+    }
+    .arrow-connector {
+        font-size: 1.5rem;
+        color: #6c757d;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('landing', lang=lang) }}">Project</a></li>
+                <li class="breadcrumb-item"><span class="badge bg-primary">WP2</span> Methodological Foundation</li>
+                <li class="breadcrumb-item active">Shared Pedagogical Framework</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<!-- Hero Section -->
+<div class="framework-hero">
+    <div class="row align-items-center">
+        <div class="col-lg-8">
+            <h1><i class="bi bi-book-half me-3"></i>Shared Pedagogical Framework</h1>
+            <p class="lead mb-0">
+                An evidence-based, ethical and inclusive framework for AI-powered personalised learning pathways
+                in basic skills education (EQF 2-4).
+            </p>
+        </div>
+        <div class="col-lg-4 text-center">
+            <div class="bg-white bg-opacity-10 rounded-3 p-3">
+                <h5 class="mb-2">Framework Version</h5>
+                <span class="badge bg-warning text-dark fs-5">Beta 1.0</span>
+                <p class="small mb-0 mt-2 opacity-75">Based on AGORA Model</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Core Principles -->
+<div class="row mb-5">
+    <div class="col-12">
+        <h3 class="mb-4"><i class="bi bi-stars me-2"></i>Core Pedagogical Principles</h3>
+    </div>
+
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card principle-card principle-1">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="rounded-circle bg-success bg-opacity-10 p-2 me-3">
+                        <i class="bi bi-person-check text-success fs-4"></i>
+                    </div>
+                    <h5 class="mb-0">Teacher Agency</h5>
+                </div>
+                <p class="text-muted">AI supports but never replaces teachers' professional judgement.
+                   Final pedagogical decisions always rest with educators.</p>
+                <ul class="small mb-0">
+                    <li>Teachers validate AI recommendations</li>
+                    <li>Override capability for all suggestions</li>
+                    <li>Transparency in AI decision-making</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card principle-card principle-2">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="rounded-circle bg-primary bg-opacity-10 p-2 me-3">
+                        <i class="bi bi-people text-primary fs-4"></i>
+                    </div>
+                    <h5 class="mb-0">Inclusive Design</h5>
+                </div>
+                <p class="text-muted">Framework designed to reduce, not amplify, educational inequalities
+                   across diverse learner populations.</p>
+                <ul class="small mb-0">
+                    <li>Accessible to all learners</li>
+                    <li>Culturally responsive content</li>
+                    <li>Multiple learning modalities</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card principle-card principle-3">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="rounded-circle p-2 me-3" style="background: rgba(156,39,176,0.1);">
+                        <i class="bi bi-shield-check fs-4" style="color: #9C27B0;"></i>
+                    </div>
+                    <h5 class="mb-0">Ethical AI Use</h5>
+                </div>
+                <p class="text-muted">Transparent, fair, and privacy-respecting implementation
+                   of AI technologies in education.</p>
+                <ul class="small mb-0">
+                    <li>Data minimization principle</li>
+                    <li>Explainable recommendations</li>
+                    <li>Bias monitoring and mitigation</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card principle-card principle-4">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="rounded-circle bg-warning bg-opacity-10 p-2 me-3">
+                        <i class="bi bi-graph-up-arrow text-warning fs-4"></i>
+                    </div>
+                    <h5 class="mb-0">Evidence-Based</h5>
+                </div>
+                <p class="text-muted">All pedagogical strategies grounded in educational research
+                   and validated through empirical pilots.</p>
+                <ul class="small mb-0">
+                    <li>High-Impact Strategies (EAI)</li>
+                    <li>Continuous assessment</li>
+                    <li>Data-driven refinement</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card principle-card principle-5">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="rounded-circle p-2 me-3" style="background: rgba(233,30,99,0.1);">
+                        <i class="bi bi-arrow-repeat fs-4" style="color: #E91E63;"></i>
+                    </div>
+                    <h5 class="mb-0">Adaptive Pathways</h5>
+                </div>
+                <p class="text-muted">Learning paths that dynamically adjust to individual learner
+                   needs, progress, and preferences.</p>
+                <ul class="small mb-0">
+                    <li>Real-time path adjustment</li>
+                    <li>Multiple entry points</li>
+                    <li>Flexible pacing</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card principle-card principle-6">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="rounded-circle p-2 me-3" style="background: rgba(0,188,212,0.1);">
+                        <i class="bi bi-translate fs-4" style="color: #00BCD4;"></i>
+                    </div>
+                    <h5 class="mb-0">Transferability</h5>
+                </div>
+                <p class="text-muted">Framework designed for replication across different
+                   European educational contexts and systems.</p>
+                <ul class="small mb-0">
+                    <li>Context-adaptable design</li>
+                    <li>Multilingual support</li>
+                    <li>Cross-national validation</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Competence Model -->
+<div class="row mb-5">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="bi bi-diagram-3 me-2"></i>Competence Integration Model</h4>
+            </div>
+            <div class="card-body">
+                <p class="text-muted mb-4">
+                    The framework addresses four interconnected basic skills, with Digital and Citizenship as primary focus,
+                    enabled by foundational Literacy and Numeracy competences.
+                </p>
+
+                <div class="competence-flow">
+                    <div class="competence-box bg-success text-white">
+                        <i class="bi bi-book fs-3 d-block mb-2"></i>
+                        <strong>Literacy</strong>
+                        <div class="small opacity-75">Enabling</div>
+                    </div>
+                    <div class="arrow-connector">+</div>
+                    <div class="competence-box bg-primary text-white">
+                        <i class="bi bi-calculator fs-3 d-block mb-2"></i>
+                        <strong>Numeracy</strong>
+                        <div class="small opacity-75">Enabling</div>
+                    </div>
+                    <div class="arrow-connector"><i class="bi bi-arrow-right"></i></div>
+                    <div class="competence-box text-white" style="background: #9C27B0;">
+                        <i class="bi bi-laptop fs-3 d-block mb-2"></i>
+                        <strong>Digital</strong>
+                        <div class="small opacity-75">Primary</div>
+                    </div>
+                    <div class="arrow-connector">+</div>
+                    <div class="competence-box bg-warning text-dark">
+                        <i class="bi bi-flag fs-3 d-block mb-2"></i>
+                        <strong>Citizenship</strong>
+                        <div class="small opacity-75">Primary</div>
+                    </div>
+                </div>
+
+                <div class="alert alert-info mt-4 mb-0">
+                    <i class="bi bi-lightbulb me-2"></i>
+                    <strong>Key Insight:</strong> Learners' ability to critically engage with online information
+                    or citizenship-related tasks is conditioned by their reading comprehension and numerical reasoning skills.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- AGORA Model -->
+<div class="row mb-5">
+    <div class="col-12">
+        <div class="agora-section">
+            <h3 class="mb-4"><i class="bi bi-diagram-2 me-2"></i>AGORA Measurement Model</h3>
+            <p class="text-muted mb-4">
+                The framework uses the AGORA model to structure variables across three dimensions:
+                Input (learner characteristics), Process (pedagogical interventions), and Output (learning outcomes).
+            </p>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="variable-category input-vars">
+                        <h5><i class="bi bi-box-arrow-in-right me-2 text-success"></i>INPUT Variables</h5>
+                        <p class="small text-muted mb-3">Learner characteristics that inform pathway personalization</p>
+                        <ul class="list-unstyled small">
+                            <li class="mb-2"><strong>V1-V4:</strong> Demographic factors</li>
+                            <li class="mb-2"><strong>V5-V6:</strong> Emotional factors (motivation, self-efficacy)</li>
+                            <li class="mb-2"><strong>V7-V12:</strong> Cognitive factors (prior knowledge, learning style)</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="variable-category process-vars">
+                        <h5><i class="bi bi-gear me-2 text-warning"></i>PROCESS Variables</h5>
+                        <p class="small text-muted mb-3">Pedagogical interventions and adaptive mechanisms</p>
+                        <ul class="list-unstyled small">
+                            <li class="mb-2"><strong>V13:</strong> High-Impact Strategies (EAI)</li>
+                            <li class="mb-2"><strong>V14:</strong> Teaching methodologies</li>
+                            <li class="mb-2"><strong>V15:</strong> Temporal adaptation</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="variable-category output-vars">
+                        <h5><i class="bi bi-box-arrow-right me-2 text-primary"></i>OUTPUT Variables</h5>
+                        <p class="small text-muted mb-3">Learning outcomes and system effectiveness</p>
+                        <ul class="list-unstyled small">
+                            <li class="mb-2"><strong>V16-V20:</strong> Performance and retention</li>
+                            <li class="mb-2"><strong>V21-V24:</strong> Engagement and equity</li>
+                            <li class="mb-2"><strong>V25-V26:</strong> Technical validation</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- High-Impact Strategies -->
+<div class="row mb-5">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-warning text-dark">
+                <h4 class="mb-0"><i class="bi bi-lightning-charge me-2"></i>High-Impact Strategies (EAI)</h4>
+            </div>
+            <div class="card-body">
+                <p class="text-muted mb-4">
+                    Evidence-based teaching strategies integrated into the learning pathways to maximize educational impact.
+                </p>
+
+                <div class="mb-4">
+                    <span class="eai-badge" style="border-color: #4CAF50;">
+                        <i class="bi bi-chat-quote me-1 text-success"></i> Feedback
+                    </span>
+                    <span class="eai-badge" style="border-color: #2196F3;">
+                        <i class="bi bi-brain me-1 text-primary"></i> Metacognition
+                    </span>
+                    <span class="eai-badge" style="border-color: #9C27B0;">
+                        <i class="bi bi-people me-1" style="color: #9C27B0;"></i> Peer Learning
+                    </span>
+                    <span class="eai-badge" style="border-color: #FF9800;">
+                        <i class="bi bi-diagram-3 me-1 text-warning"></i> Prior Knowledge
+                    </span>
+                    <span class="eai-badge" style="border-color: #E91E63;">
+                        <i class="bi bi-bullseye me-1" style="color: #E91E63;"></i> Clear Objectives
+                    </span>
+                    <span class="eai-badge" style="border-color: #00BCD4;">
+                        <i class="bi bi-arrow-repeat me-1" style="color: #00BCD4;"></i> Spaced Practice
+                    </span>
+                    <span class="eai-badge" style="border-color: #795548;">
+                        <i class="bi bi-lightbulb me-1" style="color: #795548;"></i> Worked Examples
+                    </span>
+                    <span class="eai-badge" style="border-color: #607D8B;">
+                        <i class="bi bi-question-circle me-1" style="color: #607D8B;"></i> Elaboration
+                    </span>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card bg-light border-0">
+                            <div class="card-body">
+                                <h6><i class="bi bi-check-circle text-success me-2"></i>Integration Approach</h6>
+                                <ul class="small mb-0">
+                                    <li>Strategies embedded in activity design</li>
+                                    <li>Automatic activation based on learner state</li>
+                                    <li>Teacher override and customization</li>
+                                    <li>Effectiveness tracking per strategy</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card bg-light border-0">
+                            <div class="card-body">
+                                <h6><i class="bi bi-bar-chart text-primary me-2"></i>Evidence Base</h6>
+                                <ul class="small mb-0">
+                                    <li>Based on meta-analyses (Hattie, EEF)</li>
+                                    <li>Effect sizes > 0.4 prioritized</li>
+                                    <li>Contextualized for digital learning</li>
+                                    <li>Validated in European pilots</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Learning Path Structure -->
+<div class="row mb-5">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0"><i class="bi bi-signpost-split me-2"></i>Learning Path Structure</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="text-primary">Path Components</h6>
+                        <table class="table table-sm">
+                            <tbody>
+                                <tr>
+                                    <td><span class="badge bg-info">Nodes</span></td>
+                                    <td>Individual learning units with objectives and activities</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge bg-success">Branches</span></td>
+                                    <td>Skill-specific progression tracks</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge bg-warning text-dark">Connections</span></td>
+                                    <td>Prerequisites and interdependencies</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge bg-danger">Checkpoints</span></td>
+                                    <td>Assessment and progress verification points</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="text-primary">Adaptive Mechanisms</h6>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <i class="bi bi-arrow-left-right text-info me-2"></i>
+                                <strong>Entry Point Selection:</strong> Based on diagnostic assessment
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-speedometer2 text-warning me-2"></i>
+                                <strong>Pacing Adjustment:</strong> Based on performance signals
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-signpost-2 text-success me-2"></i>
+                                <strong>Route Optimization:</strong> AI-recommended next steps
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-arrow-clockwise text-danger me-2"></i>
+                                <strong>Remediation Loops:</strong> For persistent difficulties
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Current Path Info -->
+<div class="row">
+    <div class="col-12">
+        <div class="card bg-primary text-white">
+            <div class="card-body text-center py-4">
+                <h4><i class="bi bi-diagram-3 me-2"></i>Explore the Learning Path</h4>
+                <p class="mb-3">
+                    Current path: <strong>{{ path.name }}</strong> with <strong>{{ path.nodes|length }}</strong> learning nodes
+                </p>
+                <a href="{{ url_for('itinerary', lang=lang) }}" class="btn btn-light btn-lg">
+                    <i class="bi bi-eye me-2"></i>View Interactive Tree
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

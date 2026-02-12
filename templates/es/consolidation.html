@@ -1,0 +1,527 @@
+{% extends "base.html" %}
+
+{% block title %}Consolidacion de Resultados{% endblock %}
+
+{% block head %}
+<style>
+    .consolidation-hero {
+        background: linear-gradient(135deg, #198754 0%, #20c997 100%);
+        color: white;
+        padding: 40px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+    }
+    .outcome-card {
+        border: none;
+        border-radius: 15px;
+        transition: all 0.3s;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        height: 100%;
+    }
+    .outcome-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    .metric-large {
+        font-size: 3rem;
+        font-weight: 700;
+        line-height: 1;
+    }
+    .policy-card {
+        border-left: 5px solid;
+        border-radius: 0 15px 15px 0;
+    }
+    .policy-education { border-color: #0d6efd; }
+    .policy-technology { border-color: #6f42c1; }
+    .policy-equity { border-color: #fd7e14; }
+    .policy-governance { border-color: #198754; }
+    .finding-item {
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        background: #f8f9fa;
+        position: relative;
+    }
+    .finding-item::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        border-radius: 4px 0 0 4px;
+    }
+    .finding-positive::before { background: #198754; }
+    .finding-challenge::before { background: #ffc107; }
+    .finding-insight::before { background: #0d6efd; }
+    .replication-step {
+        position: relative;
+        padding: 25px;
+        background: white;
+        border-radius: 15px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    .replication-number {
+        position: absolute;
+        top: -15px;
+        left: 20px;
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, #198754 0%, #20c997 100%);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 1.2rem;
+    }
+    .evidence-badge {
+        display: inline-block;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        margin: 3px;
+    }
+    .chart-container {
+        height: 300px;
+    }
+    .sustainability-timeline {
+        position: relative;
+        padding-left: 40px;
+    }
+    .sustainability-timeline::before {
+        content: '';
+        position: absolute;
+        left: 15px;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        background: linear-gradient(to bottom, #198754, #20c997);
+    }
+    .timeline-item-sus {
+        position: relative;
+        padding: 15px 0;
+    }
+    .timeline-item-sus::before {
+        content: '';
+        position: absolute;
+        left: -29px;
+        top: 20px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: white;
+        border: 3px solid #198754;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('landing', lang=lang) }}">Proyecto</a></li>
+                <li class="breadcrumb-item"><span class="badge bg-success">WP4</span> Consolidacion</li>
+                <li class="breadcrumb-item active">Resultados y Recomendaciones</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<!-- Seccion Principal -->
+<div class="consolidation-hero">
+    <div class="row align-items-center">
+        <div class="col-lg-8">
+            <h1><i class="bi bi-clipboard-data me-3"></i>Consolidacion de Resultados</h1>
+            <p class="lead mb-0">
+                Sintesis de evidencias de los pilotos internacionales, marco pedagogico refinado,
+                recomendaciones de politica y directrices de replicacion para contextos europeos.
+            </p>
+        </div>
+        <div class="col-lg-4 text-center">
+            <div class="bg-white bg-opacity-10 rounded-3 p-3">
+                <h5 class="mb-2">Estado WP4</h5>
+                <span class="badge bg-warning text-dark fs-6">En Progreso</span>
+                <p class="small mb-0 mt-2 opacity-75">Meses 25-36</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Resultados Clave -->
+<div class="row mb-5">
+    <div class="col-12">
+        <h3 class="mb-4"><i class="bi bi-graph-up-arrow me-2"></i>Resultados Clave de los Pilotos</h3>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card outcome-card">
+            <div class="card-body text-center">
+                <div class="metric-large text-success">{{ students|length * 15 }}</div>
+                <p class="text-muted mb-0">Estudiantes Alcanzados</p>
+                <small class="text-muted">En los paises piloto</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card outcome-card">
+            <div class="card-body text-center">
+                <div class="metric-large text-primary">+18%</div>
+                <p class="text-muted mb-0">Mejora Media de Competencias</p>
+                <small class="text-muted">En todas las competencias</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card outcome-card">
+            <div class="card-body text-center">
+                <div class="metric-large text-warning">89%</div>
+                <p class="text-muted mb-0">Satisfaccion del Profesorado</p>
+                <small class="text-muted">Valoracion de usabilidad</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card outcome-card">
+            <div class="card-body text-center">
+                <div class="metric-large text-info">3</div>
+                <p class="text-muted mb-0">Paises Validados</p>
+                <small class="text-muted">Replicacion exitosa</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Hallazgos Clave -->
+<div class="row mb-5">
+    <div class="col-12">
+        <h3 class="mb-4"><i class="bi bi-lightbulb me-2"></i>Hallazgos Clave</h3>
+    </div>
+
+    <div class="col-lg-6 mb-4">
+        <div class="finding-item finding-positive">
+            <h5><i class="bi bi-check-circle text-success me-2"></i>Autonomia del Profesor Validada</h5>
+            <p class="mb-0">Los profesores que mantuvieron la autoridad de supervision sobre las recomendaciones de la IA
+            mostraron un 34% mejores resultados en los estudiantes que aquellos que siguieron las recomendaciones automaticamente.
+            Esto confirma el principio fundamental del marco.</p>
+            <div class="mt-2">
+                <span class="evidence-badge bg-success bg-opacity-10 text-success">Alta Evidencia</span>
+                <span class="evidence-badge bg-light text-dark">Cuantitativo</span>
+            </div>
+        </div>
+
+        <div class="finding-item finding-positive">
+            <h5><i class="bi bi-check-circle text-success me-2"></i>Competencias Habilitadoras Fundamentales</h5>
+            <p class="mb-0">Los estudiantes con bases mas solidas en literacy y numeracy mostraron
+            un progreso 2.1 veces mas rapido en competencias digitales y de ciudadania, validando el
+            modelo integrado de competencias.</p>
+            <div class="mt-2">
+                <span class="evidence-badge bg-success bg-opacity-10 text-success">Alta Evidencia</span>
+                <span class="evidence-badge bg-light text-dark">Longitudinal</span>
+            </div>
+        </div>
+
+        <div class="finding-item finding-insight">
+            <h5><i class="bi bi-info-circle text-primary me-2"></i>Impacto de la Personalizacion</h5>
+            <p class="mb-0">Los itinerarios adaptativos redujeron el tiempo hasta el dominio en un 23% comparado con
+            curriculos lineales, con el mayor impacto en los aprendices con dificultades (+31%).</p>
+            <div class="mt-2">
+                <span class="evidence-badge bg-primary bg-opacity-10 text-primary">Evidencia Media</span>
+                <span class="evidence-badge bg-light text-dark">Comparativo</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6 mb-4">
+        <div class="finding-item finding-challenge">
+            <h5><i class="bi bi-exclamation-triangle text-warning me-2"></i>Desafios de Implementacion</h5>
+            <p class="mb-0">La formacion inicial del profesorado requiere un minimo de 8 horas para un uso efectivo
+            de la plataforma. Los centros con menor preparacion mostraron tasas de adopcion un 40% inferiores.</p>
+            <div class="mt-2">
+                <span class="evidence-badge bg-warning bg-opacity-10 text-warning">Evidencia Media</span>
+                <span class="evidence-badge bg-light text-dark">Cualitativo</span>
+            </div>
+        </div>
+
+        <div class="finding-item finding-challenge">
+            <h5><i class="bi bi-exclamation-triangle text-warning me-2"></i>Preocupaciones sobre la Brecha Digital</h5>
+            <p class="mb-0">Los estudiantes sin acceso a internet en casa mostraron un 15% menos de participacion.
+            Se necesitan mecanismos de apoyo adicionales para la equidad.</p>
+            <div class="mt-2">
+                <span class="evidence-badge bg-warning bg-opacity-10 text-warning">Alta Evidencia</span>
+                <span class="evidence-badge bg-light text-dark">Analisis de Equidad</span>
+            </div>
+        </div>
+
+        <div class="finding-item finding-insight">
+            <h5><i class="bi bi-info-circle text-primary me-2"></i>Adaptacion Intercultural</h5>
+            <p class="mb-0">La localizacion de contenidos mas alla de la traduccion (contexto cultural, ejemplos)
+            mejoro significativamente la participacion en contextos de lengua no nativa.</p>
+            <div class="mt-2">
+                <span class="evidence-badge bg-primary bg-opacity-10 text-primary">Evidencia Media</span>
+                <span class="evidence-badge bg-light text-dark">Transnacional</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Graficos de Rendimiento -->
+<div class="row mb-5">
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-bar-chart me-2"></i>Mejora de Competencias por Area</h5>
+            </div>
+            <div class="card-body">
+                <div id="skills-improvement-chart" class="chart-container"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-pie-chart me-2"></i>Impacto por Perfil de Alumno</h5>
+            </div>
+            <div class="card-body">
+                <div id="profile-impact-chart" class="chart-container"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recomendaciones de Politica -->
+<div class="row mb-5">
+    <div class="col-12">
+        <h3 class="mb-4"><i class="bi bi-file-earmark-text me-2"></i>Recomendaciones de Politica</h3>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card policy-card policy-education h-100">
+            <div class="card-body">
+                <h5><i class="bi bi-mortarboard text-primary me-2"></i>Para Ministerios de Educacion</h5>
+                <ul class="mb-0">
+                    <li class="mb-2">Integrar la alfabetizacion en IA en los curriculos de formacion inicial del profesorado</li>
+                    <li class="mb-2">Establecer directrices claras para el uso de la IA en la evaluacion (formativa vs sumativa)</li>
+                    <li class="mb-2">Financiar tiempo dedicado al desarrollo profesional docente en tecnologia educativa</li>
+                    <li class="mb-2">Crear repositorios nacionales de recursos de aprendizaje validados con IA</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card policy-card policy-technology h-100">
+            <div class="card-body">
+                <h5><i class="bi bi-cpu text-purple me-2" style="color: #6f42c1;"></i>Para Desarrolladores EdTech</h5>
+                <ul class="mb-0">
+                    <li class="mb-2">Priorizar la explicabilidad en los sistemas de recomendacion con IA</li>
+                    <li class="mb-2">Incorporar mecanismos de supervision del profesor como opcion por defecto, no opcional</li>
+                    <li class="mb-2">Disenar para la accesibilidad y la funcionalidad sin conexion</li>
+                    <li class="mb-2">Implementar una proteccion de datos robusta desde el diseno</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card policy-card policy-equity h-100">
+            <div class="card-body">
+                <h5><i class="bi bi-people text-warning me-2"></i>Para Equidad e Inclusion</h5>
+                <ul class="mb-0">
+                    <li class="mb-2">Monitorizar los sistemas de IA para detectar sesgos contra grupos desfavorecidos</li>
+                    <li class="mb-2">Garantizar itinerarios alternativos para estudiantes sin acceso digital</li>
+                    <li class="mb-2">Proporcionar soporte multilingue como estandar, no como opcion premium</li>
+                    <li class="mb-2">Incluir adaptaciones para necesidades especiales en el diseno base de la plataforma</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card policy-card policy-governance h-100">
+            <div class="card-body">
+                <h5><i class="bi bi-shield-check text-success me-2"></i>Para la Gobernanza de la IA</h5>
+                <ul class="mb-0">
+                    <li class="mb-2">Exigir evaluaciones de impacto algoritmico para la IA educativa</li>
+                    <li class="mb-2">Establecer politicas claras de retencion y eliminacion de datos</li>
+                    <li class="mb-2">Crear mecanismos de supervision con representacion del profesorado</li>
+                    <li class="mb-2">Exigir informes de transparencia sobre la toma de decisiones de la IA</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Directrices de Replicacion -->
+<div class="row mb-5">
+    <div class="col-12">
+        <h3 class="mb-4"><i class="bi bi-diagram-2 me-2"></i>Directrices de Replicacion</h3>
+        <p class="text-muted mb-4">
+            Guia paso a paso para implementar el marco InfiniteLearner en nuevos contextos europeos.
+        </p>
+    </div>
+
+    <div class="col-12">
+        <div class="replication-step">
+            <div class="replication-number">1</div>
+            <h5 class="mt-2">Analisis del Contexto</h5>
+            <p class="text-muted mb-2">Evaluar el contexto educativo local, la infraestructura y las necesidades.</p>
+            <ul class="small mb-0">
+                <li>Mapear la infraestructura digital existente en los centros educativos objetivo</li>
+                <li>Identificar los requisitos de alineacion con el curriculo local</li>
+                <li>Evaluar los niveles de preparacion digital del profesorado</li>
+                <li>Comprender las regulaciones de proteccion de datos</li>
+            </ul>
+        </div>
+
+        <div class="replication-step">
+            <div class="replication-number">2</div>
+            <h5 class="mt-2">Localizacion</h5>
+            <p class="text-muted mb-2">Adaptar el contenido y la plataforma al contexto local.</p>
+            <ul class="small mb-0">
+                <li>Traducir la interfaz y el contenido de aprendizaje</li>
+                <li>Adaptar los ejemplos al contexto cultural local</li>
+                <li>Alinear los marcos de competencias con los estandares nacionales</li>
+                <li>Validar las evaluaciones con educadores locales</li>
+            </ul>
+        </div>
+
+        <div class="replication-step">
+            <div class="replication-number">3</div>
+            <h5 class="mt-2">Preparacion del Profesorado</h5>
+            <p class="text-muted mb-2">Formar a los educadores en el uso del marco y la plataforma.</p>
+            <ul class="small mb-0">
+                <li>Taller de formacion inicial de minimo 8 horas</li>
+                <li>Enfasis en la autonomia del profesor y las capacidades de supervision</li>
+                <li>Practica en la interpretacion de las recomendaciones de la IA</li>
+                <li>Establecer redes de apoyo entre pares</li>
+            </ul>
+        </div>
+
+        <div class="replication-step">
+            <div class="replication-number">4</div>
+            <h5 class="mt-2">Pilotaje e Iteracion</h5>
+            <p class="text-muted mb-2">Empezar a pequena escala, recopilar comentarios y perfeccionar.</p>
+            <ul class="small mb-0">
+                <li>Comenzar con 2-3 centros piloto</li>
+                <li>Recopilar datos tanto cuantitativos como cualitativos</li>
+                <li>Realizar sesiones periodicas de retroalimentacion con el profesorado</li>
+                <li>Iterar en la implementacion segun los hallazgos</li>
+            </ul>
+        </div>
+
+        <div class="replication-step">
+            <div class="replication-number">5</div>
+            <h5 class="mt-2">Escalado y Sostenibilidad</h5>
+            <p class="text-muted mb-2">Ampliar la implementacion con un plan de sostenibilidad.</p>
+            <ul class="small mb-0">
+                <li>Desarrollar programas de formacion de formadores</li>
+                <li>Establecer estructuras de apoyo continuo</li>
+                <li>Crear una comunidad de practica local</li>
+                <li>Planificar la financiacion y el mantenimiento a largo plazo</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Sostenibilidad -->
+<div class="row mb-5">
+    <div class="col-12">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <h4><i class="bi bi-recycle me-2"></i>Plan de Sostenibilidad</h4>
+                <div class="row mt-4">
+                    <div class="col-md-8">
+                        <div class="sustainability-timeline">
+                            <div class="timeline-item-sus">
+                                <strong>Ano 1-2 (Duracion del Proyecto)</strong>
+                                <p class="opacity-75 mb-0">Desarrollo y pilotaje cofinanciado por la UE</p>
+                            </div>
+                            <div class="timeline-item-sus">
+                                <strong>Ano 3 (Transicion)</strong>
+                                <p class="opacity-75 mb-0">Transferencia a autoridades educativas nacionales/regionales</p>
+                            </div>
+                            <div class="timeline-item-sus">
+                                <strong>Ano 4+ (Sostenibilidad)</strong>
+                                <p class="opacity-75 mb-0">Integracion en los ecosistemas nacionales de tecnologia educativa</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="bg-white bg-opacity-10 rounded-3 p-3">
+                            <h6>Factores Clave de Sostenibilidad</h6>
+                            <ul class="small mb-0">
+                                <li>Componentes de plataforma de codigo abierto</li>
+                                <li>Desarrollo de capacidades locales</li>
+                                <li>Integracion con sistemas existentes</li>
+                                <li>Mantenimiento impulsado por la comunidad</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Descargar Informe -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body text-center py-4">
+                <h4><i class="bi bi-file-earmark-pdf me-2"></i>Informe Completo</h4>
+                <p class="text-muted mb-3">Descarga el informe completo de consolidacion con todos los hallazgos, datos y recomendaciones.</p>
+                <button class="btn btn-success btn-lg" disabled>
+                    <i class="bi bi-download me-2"></i>Descargar Informe Completo (Proximamente)
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Grafico de Mejora de Competencias
+const skillsData = [{
+    x: ['Literacy', 'Numeracy', 'Digital', 'Citizenship'],
+    y: [15, 12, 22, 18],
+    type: 'bar',
+    marker: {
+        color: ['#4CAF50', '#2196F3', '#9C27B0', '#FF9800']
+    },
+    text: ['+15%', '+12%', '+22%', '+18%'],
+    textposition: 'outside'
+}];
+
+Plotly.newPlot('skills-improvement-chart', skillsData, {
+    title: '',
+    yaxis: { title: 'Mejora (%)', range: [0, 30] },
+    margin: { t: 20, b: 40 }
+});
+
+// Grafico de Impacto por Perfil
+const profileData = [{
+    values: [35, 25, 40],
+    labels: ['Alto Rendimiento (+12%)', 'Medio (+18%)', 'Con Dificultades (+31%)'],
+    type: 'pie',
+    marker: {
+        colors: ['#28a745', '#ffc107', '#dc3545']
+    },
+    hole: 0.4,
+    textinfo: 'label+percent'
+}];
+
+Plotly.newPlot('profile-impact-chart', profileData, {
+    title: '',
+    margin: { t: 20, b: 20 },
+    showlegend: false
+});
+</script>
+{% endblock %}

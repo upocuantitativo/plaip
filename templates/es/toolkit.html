@@ -1,0 +1,554 @@
+{% extends "base.html" %}
+
+{% block title %}Kit de Herramientas para Docentes{% endblock %}
+
+{% block head %}
+<style>
+    .toolkit-hero {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: white;
+        padding: 40px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+    }
+    .resource-card {
+        border: none;
+        border-radius: 15px;
+        transition: all 0.3s;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        height: 100%;
+    }
+    .resource-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    .resource-icon {
+        width: 70px;
+        height: 70px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+    }
+    .guide-item {
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        background: #f8f9fa;
+        border-left: 4px solid;
+        transition: all 0.2s;
+    }
+    .guide-item:hover {
+        background: #e9ecef;
+    }
+    .guide-step {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: white;
+        flex-shrink: 0;
+    }
+    .module-badge {
+        display: inline-block;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+    .download-card {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 15px;
+        padding: 25px;
+        text-align: center;
+        transition: all 0.3s;
+        border: 2px dashed #dee2e6;
+    }
+    .download-card:hover {
+        border-color: #28a745;
+        background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    }
+    .faq-item {
+        border: none;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        overflow: hidden;
+    }
+    .faq-item .accordion-button {
+        background: #f8f9fa;
+        font-weight: 500;
+    }
+    .faq-item .accordion-button:not(.collapsed) {
+        background: #e9ecef;
+        color: #28a745;
+    }
+    .video-placeholder {
+        background: #212529;
+        border-radius: 10px;
+        padding: 60px 20px;
+        text-align: center;
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('landing', lang=lang) }}">Proyecto</a></li>
+                <li class="breadcrumb-item"><span class="badge bg-primary">WP2</span> Fundamento Metodologico</li>
+                <li class="breadcrumb-item active">Kit de Herramientas para Docentes</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<!-- Hero Section -->
+<div class="toolkit-hero">
+    <div class="row align-items-center">
+        <div class="col-lg-8">
+            <h1><i class="bi bi-tools me-3"></i>Kit de Herramientas para Docentes</h1>
+            <p class="lead mb-0">
+                Recursos practicos, guias y materiales de formacion para implementar eficazmente
+                itinerarios de aprendizaje personalizados impulsados por IA en tu aula.
+            </p>
+        </div>
+        <div class="col-lg-4 text-center">
+            <div class="bg-white bg-opacity-10 rounded-3 p-3">
+                <h5 class="mb-2">Estado del Kit</h5>
+                <span class="badge bg-warning text-dark fs-6">Version Beta</span>
+                <p class="small mb-0 mt-2 opacity-75">Actualizado: Enero 2026</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Access Resources -->
+<div class="row mb-5">
+    <div class="col-12">
+        <h3 class="mb-4"><i class="bi bi-grid-3x3-gap me-2"></i>Recursos de Acceso Rapido</h3>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card resource-card">
+            <div class="card-body text-center p-4">
+                <div class="resource-icon bg-primary bg-opacity-10 mx-auto">
+                    <i class="bi bi-book text-primary"></i>
+                </div>
+                <h5>Guia de Usuario</h5>
+                <p class="text-muted small">Manual completo de la plataforma con instrucciones paso a paso</p>
+                <a href="#user-guide" class="btn btn-outline-primary btn-sm">Ver Guia</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card resource-card">
+            <div class="card-body text-center p-4">
+                <div class="resource-icon bg-success bg-opacity-10 mx-auto">
+                    <i class="bi bi-play-circle text-success"></i>
+                </div>
+                <h5>Videotutoriales</h5>
+                <p class="text-muted small">Videos cortos explicando las funciones clave de la plataforma</p>
+                <a href="#videos" class="btn btn-outline-success btn-sm">Ver Videos</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card resource-card">
+            <div class="card-body text-center p-4">
+                <div class="resource-icon bg-warning bg-opacity-10 mx-auto">
+                    <i class="bi bi-file-earmark-text text-warning"></i>
+                </div>
+                <h5>Plantillas</h5>
+                <p class="text-muted small">Plantillas de actividades y planes de clase listas para usar</p>
+                <a href="#templates" class="btn btn-outline-warning btn-sm">Obtener Plantillas</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card resource-card">
+            <div class="card-body text-center p-4">
+                <div class="resource-icon bg-info bg-opacity-10 mx-auto">
+                    <i class="bi bi-question-circle text-info"></i>
+                </div>
+                <h5>Preguntas Frecuentes</h5>
+                <p class="text-muted small">Respuestas a las preguntas mas frecuentes</p>
+                <a href="#faq" class="btn btn-outline-info btn-sm">Ver FAQ</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- User Guide Section -->
+<div class="row mb-5" id="user-guide">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="bi bi-book me-2"></i>Guia de Usuario de la Plataforma</h4>
+            </div>
+            <div class="card-body">
+                <p class="text-muted mb-4">
+                    Sigue estos pasos para utilizar eficazmente la plataforma InfiniteLearner con tus estudiantes.
+                </p>
+
+                <div class="guide-item" style="border-color: #4CAF50;">
+                    <div class="d-flex align-items-start">
+                        <div class="guide-step bg-success me-3">1</div>
+                        <div>
+                            <h5>Configuracion Inicial</h5>
+                            <p class="mb-2">Configura tu clase y registra a los estudiantes en la plataforma.</p>
+                            <ul class="small text-muted mb-0">
+                                <li>Accede a la seccion de <a href="{{ url_for('students_page', lang=lang) }}">Gestion de Estudiantes</a></li>
+                                <li>Crea perfiles individuales o utiliza la importacion masiva</li>
+                                <li>Establece la informacion demografica e inicial de competencias</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="guide-item" style="border-color: #2196F3;">
+                    <div class="d-flex align-items-start">
+                        <div class="guide-step bg-primary me-3">2</div>
+                        <div>
+                            <h5>Realizar el Diagnostico Inicial</h5>
+                            <p class="mb-2">Evalua los niveles iniciales de los estudiantes en todas las competencias.</p>
+                            <ul class="small text-muted mb-0">
+                                <li>Accede al modulo de <a href="{{ url_for('diagnostic', lang=lang) }}">Diagnostico</a></li>
+                                <li>Asigna pruebas diagnosticas a los estudiantes</li>
+                                <li>Revisa los resultados para comprender los niveles de partida</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="guide-item" style="border-color: #9C27B0;">
+                    <div class="d-flex align-items-start">
+                        <div class="guide-step me-3" style="background: #9C27B0;">3</div>
+                        <div>
+                            <h5>Asignar Actividades de Aprendizaje</h5>
+                            <p class="mb-2">Guia a los estudiantes a traves de itinerarios de aprendizaje personalizados.</p>
+                            <ul class="small text-muted mb-0">
+                                <li>Revisa las actividades sugeridas por la IA en el modulo de <a href="{{ url_for('activities', lang=lang) }}">Actividades</a></li>
+                                <li>Aprueba, modifica o anula las recomendaciones</li>
+                                <li>Supervisa el progreso de los estudiantes en tiempo real</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="guide-item" style="border-color: #FF9800;">
+                    <div class="d-flex align-items-start">
+                        <div class="guide-step bg-warning me-3">4</div>
+                        <div>
+                            <h5>Supervisar e Intervenir</h5>
+                            <p class="mb-2">Utiliza los paneles de control para seguir el progreso e identificar a los estudiantes que necesitan apoyo.</p>
+                            <ul class="small text-muted mb-0">
+                                <li>Consulta el <a href="{{ url_for('dashboard_teacher', lang=lang) }}">Panel del Docente</a> con regularidad</li>
+                                <li>Revisa las alertas de estudiantes con dificultades</li>
+                                <li>Utiliza las recomendaciones de la IA aplicando tu juicio profesional</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="guide-item" style="border-color: #E91E63;">
+                    <div class="d-flex align-items-start">
+                        <div class="guide-step me-3" style="background: #E91E63;">5</div>
+                        <div>
+                            <h5>Evaluacion Formativa</h5>
+                            <p class="mb-2">Evalua continuamente el aprendizaje y ajusta los itinerarios segun sea necesario.</p>
+                            <ul class="small text-muted mb-0">
+                                <li>Utiliza las herramientas de evaluacion formativa integradas</li>
+                                <li>Revisa las analiticas de aprendizaje</li>
+                                <li>Ajusta la dificultad y el ritmo del itinerario</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Video Tutorials -->
+<div class="row mb-5" id="videos">
+    <div class="col-12">
+        <h3 class="mb-4"><i class="bi bi-play-circle me-2"></i>Videotutoriales</h3>
+    </div>
+
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100">
+            <div class="video-placeholder">
+                <i class="bi bi-play-btn fs-1 mb-3"></i>
+                <p class="mb-0">Vision General de la Plataforma</p>
+                <small class="opacity-50">5:30 min</small>
+            </div>
+            <div class="card-body">
+                <h6>Primeros Pasos</h6>
+                <p class="small text-muted mb-0">Introduccion a la plataforma InfiniteLearner y sus funciones principales.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100">
+            <div class="video-placeholder">
+                <i class="bi bi-play-btn fs-1 mb-3"></i>
+                <p class="mb-0">Gestion de Estudiantes</p>
+                <small class="opacity-50">4:15 min</small>
+            </div>
+            <div class="card-body">
+                <h6>Gestionar Estudiantes</h6>
+                <p class="small text-muted mb-0">Como crear, editar y gestionar perfiles de estudiantes.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100">
+            <div class="video-placeholder">
+                <i class="bi bi-play-btn fs-1 mb-3"></i>
+                <p class="mb-0">Uso del Panel de Control</p>
+                <small class="opacity-50">6:45 min</small>
+            </div>
+            <div class="card-body">
+                <h6>Panel del Docente</h6>
+                <p class="small text-muted mb-0">Comprender las senales de aprendizaje observables y el progreso de los estudiantes.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100">
+            <div class="video-placeholder">
+                <i class="bi bi-play-btn fs-1 mb-3"></i>
+                <p class="mb-0">Recomendaciones de IA</p>
+                <small class="opacity-50">5:00 min</small>
+            </div>
+            <div class="card-body">
+                <h6>Trabajar con la IA</h6>
+                <p class="small text-muted mb-0">Como interpretar y actuar sobre las recomendaciones generadas por la IA.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100">
+            <div class="video-placeholder">
+                <i class="bi bi-play-btn fs-1 mb-3"></i>
+                <p class="mb-0">Itinerarios de Aprendizaje</p>
+                <small class="opacity-50">7:20 min</small>
+            </div>
+            <div class="card-body">
+                <h6>Navegar por los Itinerarios</h6>
+                <p class="small text-muted mb-0">Comprender el arbol de aprendizaje y la personalizacion de itinerarios.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100">
+            <div class="video-placeholder">
+                <i class="bi bi-play-btn fs-1 mb-3"></i>
+                <p class="mb-0">Herramientas de Evaluacion</p>
+                <small class="opacity-50">4:50 min</small>
+            </div>
+            <div class="card-body">
+                <h6>Evaluacion Formativa</h6>
+                <p class="small text-muted mb-0">Uso de las funciones de evaluacion diagnostica y formativa.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Downloadable Templates -->
+<div class="row mb-5" id="templates">
+    <div class="col-12">
+        <h3 class="mb-4"><i class="bi bi-file-earmark-text me-2"></i>Recursos Descargables</h3>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="download-card h-100">
+            <i class="bi bi-file-earmark-pdf text-danger fs-1 mb-3"></i>
+            <h6>Guia de Inicio Rapido</h6>
+            <p class="small text-muted">Resumen de 2 paginas para empezar</p>
+            <span class="module-badge bg-primary text-white">PDF</span>
+            <button class="btn btn-sm btn-outline-success mt-3 w-100" disabled>
+                <i class="bi bi-download me-1"></i> Proximamente
+            </button>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="download-card h-100">
+            <i class="bi bi-file-earmark-excel text-success fs-1 mb-3"></i>
+            <h6>Plantilla de Importacion de Estudiantes</h6>
+            <p class="small text-muted">Plantilla Excel para importacion masiva de estudiantes</p>
+            <span class="module-badge bg-success text-white">XLSX</span>
+            <button class="btn btn-sm btn-outline-success mt-3 w-100" disabled>
+                <i class="bi bi-download me-1"></i> Proximamente
+            </button>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="download-card h-100">
+            <i class="bi bi-file-earmark-word text-primary fs-1 mb-3"></i>
+            <h6>Plantillas de Planes de Clase</h6>
+            <p class="small text-muted">Plantillas editables de planes de clase</p>
+            <span class="module-badge bg-primary text-white">DOCX</span>
+            <button class="btn btn-sm btn-outline-success mt-3 w-100" disabled>
+                <i class="bi bi-download me-1"></i> Proximamente
+            </button>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="download-card h-100">
+            <i class="bi bi-file-earmark-ppt text-warning fs-1 mb-3"></i>
+            <h6>Presentacion de Formacion</h6>
+            <p class="small text-muted">Diapositivas para sesiones de formacion docente</p>
+            <span class="module-badge bg-warning text-dark">PPTX</span>
+            <button class="btn btn-sm btn-outline-success mt-3 w-100" disabled>
+                <i class="bi bi-download me-1"></i> Proximamente
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- FAQ Section -->
+<div class="row mb-5" id="faq">
+    <div class="col-12">
+        <h3 class="mb-4"><i class="bi bi-question-circle me-2"></i>Preguntas Frecuentes</h3>
+
+        <div class="accordion" id="faqAccordion">
+            <div class="accordion-item faq-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                        Como hace la IA sus recomendaciones?
+                    </button>
+                </h2>
+                <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        La IA analiza senales de aprendizaje observables, incluyendo patrones de respuesta, tiempo dedicado a las actividades,
+                        numero de intentos y patrones de progresion. Utiliza aprendizaje por refuerzo para identificar itinerarios
+                        de aprendizaje optimos basados en perfiles de estudiantes similares. Sin embargo, todas las recomendaciones son sugerencias:
+                        la decision final siempre corresponde al profesorado.
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item faq-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                        Puedo anular las recomendaciones de la IA?
+                    </button>
+                </h2>
+                <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Si, por supuesto. La plataforma esta disenada con la agencia docente como principio fundamental. Puedes aceptar,
+                        modificar o anular completamente cualquier recomendacion de la IA. El sistema aprende de tus decisiones para
+                        mejorar las sugerencias futuras.
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item faq-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                        Como se protegen los datos de los estudiantes?
+                    </button>
+                </h2>
+                <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        La plataforma sigue las directrices del RGPD y los principios de minimizacion de datos. Solo se recogen los datos
+                        de aprendizaje necesarios, y toda la informacion personal esta cifrada. Los estudiantes pueden ser anonimizados para
+                        fines de analisis, y los datos nunca se comparten con terceros sin consentimiento explicito.
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item faq-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                        Que pasa si un estudiante tiene dificultades significativas?
+                    </button>
+                </h2>
+                <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        El panel de control te alertara sobre estudiantes que puedan necesitar apoyo adicional a traves de la seccion
+                        "Atencion Requerida". Puedes entonces revisar su historial de aprendizaje, ajustar la dificultad de su itinerario,
+                        asignar actividades de refuerzo o proporcionar intervencion directa. La IA sugerira estrategias especificas basadas
+                        en el perfil del estudiante.
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item faq-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+                        Como interpreto las senales de aprendizaje en el panel de control?
+                    </button>
+                </h2>
+                <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Las senales de aprendizaje observables incluyen:
+                        <ul class="mb-0 mt-2">
+                            <li><strong>Respuestas correctas/incorrectas:</strong> Tasa de precision general</li>
+                            <li><strong>Numero de intentos:</strong> Nivel de persistencia y compromiso</li>
+                            <li><strong>Tiempo empleado:</strong> Profundidad del compromiso (demasiado rapido puede indicar adivinacion, demasiado lento puede indicar dificultad)</li>
+                            <li><strong>Revisiones de respuestas:</strong> Autocorreccion y actividad metacognitiva</li>
+                            <li><strong>Patrones de progresion:</strong> Trayectoria de aprendizaje a lo largo del tiempo</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item faq-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq6">
+                        Puedo personalizar los itinerarios de aprendizaje?
+                    </button>
+                </h2>
+                <div id="faq6" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Si. Aunque la plataforma proporciona un arbol de aprendizaje predeterminado basado en el marco pedagogico compartido,
+                        el profesorado puede personalizar las actividades, ajustar los niveles de dificultad, anadir materiales complementarios
+                        y modificar la secuencia de nodos de aprendizaje para estudiantes individuales o grupos.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Support Section -->
+<div class="row">
+    <div class="col-12">
+        <div class="card bg-success text-white">
+            <div class="card-body text-center py-4">
+                <h4><i class="bi bi-headset me-2"></i>Necesitas Mas Ayuda?</h4>
+                <p class="mb-3">Contacta con nuestro equipo de soporte o unete al foro de la comunidad docente</p>
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    <a href="mailto:support@infinitelearnerai.eu" class="btn btn-light">
+                        <i class="bi bi-envelope me-2"></i>Soporte por Email
+                    </a>
+                    <button class="btn btn-outline-light" disabled>
+                        <i class="bi bi-chat-dots me-2"></i>Foro de la Comunidad (Proximamente)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

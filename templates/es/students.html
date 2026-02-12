@@ -1,0 +1,257 @@
+{% extends "base.html" %}
+
+{% block title %}Estudiantes{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12 d-flex justify-content-between align-items-center">
+        <div>
+            <h1><i class="bi bi-people text-success"></i> Gestion de Estudiantes</h1>
+            <p class="text-muted">Perfiles de estudiantes y clones virtuales para simulacion</p>
+        </div>
+        <div>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newStudentModal">
+                <i class="bi bi-person-plus"></i> Nuevo Estudiante
+            </button>
+            <button class="btn btn-outline-secondary" onclick="createSampleStudents()">
+                <i class="bi bi-magic"></i> Crear Ejemplos
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Students List -->
+<div class="row" id="students-container">
+    {% for student in students %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">{{ student.name }}</h5>
+                <span class="badge bg-secondary">{{ student.demographics.education_stage.value }}</span>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <small class="text-muted">Edad</small>
+                        <p class="mb-0"><strong>{{ student.demographics.age }} anos</strong></p>
+                    </div>
+                    <div class="col-6">
+                        <small class="text-muted">Comp. Digital</small>
+                        <p class="mb-0"><strong>{{ student.demographics.digital_competence_score|round(1) }}%</strong></p>
+                    </div>
+                </div>
+
+                <h6 class="text-muted mb-2"><i class="bi bi-heart"></i> Factores Emocionales</h6>
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <small>Motivacion</small>
+                        <small>{{ student.emotional.intrinsic_motivation|round(1) }}%</small>
+                    </div>
+                    <div class="progress" style="height: 8px;">
+                        <div class="progress-bar bg-success" style="width: {{ student.emotional.intrinsic_motivation }}%"></div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <small>Autoeficacia</small>
+                        <small>{{ student.emotional.self_efficacy|round(1) }}%</small>
+                    </div>
+                    <div class="progress" style="height: 8px;">
+                        <div class="progress-bar bg-info" style="width: {{ student.emotional.self_efficacy }}%"></div>
+                    </div>
+                </div>
+
+                <h6 class="text-muted mb-2"><i class="bi bi-lightbulb"></i> Conocimiento Previo</h6>
+                <div class="row g-2">
+                    {% for skill, value in student.cognitive.prior_knowledge.items() %}
+                    <div class="col-6">
+                        <small class="text-capitalize">{{ skill }}</small>
+                        <div class="progress" style="height: 6px;">
+                            <div class="progress-bar" style="width: {{ value }}%;
+                                background-color: {% if skill == 'literacy' %}#4CAF50{% elif skill == 'numeracy' %}#2196F3{% elif skill == 'digital' %}#9C27B0{% else %}#FF9800{% endif %}">
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="card-footer">
+                <small class="text-muted">
+                    <i class="bi bi-check-circle"></i> {{ student.completed_nodes|length }} nodos completados
+                </small>
+                <button class="btn btn-sm btn-outline-primary float-end"
+                        onclick="viewOptimalPath('{{ student.id }}')">
+                    <i class="bi bi-signpost"></i> Ver Ruta
+                </button>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12">
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle"></i> No hay estudiantes registrados.
+            <a href="#" onclick="createSampleStudents()">Crea estudiantes de ejemplo</a> para comenzar.
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- New Student Modal -->
+<div class="modal fade" id="newStudentModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-person-plus"></i> Nuevo Estudiante</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="studentForm" onsubmit="createStudent(event)">
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Nombre</label>
+                            <input type="text" class="form-control" name="name" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Edad</label>
+                            <input type="number" class="form-control" name="age" min="12" max="25" value="16">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Etapa</label>
+                            <select class="form-select" name="education_stage">
+                                <option value="ESO">ESO</option>
+                                <option value="BACHILLERATO">Bachillerato</option>
+                                <option value="FP_BASICA">FP Basica</option>
+                                <option value="FP_MEDIO">FP Medio</option>
+                            </select>
+                        </div>
+
+                        <div class="col-12"><hr><h6>Variables Emocionales (V5-V6)</h6></div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Motivacion Intrinseca (0-100)</label>
+                            <input type="range" class="form-range" name="motivation" min="0" max="100" value="50"
+                                   oninput="this.nextElementSibling.textContent = this.value">
+                            <span class="badge bg-secondary">50</span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Autoeficacia (0-100)</label>
+                            <input type="range" class="form-range" name="self_efficacy" min="0" max="100" value="50"
+                                   oninput="this.nextElementSibling.textContent = this.value">
+                            <span class="badge bg-secondary">50</span>
+                        </div>
+
+                        <div class="col-12"><hr><h6>Variables Cognitivas (V7-V12)</h6></div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Competencia Digital (0-100)</label>
+                            <input type="range" class="form-range" name="digital_competence" min="0" max="100" value="50"
+                                   oninput="this.nextElementSibling.textContent = this.value">
+                            <span class="badge bg-secondary">50</span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Estilo Kolb</label>
+                            <select class="form-select" name="kolb_style">
+                                <option value="CONVERGENT">Convergente</option>
+                                <option value="DIVERGENT">Divergente</option>
+                                <option value="ASSIMILATOR">Asimilador</option>
+                                <option value="ACCOMMODATOR">Acomodador</option>
+                            </select>
+                        </div>
+
+                        <div class="col-12"><h6 class="mt-3">Conocimiento Previo por Competencia</h6></div>
+                        <div class="col-md-3">
+                            <label class="form-label">Literacy</label>
+                            <input type="number" class="form-control" name="literacy" min="0" max="100" value="50">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Numeracy</label>
+                            <input type="number" class="form-control" name="numeracy" min="0" max="100" value="50">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Digital</label>
+                            <input type="number" class="form-control" name="digital" min="0" max="100" value="50">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Citizenship</label>
+                            <input type="number" class="form-control" name="citizenship" min="0" max="100" value="50">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Crear Estudiante</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+async function createSampleStudents() {
+    try {
+        const response = await fetch('/api/students/sample', {method: 'POST'});
+        const data = await response.json();
+        alert(`Creados ${data.length} estudiantes de prueba`);
+        location.reload();
+    } catch (error) {
+        alert('Error: ' + error.message);
+    }
+}
+
+async function createStudent(event) {
+    event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(form);
+
+    const data = {
+        name: formData.get('name'),
+        age: parseInt(formData.get('age')),
+        education_stage: formData.get('education_stage'),
+        motivation: parseFloat(formData.get('motivation')),
+        self_efficacy: parseFloat(formData.get('self_efficacy')),
+        digital_competence: parseFloat(formData.get('digital_competence')),
+        kolb_style: formData.get('kolb_style'),
+        prior_knowledge: {
+            literacy: parseFloat(formData.get('literacy')),
+            numeracy: parseFloat(formData.get('numeracy')),
+            digital: parseFloat(formData.get('digital')),
+            citizenship: parseFloat(formData.get('citizenship'))
+        }
+    };
+
+    try {
+        const response = await fetch('/api/students', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        });
+        if (response.ok) {
+            location.reload();
+        } else {
+            throw new Error('Error al crear estudiante');
+        }
+    } catch (error) {
+        alert('Error: ' + error.message);
+    }
+}
+
+async function viewOptimalPath(studentId) {
+    try {
+        const response = await fetch(`/api/simulation/optimal-path/${studentId}`);
+        const data = await response.json();
+
+        if (data.error) {
+            alert('Primero debes entrenar el agente RL en la seccion de Simulacion');
+            return;
+        }
+
+        const pathStr = data.optimal_path.join(' -> ');
+        alert(`Ruta optima para el estudiante:\n\n${pathStr}\n\nDuracion total: ${data.visualization.totalDuration} minutos`);
+    } catch (error) {
+        alert('Error: Primero entrena el agente RL');
+    }
+}
+</script>
+{% endblock %}

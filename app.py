@@ -8,10 +8,12 @@ ERASMUS-EDU-2026-POL-EXP-T03-DIGITAL-BS
 Main application for managing and visualizing personalized learning paths
 with reinforcement learning optimization.
 """
-from flask import Flask, render_template, jsonify, request, redirect, url_for
+from flask import Flask, render_template, jsonify, request, redirect, url_for, g
 import os
 import json
 from datetime import datetime
+
+SUPPORTED_LANGS = ('en', 'es', 'de')
 
 # Import models
 from models.student_profile import StudentProfile, StudentFactory, DemographicVariables, EmotionalFactors, CognitiveFactors, EducationStage, Gender, KolbStyle
@@ -53,120 +55,153 @@ def get_or_create_learning_path():
 
 @app.route('/')
 def index():
-    """Redirect to landing page"""
-    return redirect(url_for('landing'))
+    """Redirect to default language landing page"""
+    return redirect(url_for('landing', lang='en'))
 
 
-@app.route('/itinerary')
-def itinerary():
+@app.route('/<lang>/itinerary')
+def itinerary(lang='en'):
     """Learning path tree visualization"""
+    if lang not in SUPPORTED_LANGS:
+        return redirect(url_for('itinerary', lang='en'))
     path = get_or_create_learning_path()
     tree_data = generate_tree_data(path)
-    return render_template('itinerary.html',
+    return render_template(f'{lang}/itinerary.html',
                            path=path,
-                           tree_data=json.dumps(tree_data))
+                           tree_data=json.dumps(tree_data),
+                           lang=lang)
 
 
-@app.route('/students')
-def students_page():
+@app.route('/<lang>/students')
+def students_page(lang='en'):
     """Student management page"""
-    return render_template('students.html', students=list(students.values()))
+    if lang not in SUPPORTED_LANGS:
+        return redirect(url_for('students_page', lang='en'))
+    return render_template(f'{lang}/students.html', students=list(students.values()), lang=lang)
 
 
-@app.route('/simulation')
-def simulation():
+@app.route('/<lang>/simulation')
+def simulation(lang='en'):
     """RL Simulation page"""
-    return render_template('simulation.html',
+    if lang not in SUPPORTED_LANGS:
+        return redirect(url_for('simulation', lang='en'))
+    return render_template(f'{lang}/simulation.html',
                            has_agent=trained_agent is not None,
-                           num_students=len(students))
+                           num_students=len(students),
+                           lang=lang)
 
 
-@app.route('/analytics')
-def analytics():
+@app.route('/<lang>/analytics')
+def analytics(lang='en'):
     """Analytics dashboard"""
+    if lang not in SUPPORTED_LANGS:
+        return redirect(url_for('analytics', lang='en'))
     path = get_or_create_learning_path()
     chart_data = generate_performance_chart(path, list(students.values()))
-    return render_template('analytics.html', chart_data=json.dumps(chart_data))
+    return render_template(f'{lang}/analytics.html', chart_data=json.dumps(chart_data), lang=lang)
 
 
 # ============================================================================
 # New Routes - InfiniteLearner Structure
 # ============================================================================
 
-@app.route('/landing')
-def landing():
+@app.route('/<lang>/landing')
+def landing(lang='en'):
     """Project landing page for partner recruitment"""
-    return render_template('landing.html')
+    if lang not in SUPPORTED_LANGS:
+        return redirect(url_for('landing', lang='en'))
+    return render_template(f'{lang}/landing.html', lang=lang)
 
 
-@app.route('/framework')
-def framework():
+@app.route('/<lang>/framework')
+def framework(lang='en'):
     """WP2 - Shared Pedagogical Framework"""
+    if lang not in SUPPORTED_LANGS:
+        return redirect(url_for('framework', lang='en'))
     path = get_or_create_learning_path()
-    return render_template('framework.html', path=path)
+    return render_template(f'{lang}/framework.html', path=path, lang=lang)
 
 
-@app.route('/toolkit')
-def toolkit():
+@app.route('/<lang>/toolkit')
+def toolkit(lang='en'):
     """WP2 - Toolkit for Teachers"""
-    return render_template('toolkit.html')
+    if lang not in SUPPORTED_LANGS:
+        return redirect(url_for('toolkit', lang='en'))
+    return render_template(f'{lang}/toolkit.html', lang=lang)
 
 
-@app.route('/diagnostic')
-def diagnostic():
+@app.route('/<lang>/diagnostic')
+def diagnostic(lang='en'):
     """WP3 - Initial Diagnostic Assessment"""
-    return render_template('diagnostic.html', students=list(students.values()))
+    if lang not in SUPPORTED_LANGS:
+        return redirect(url_for('diagnostic', lang='en'))
+    return render_template(f'{lang}/diagnostic.html', students=list(students.values()), lang=lang)
 
 
-@app.route('/activities')
-def activities():
+@app.route('/<lang>/activities')
+def activities(lang='en'):
     """WP3 - Learning Activities"""
+    if lang not in SUPPORTED_LANGS:
+        return redirect(url_for('activities', lang='en'))
     path = get_or_create_learning_path()
-    return render_template('activities.html', path=path, students=list(students.values()))
+    return render_template(f'{lang}/activities.html', path=path, students=list(students.values()), lang=lang)
 
 
-@app.route('/evaluation')
-def evaluation():
+@app.route('/<lang>/evaluation')
+def evaluation(lang='en'):
     """WP3 - Formative Evaluation"""
+    if lang not in SUPPORTED_LANGS:
+        return redirect(url_for('evaluation', lang='en'))
     path = get_or_create_learning_path()
-    return render_template('evaluation.html', path=path, students=list(students.values()))
+    return render_template(f'{lang}/evaluation.html', path=path, students=list(students.values()), lang=lang)
 
 
-@app.route('/dashboard/teacher')
-def dashboard_teacher():
+@app.route('/<lang>/dashboard/teacher')
+def dashboard_teacher(lang='en'):
     """Teacher Dashboard - Observable Learning Signals"""
+    if lang not in SUPPORTED_LANGS:
+        return redirect(url_for('dashboard_teacher', lang='en'))
     path = get_or_create_learning_path()
-    return render_template('dashboard_teacher.html',
+    return render_template(f'{lang}/dashboard_teacher.html',
                           path=path,
                           students=list(students.values()),
-                          num_students=len(students))
+                          num_students=len(students),
+                          lang=lang)
 
 
-@app.route('/dashboard/student')
-def dashboard_student():
+@app.route('/<lang>/dashboard/student')
+def dashboard_student(lang='en'):
     """Student Dashboard - Personal Progress"""
-    return render_template('dashboard_student.html', students=list(students.values()))
+    if lang not in SUPPORTED_LANGS:
+        return redirect(url_for('dashboard_student', lang='en'))
+    return render_template(f'{lang}/dashboard_student.html', students=list(students.values()), lang=lang)
 
 
-@app.route('/recommendations')
-def recommendations():
+@app.route('/<lang>/recommendations')
+def recommendations(lang='en'):
     """AI Recommendations - Next Steps Suggestions"""
+    if lang not in SUPPORTED_LANGS:
+        return redirect(url_for('recommendations', lang='en'))
     path = get_or_create_learning_path()
-    return render_template('recommendations.html',
+    return render_template(f'{lang}/recommendations.html',
                           path=path,
                           students=list(students.values()),
-                          has_agent=trained_agent is not None)
+                          has_agent=trained_agent is not None,
+                          lang=lang)
 
 
-@app.route('/consolidation')
-def consolidation():
+@app.route('/<lang>/consolidation')
+def consolidation(lang='en'):
     """WP4 - Results Consolidation and Recommendations"""
+    if lang not in SUPPORTED_LANGS:
+        return redirect(url_for('consolidation', lang='en'))
     path = get_or_create_learning_path()
     chart_data = generate_performance_chart(path, list(students.values()))
-    return render_template('consolidation.html',
+    return render_template(f'{lang}/consolidation.html',
                           path=path,
                           students=list(students.values()),
-                          chart_data=json.dumps(chart_data))
+                          chart_data=json.dumps(chart_data),
+                          lang=lang)
 
 
 # ============================================================================
@@ -539,12 +574,18 @@ def api_redesign_path():
 
 @app.errorhandler(404)
 def not_found(e):
-    return render_template('404.html'), 404
+    lang = request.path.split('/')[1] if len(request.path.split('/')) > 1 else 'en'
+    if lang not in SUPPORTED_LANGS:
+        lang = 'en'
+    return render_template(f'{lang}/404.html', lang=lang), 404
 
 
 @app.errorhandler(500)
 def server_error(e):
-    return render_template('500.html'), 500
+    lang = request.path.split('/')[1] if len(request.path.split('/')) > 1 else 'en'
+    if lang not in SUPPORTED_LANGS:
+        lang = 'en'
+    return render_template(f'{lang}/500.html', lang=lang), 500
 
 
 # ============================================================================

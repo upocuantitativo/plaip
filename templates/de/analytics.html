@@ -1,0 +1,221 @@
+{% extends "base.html" %}
+
+{% block title %}Analytik{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h1><i class="bi bi-graph-up text-warning"></i> Analytik-Dashboard</h1>
+        <p class="text-muted">Leistungskennzahlen und Wirkung des Lernpfads</p>
+    </div>
+</div>
+
+<!-- Summary Cards -->
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <h6 class="card-subtitle opacity-75">Literacy</h6>
+                <h3 class="mb-0" id="literacy-score">-</h3>
+                <small>Durchschnittliche Punktzahl</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <h6 class="card-subtitle opacity-75">Numeracy</h6>
+                <h3 class="mb-0" id="numeracy-score">-</h3>
+                <small>Durchschnittliche Punktzahl</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white" style="background-color: #9C27B0;">
+            <div class="card-body">
+                <h6 class="card-subtitle opacity-75">Digital</h6>
+                <h3 class="mb-0" id="digital-score">-</h3>
+                <small>Durchschnittliche Punktzahl</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-warning text-white">
+            <div class="card-body">
+                <h6 class="card-subtitle opacity-75">Citizenship</h6>
+                <h3 class="mb-0" id="citizenship-score">-</h3>
+                <small>Durchschnittliche Punktzahl</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Row 1 -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-bar-chart"></i> Leistung nach Kompetenz</h5>
+            </div>
+            <div class="card-body">
+                <div id="skills-chart" style="height: 300px;"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-clock"></i> Durchschnittliche Zeit nach Kompetenz</h5>
+            </div>
+            <div class="card-body">
+                <div id="time-chart" style="height: 300px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Row 2 -->
+<div class="row mb-4">
+    <div class="col-md-8">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-pie-chart"></i> Abschlussrate</h5>
+            </div>
+            <div class="card-body">
+                <div id="completion-chart" style="height: 300px;"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-people"></i> Fortschritt der Lernenden</h5>
+            </div>
+            <div class="card-body">
+                <div id="students-progress"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Variables AGORA Reference -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-list-check"></i> Messvariablen (AGORA-Modell)</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h6 class="text-success"><i class="bi bi-box-arrow-in-right"></i> INPUT</h6>
+                        <ul class="small">
+                            <li>V1-V4: Demografische Variablen</li>
+                            <li>V5-V6: Emotionale Faktoren</li>
+                            <li>V7-V12: Kognitive Faktoren</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <h6 class="text-warning"><i class="bi bi-gear"></i> PROZESS</h6>
+                        <ul class="small">
+                            <li>V13: Hochwirksame Strategien (EAI)</li>
+                            <li>V14: Lehrmethoden</li>
+                            <li>V15: Zeitliche Anpassung</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <h6 class="text-primary"><i class="bi bi-box-arrow-right"></i> OUTPUT</h6>
+                        <ul class="small">
+                            <li>V16-V20: Leistung und Behaltensrate</li>
+                            <li>V21-V24: Beteiligung und Chancengleichheit</li>
+                            <li>V25-V26: Technische Validierung</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const chartData = {{ chart_data | safe }};
+
+// Update score cards
+if (chartData.averageScores) {
+    const skills = ['literacy', 'numeracy', 'digital', 'citizenship'];
+    skills.forEach((skill, i) => {
+        const el = document.getElementById(`${skill}-score`);
+        if (el) {
+            el.textContent = chartData.averageScores[i]?.toFixed(1) || '0';
+        }
+    });
+}
+
+// Skills performance chart
+const skillsTrace = {
+    x: chartData.skills || [],
+    y: chartData.averageScores || [],
+    type: 'bar',
+    marker: {
+        color: ['#4CAF50', '#2196F3', '#9C27B0', '#FF9800']
+    }
+};
+
+Plotly.newPlot('skills-chart', [skillsTrace], {
+    yaxis: {title: 'Durchschnittliche Punktzahl', range: [0, 100]},
+    margin: {t: 20}
+});
+
+// Time chart
+const timeTrace = {
+    x: chartData.skills || [],
+    y: chartData.averageTimes || [],
+    type: 'bar',
+    marker: {
+        color: ['#4CAF50', '#2196F3', '#9C27B0', '#FF9800']
+    }
+};
+
+Plotly.newPlot('time-chart', [timeTrace], {
+    yaxis: {title: 'Zeit (Minuten)'},
+    margin: {t: 20}
+});
+
+// Completion rate chart
+const completionTrace = {
+    values: chartData.completionRates || [25, 25, 25, 25],
+    labels: chartData.skills || ['Literacy', 'Numeracy', 'Digital', 'Citizenship'],
+    type: 'pie',
+    marker: {
+        colors: ['#4CAF50', '#2196F3', '#9C27B0', '#FF9800']
+    },
+    textinfo: 'label+percent',
+    hole: 0.4
+};
+
+Plotly.newPlot('completion-chart', [completionTrace], {
+    margin: {t: 20, b: 20}
+});
+
+// Student progress list
+const studentsContainer = document.getElementById('students-progress');
+if (chartData.studentProgress && chartData.studentProgress.length > 0) {
+    studentsContainer.innerHTML = chartData.studentProgress.map(s => `
+        <div class="mb-3">
+            <div class="d-flex justify-content-between">
+                <strong>${s.name}</strong>
+                <span class="badge bg-secondary">${s.completedNodes}/${s.totalNodes}</span>
+            </div>
+            <div class="progress" style="height: 8px;">
+                <div class="progress-bar" style="width: ${(s.completedNodes/s.totalNodes)*100}%"></div>
+            </div>
+            <small class="text-muted">Motivation: ${s.motivation?.toFixed(0)}%</small>
+        </div>
+    `).join('');
+} else {
+    studentsContainer.innerHTML = '<p class="text-muted">Keine Lernendendaten vorhanden</p>';
+}
+</script>
+{% endblock %}

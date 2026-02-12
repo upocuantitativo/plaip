@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg?v=2">
+    <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png?v=2">
+    <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png?v=2">
+    <link rel="apple-touch-icon" href="../favicon-180.png?v=2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actividades de Aprendizaje - InfiniteLearner</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .logo-bar { background: #fff; padding: 10px 0; border-bottom: 3px solid #003399; }
+        .logo-bar img { max-height: 50px; margin: 0 15px; }
+        .navbar-brand-custom { font-weight: 700; font-size: 1.3rem; }
+        .nav-wp-badge { font-size: 0.65rem; padding: 2px 5px; margin-left: 5px; }
+        .activities-hero { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; padding: 40px; border-radius: 15px; margin-bottom: 30px; }
+        .activity-card { border-radius: 15px; transition: all 0.3s; border: none; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+        .activity-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+        .difficulty-badge { font-size: 0.7rem; padding: 3px 8px; border-radius: 10px; }
+        .footer-logos img { max-height: 40px; margin: 0 10px; opacity: 0.8; }
+        .eu-disclaimer { font-size: 0.75rem; color: #666; max-width: 600px; margin: 10px auto; }
+
+        /* Language Selector Sidebar */
+        .lang-sidebar { position: fixed; left: 0; top: 50%; transform: translateY(-50%); z-index: 1050; display: flex; flex-direction: column; gap: 8px; padding: 10px 6px; background: rgba(255,255,255,0.95); border-radius: 0 12px 12px 0; box-shadow: 2px 2px 12px rgba(0,0,0,0.15); }
+        .lang-sidebar a { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; text-decoration: none; font-size: 0.75rem; font-weight: 700; color: #fff; transition: transform 0.2s, box-shadow 0.2s; }
+        .lang-sidebar a:hover { transform: scale(1.15); box-shadow: 0 2px 8px rgba(0,0,0,0.25); }
+        .lang-sidebar a.active { outline: 3px solid #003399; outline-offset: 2px; }
+        .lang-sidebar .lang-es { background: #c60b1e; }
+        .lang-sidebar .lang-en { background: #003478; }
+        .lang-sidebar .lang-de { background: #000; }
+        @media (max-width: 768px) { .lang-sidebar { top: auto; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: row; border-radius: 12px; padding: 6px 10px; } }
+    </style>
+</head>
+<body>
+    <div class="lang-sidebar">
+        <a href="activities.html" class="lang-es active" title="Espanol">ES</a>
+        <a href="../activities.html" class="lang-en" title="English">EN</a>
+        <a href="../de/activities.html" class="lang-de" title="Deutsch">DE</a>
+    </div>
+
+    <div class="logo-bar">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <div class="d-flex align-items-center">
+                    <img src="../static/img/upo.jpg" alt="UPO" onerror="this.outerHTML='<span class=\'badge bg-primary me-2\'>UPO</span>'">
+                </div>
+                <div class="text-center flex-grow-1"><span class="fw-bold text-primary">Erasmus+ KA3 - Experimentacion de Politicas Europeas</span></div>
+                <div><img src="../static/img/erasmus.jpg" alt="UE" style="max-height:45px" onerror="this.outerHTML='<span class=\'badge bg-warning text-dark\'>UE</span>'"></div>
+            </div>
+        </div>
+    </div>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand navbar-brand-custom" href="index.html"><i class="bi bi-infinity"></i> InfiniteLearner</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html"><i class="bi bi-house-heart"></i> Proyecto</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"><i class="bi bi-book"></i> Fundamentos <span class="badge bg-light text-primary nav-wp-badge">WP2</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="framework.html"><i class="bi bi-diagram-3 me-2"></i>Marco Pedagogico Compartido</a></li>
+                            <li><a class="dropdown-item" href="itinerary.html"><i class="bi bi-signpost-split me-2"></i>Itinerarios de Aprendizaje</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="toolkit.html"><i class="bi bi-tools me-2"></i>Kit de Herramientas para Docentes</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active" href="#" data-bs-toggle="dropdown"><i class="bi bi-rocket-takeoff"></i> Pilotos <span class="badge bg-warning text-dark nav-wp-badge">WP3</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="diagnostic.html"><i class="bi bi-clipboard2-pulse me-2"></i>Diagnostico Inicial</a></li>
+                            <li><a class="dropdown-item" href="activities.html"><i class="bi bi-puzzle me-2"></i>Actividades de Aprendizaje</a></li>
+                            <li><a class="dropdown-item" href="evaluation.html"><i class="bi bi-check2-square me-2"></i>Evaluacion Formativa</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="students.html"><i class="bi bi-people me-2"></i>Perfiles de Estudiantes</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"><i class="bi bi-speedometer2"></i> Paneles</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="dashboard_teacher.html"><i class="bi bi-person-workspace me-2"></i>Panel del Docente</a></li>
+                            <li><a class="dropdown-item" href="dashboard_student.html"><i class="bi bi-mortarboard me-2"></i>Panel del Estudiante</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="recommendations.html"><i class="bi bi-lightbulb me-2"></i>Recomendaciones IA</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="consolidation.html"><i class="bi bi-file-earmark-check"></i> Resultados <span class="badge bg-success nav-wp-badge">WP4</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="simulation.html"><i class="bi bi-cpu"></i> Simulacion RL</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container-fluid py-4">
+        <div class="activities-hero">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1><i class="bi bi-puzzle me-3"></i>Actividades de Aprendizaje</h1>
+                    <p class="lead mb-0">Ejercicios breves, micro-tareas, reflexiones guiadas y retos digitales disenados para desarrollar competencias basicas a traves del itinerario de aprendizaje personalizado.</p>
+                </div>
+                <div class="col-lg-4 text-center">
+                    <div class="bg-white bg-opacity-10 rounded-3 p-3">
+                        <h5 class="mb-2">Total de Actividades</h5>
+                        <span class="badge bg-light text-success fs-5">48 Actividades</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-6 col-lg-3 mb-3">
+                <select class="form-select"><option>Todas las Competencias</option><option>Lectoescritura</option><option>Calculo</option><option>Competencias Digitales</option><option>Ciudadania</option></select>
+            </div>
+            <div class="col-md-6 col-lg-3 mb-3">
+                <select class="form-select"><option>Todos los Niveles</option><option>Basico</option><option>Elemental</option><option>Intermedio</option><option>Avanzado</option></select>
+            </div>
+            <div class="col-md-6 col-lg-3 mb-3">
+                <select class="form-select"><option>Todos los Tipos</option><option>Ejercicio</option><option>Reflexion</option><option>Reto</option><option>Proyecto</option></select>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-12"><h3 class="mb-4"><i class="bi bi-book me-2 text-success"></i>Actividades de Lectoescritura</h3></div>
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card activity-card h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="badge bg-success">Lectoescritura</span>
+                            <span class="difficulty-badge bg-success text-white">Basico</span>
+                        </div>
+                        <h5>Comprension Lectora Basica</h5>
+                        <p class="text-muted small">Identifica las ideas principales y los detalles de apoyo en textos breves.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted"><i class="bi bi-clock me-1"></i>15 min</small>
+                            <button class="btn btn-sm btn-outline-success">Iniciar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card activity-card h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="badge bg-success">Lectoescritura</span>
+                            <span class="difficulty-badge bg-info text-white">Elemental</span>
+                        </div>
+                        <h5>Lectura Critica</h5>
+                        <p class="text-muted small">Analiza la perspectiva del autor e identifica sesgos en los textos.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted"><i class="bi bi-clock me-1"></i>20 min</small>
+                            <button class="btn btn-sm btn-outline-success">Iniciar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card activity-card h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="badge bg-success">Lectoescritura</span>
+                            <span class="difficulty-badge bg-warning text-dark">Intermedio</span>
+                        </div>
+                        <h5>Escritura Argumentativa</h5>
+                        <p class="text-muted small">Construye argumentos bien estructurados con evidencias.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted"><i class="bi bi-clock me-1"></i>30 min</small>
+                            <button class="btn btn-sm btn-outline-success">Iniciar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-12"><h3 class="mb-4"><i class="bi bi-laptop me-2" style="color:#9C27B0"></i>Actividades de Competencias Digitales</h3></div>
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card activity-card h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="badge" style="background:#9C27B0">Digital</span>
+                            <span class="difficulty-badge bg-success text-white">Basico</span>
+                        </div>
+                        <h5>Fundamentos de Seguridad en Linea</h5>
+                        <p class="text-muted small">Aprende a proteger la informacion personal en linea.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted"><i class="bi bi-clock me-1"></i>15 min</small>
+                            <button class="btn btn-sm btn-outline-primary">Iniciar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card activity-card h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="badge" style="background:#9C27B0">Digital</span>
+                            <span class="difficulty-badge bg-info text-white">Elemental</span>
+                        </div>
+                        <h5>Evaluacion de Fuentes en Linea</h5>
+                        <p class="text-muted small">Distingue fuentes de informacion fiables de las no fiables.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted"><i class="bi bi-clock me-1"></i>20 min</small>
+                            <button class="btn btn-sm btn-outline-primary">Iniciar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card activity-card h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="badge" style="background:#9C27B0">Digital</span>
+                            <span class="difficulty-badge bg-danger text-white">Avanzado</span>
+                        </div>
+                        <h5>Deteccion de Desinformacion</h5>
+                        <p class="text-muted small">Tecnicas avanzadas para identificar noticias falsas y deepfakes.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted"><i class="bi bi-clock me-1"></i>25 min</small>
+                            <button class="btn btn-sm btn-outline-primary">Iniciar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card bg-success text-white">
+                    <div class="card-body text-center py-4">
+                        <h4><i class="bi bi-collection me-2"></i>Explorar Todas las Actividades</h4>
+                        <p class="mb-3">Explora la biblioteca completa de actividades con 48 actividades de aprendizaje en todas las competencias</p>
+                        <a href="itinerary.html" class="btn btn-light"><i class="bi bi-diagram-3 me-2"></i>Ver Itinerario de Aprendizaje</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-light py-4 mt-4">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-4 text-center text-md-start footer-logos">
+                    <img src="../static/img/upo.jpg" alt="UPO" onerror="this.style.display='none'">
+                </div>
+                <div class="col-md-4 text-center"><p class="mb-1"><strong>InfiniteLearner</strong></p><small class="text-muted">ERASMUS-EDU-2026-POL-EXP-T03-DIGITAL-BS</small></div>
+                <div class="col-md-4 text-center text-md-end"><img src="../static/img/erasmus.jpg" alt="UE" style="max-height:35px" onerror="this.style.display='none'"></div>
+            </div>
+            <div class="eu-disclaimer text-center mt-3"><small>Cofinanciado por la Union Europea. Los puntos de vista y las opiniones expresados son unicamente los del autor o autores y no reflejan necesariamente los de la Union Europea ni los de la Agencia Ejecutiva Europea de Educacion y Cultura (EACEA). Ni la Union Europea ni la EACEA pueden ser consideradas responsables de ellos.</small></div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

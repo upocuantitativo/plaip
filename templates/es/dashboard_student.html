@@ -1,0 +1,555 @@
+{% extends "base.html" %}
+
+{% block title %}Panel del Estudiante{% endblock %}
+
+{% block head %}
+<style>
+    .student-hero {
+        background: linear-gradient(135deg, #6f42c1 0%, #9C27B0 100%);
+        color: white;
+        padding: 30px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+    }
+    .progress-ring-container {
+        position: relative;
+        width: 150px;
+        height: 150px;
+        margin: 0 auto;
+    }
+    .progress-ring-bg {
+        fill: none;
+        stroke: rgba(255,255,255,0.2);
+        stroke-width: 12;
+    }
+    .progress-ring-fill {
+        fill: none;
+        stroke: white;
+        stroke-width: 12;
+        stroke-linecap: round;
+        transform: rotate(-90deg);
+        transform-origin: 50% 50%;
+        transition: stroke-dashoffset 0.5s ease;
+    }
+    .progress-ring-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+    }
+    .achievement-card {
+        border: none;
+        border-radius: 15px;
+        transition: all 0.3s;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    .achievement-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    .badge-achievement {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin: 0 auto 10px;
+    }
+    .badge-locked {
+        background: #e9ecef;
+        color: #adb5bd;
+    }
+    .skill-card {
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 15px;
+        position: relative;
+        overflow: hidden;
+    }
+    .skill-card::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+    }
+    .skill-literacy { background: rgba(76,175,80,0.1); }
+    .skill-literacy::after { background: #4CAF50; }
+    .skill-numeracy { background: rgba(33,150,243,0.1); }
+    .skill-numeracy::after { background: #2196F3; }
+    .skill-digital { background: rgba(156,39,176,0.1); }
+    .skill-digital::after { background: #9C27B0; }
+    .skill-citizenship { background: rgba(255,152,0,0.1); }
+    .skill-citizenship::after { background: #FF9800; }
+    .activity-item {
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        background: #f8f9fa;
+        transition: all 0.2s;
+    }
+    .activity-item:hover {
+        background: #e9ecef;
+    }
+    .streak-fire {
+        animation: flicker 0.5s ease-in-out infinite alternate;
+    }
+    @keyframes flicker {
+        from { opacity: 0.8; }
+        to { opacity: 1; }
+    }
+    .motivation-quote {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 15px;
+        padding: 25px;
+        border-left: 5px solid #6f42c1;
+    }
+    .xp-bar {
+        height: 20px;
+        border-radius: 10px;
+        background: #e9ecef;
+        overflow: hidden;
+    }
+    .xp-fill {
+        height: 100%;
+        border-radius: 10px;
+        background: linear-gradient(90deg, #6f42c1 0%, #9C27B0 100%);
+        transition: width 0.5s ease;
+    }
+    .next-activity-card {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: white;
+        border-radius: 15px;
+        padding: 25px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('landing', lang=lang) }}">Proyecto</a></li>
+                <li class="breadcrumb-item">Paneles</li>
+                <li class="breadcrumb-item active">Panel del Estudiante</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<!-- Seleccion de Estudiante (para demostracion) -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <label class="form-label"><i class="bi bi-person-circle me-2"></i>Seleccionar Perfil de Estudiante</label>
+                <select class="form-select" id="student-select" onchange="loadStudentDashboard()">
+                    <option value="">-- Selecciona un estudiante para ver su panel --</option>
+                    {% for student in students %}
+                    <option value="{{ student.id }}">{{ student.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Seccion Principal -->
+<div class="student-hero" id="student-hero">
+    <div class="row align-items-center">
+        <div class="col-lg-8">
+            <h1><i class="bi bi-mortarboard me-3"></i>Bienvenido/a de nuevo!</h1>
+            <p class="lead mb-3">Selecciona un estudiante para ver su panel de aprendizaje personalizado.</p>
+            <div class="d-flex gap-3 flex-wrap">
+                <div class="bg-white bg-opacity-10 rounded-3 px-3 py-2">
+                    <i class="bi bi-fire streak-fire me-1"></i>
+                    <strong>0 Dias de Racha</strong>
+                </div>
+                <div class="bg-white bg-opacity-10 rounded-3 px-3 py-2">
+                    <i class="bi bi-star-fill me-1"></i>
+                    <strong>0 XP</strong>
+                </div>
+                <div class="bg-white bg-opacity-10 rounded-3 px-3 py-2">
+                    <i class="bi bi-trophy me-1"></i>
+                    <strong>Nivel 1</strong>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 text-center mt-4 mt-lg-0">
+            <div class="progress-ring-container">
+                <svg width="150" height="150" viewBox="0 0 150 150">
+                    <circle class="progress-ring-bg" cx="75" cy="75" r="60"/>
+                    <circle class="progress-ring-fill" cx="75" cy="75" r="60"
+                            stroke-dasharray="377" stroke-dashoffset="377" id="progress-ring"/>
+                </svg>
+                <div class="progress-ring-text">
+                    <div class="h2 mb-0" id="overall-progress">0%</div>
+                    <small>Progreso General</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Progreso XP -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h6 class="mb-0"><i class="bi bi-lightning-charge text-warning me-2"></i>Puntos de Experiencia</h6>
+                    <span class="badge bg-purple" style="background: #6f42c1;">Nivel <span id="current-level">1</span></span>
+                </div>
+                <div class="xp-bar">
+                    <div class="xp-fill" style="width: 0%;" id="xp-bar"></div>
+                </div>
+                <div class="d-flex justify-content-between mt-2 small text-muted">
+                    <span><span id="current-xp">0</span> XP</span>
+                    <span><span id="next-level-xp">100</span> XP para Nivel <span id="next-level">2</span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tarjetas de Progreso por Competencia -->
+<div class="row mb-4">
+    <div class="col-12">
+        <h4 class="mb-3"><i class="bi bi-bar-chart-fill me-2"></i>Mi Progreso en Competencias</h4>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-3">
+        <div class="skill-card skill-literacy">
+            <div class="d-flex align-items-center mb-3">
+                <i class="bi bi-book text-success fs-3 me-3"></i>
+                <div>
+                    <h6 class="mb-0">Literacy</h6>
+                    <small class="text-muted">Lectura y Escritura</small>
+                </div>
+            </div>
+            <div class="progress mb-2" style="height: 10px;">
+                <div class="progress-bar bg-success" style="width: 0%;" id="literacy-progress"></div>
+            </div>
+            <div class="d-flex justify-content-between small">
+                <span id="literacy-percent">0%</span>
+                <span class="text-success" id="literacy-trend">+0%</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-3">
+        <div class="skill-card skill-numeracy">
+            <div class="d-flex align-items-center mb-3">
+                <i class="bi bi-calculator text-primary fs-3 me-3"></i>
+                <div>
+                    <h6 class="mb-0">Numeracy</h6>
+                    <small class="text-muted">Matematicas y Datos</small>
+                </div>
+            </div>
+            <div class="progress mb-2" style="height: 10px;">
+                <div class="progress-bar bg-primary" style="width: 0%;" id="numeracy-progress"></div>
+            </div>
+            <div class="d-flex justify-content-between small">
+                <span id="numeracy-percent">0%</span>
+                <span class="text-primary" id="numeracy-trend">+0%</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-3">
+        <div class="skill-card skill-digital">
+            <div class="d-flex align-items-center mb-3">
+                <i class="bi bi-laptop fs-3 me-3" style="color: #9C27B0;"></i>
+                <div>
+                    <h6 class="mb-0">Digital</h6>
+                    <small class="text-muted">Tecnologia y Seguridad en Linea</small>
+                </div>
+            </div>
+            <div class="progress mb-2" style="height: 10px;">
+                <div class="progress-bar" style="width: 0%; background: #9C27B0;" id="digital-progress"></div>
+            </div>
+            <div class="d-flex justify-content-between small">
+                <span id="digital-percent">0%</span>
+                <span style="color: #9C27B0;" id="digital-trend">+0%</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-3">
+        <div class="skill-card skill-citizenship">
+            <div class="d-flex align-items-center mb-3">
+                <i class="bi bi-flag text-warning fs-3 me-3"></i>
+                <div>
+                    <h6 class="mb-0">Citizenship</h6>
+                    <small class="text-muted">Sociedad y Derechos</small>
+                </div>
+            </div>
+            <div class="progress mb-2" style="height: 10px;">
+                <div class="progress-bar bg-warning" style="width: 0%;" id="citizenship-progress"></div>
+            </div>
+            <div class="d-flex justify-content-between small">
+                <span id="citizenship-percent">0%</span>
+                <span class="text-warning" id="citizenship-trend">+0%</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Siguiente Actividad y Actividades Recientes -->
+<div class="row mb-4">
+    <div class="col-lg-6 mb-4">
+        <div class="next-activity-card h-100">
+            <h5><i class="bi bi-play-circle me-2"></i>Continuar Aprendiendo</h5>
+            <p class="opacity-75 mb-3" id="next-activity-desc">Selecciona un estudiante para ver su siguiente actividad recomendada.</p>
+            <div class="bg-white bg-opacity-10 rounded-3 p-3 mb-3">
+                <div class="d-flex align-items-center">
+                    <div class="me-3">
+                        <i class="bi bi-laptop fs-2"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-0" id="next-activity-title">Ninguna actividad seleccionada</h6>
+                        <small class="opacity-75" id="next-activity-time">-- min</small>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-light w-100" id="start-activity-btn" disabled>
+                <i class="bi bi-arrow-right me-2"></i>Iniciar Actividad
+            </button>
+        </div>
+    </div>
+
+    <div class="col-lg-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-clock-history me-2"></i>Actividad Reciente</h5>
+            </div>
+            <div class="card-body" id="recent-activities">
+                <div class="text-center text-muted py-4">
+                    <i class="bi bi-inbox fs-1 mb-2 d-block"></i>
+                    <p>No hay actividades recientes para mostrar</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Logros -->
+<div class="row mb-4">
+    <div class="col-12">
+        <h4 class="mb-3"><i class="bi bi-trophy me-2"></i>Mis Logros</h4>
+    </div>
+
+    <div class="col-6 col-md-4 col-lg-2 mb-3">
+        <div class="card achievement-card text-center p-3 h-100">
+            <div class="badge-achievement bg-success text-white">
+                <i class="bi bi-rocket"></i>
+            </div>
+            <h6 class="mb-1">Primeros Pasos</h6>
+            <small class="text-muted">Completa tu primera actividad</small>
+            <span class="badge bg-success mt-2">Desbloqueado</span>
+        </div>
+    </div>
+
+    <div class="col-6 col-md-4 col-lg-2 mb-3">
+        <div class="card achievement-card text-center p-3 h-100">
+            <div class="badge-achievement badge-locked">
+                <i class="bi bi-fire"></i>
+            </div>
+            <h6 class="mb-1">En Llamas</h6>
+            <small class="text-muted">Racha de aprendizaje de 7 dias</small>
+            <span class="badge bg-secondary mt-2">Bloqueado</span>
+        </div>
+    </div>
+
+    <div class="col-6 col-md-4 col-lg-2 mb-3">
+        <div class="card achievement-card text-center p-3 h-100">
+            <div class="badge-achievement badge-locked">
+                <i class="bi bi-book"></i>
+            </div>
+            <h6 class="mb-1">Raton de Biblioteca</h6>
+            <small class="text-muted">Domina los fundamentos de lectoescritura</small>
+            <span class="badge bg-secondary mt-2">Bloqueado</span>
+        </div>
+    </div>
+
+    <div class="col-6 col-md-4 col-lg-2 mb-3">
+        <div class="card achievement-card text-center p-3 h-100">
+            <div class="badge-achievement badge-locked">
+                <i class="bi bi-calculator"></i>
+            </div>
+            <h6 class="mb-1">Mago de las Mates</h6>
+            <small class="text-muted">Supera los retos de numeracy</small>
+            <span class="badge bg-secondary mt-2">Bloqueado</span>
+        </div>
+    </div>
+
+    <div class="col-6 col-md-4 col-lg-2 mb-3">
+        <div class="card achievement-card text-center p-3 h-100">
+            <div class="badge-achievement badge-locked">
+                <i class="bi bi-shield-check"></i>
+            </div>
+            <h6 class="mb-1">Guardian Digital</h6>
+            <small class="text-muted">Completa seguridad en linea</small>
+            <span class="badge bg-secondary mt-2">Bloqueado</span>
+        </div>
+    </div>
+
+    <div class="col-6 col-md-4 col-lg-2 mb-3">
+        <div class="card achievement-card text-center p-3 h-100">
+            <div class="badge-achievement badge-locked">
+                <i class="bi bi-globe"></i>
+            </div>
+            <h6 class="mb-1">Ciudadano del Mundo</h6>
+            <small class="text-muted">Domina las competencias de ciudadania</small>
+            <span class="badge bg-secondary mt-2">Bloqueado</span>
+        </div>
+    </div>
+</div>
+
+<!-- Cita Motivacional -->
+<div class="row">
+    <div class="col-12">
+        <div class="motivation-quote">
+            <div class="row align-items-center">
+                <div class="col-auto">
+                    <i class="bi bi-quote fs-1 text-purple" style="color: #6f42c1;"></i>
+                </div>
+                <div class="col">
+                    <p class="lead mb-1 fst-italic">"Cuanto mas leas, mas cosas sabras. Cuanto mas aprendas, a mas lugares llegaras."</p>
+                    <small class="text-muted">- Dr. Seuss</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const studentSelect = document.getElementById('student-select');
+
+function loadStudentDashboard() {
+    const studentId = studentSelect.value;
+    if (!studentId) return;
+
+    fetch(`/api/students/${studentId}`)
+        .then(response => response.json())
+        .then(student => {
+            updateDashboard(student);
+        })
+        .catch(error => {
+            console.error('Error loading student:', error);
+        });
+}
+
+function updateDashboard(student) {
+    // Update hero
+    document.querySelector('.student-hero h1').innerHTML =
+        `<i class="bi bi-mortarboard me-3"></i>Bienvenido/a de nuevo, ${student.name}!`;
+
+    // Calculate overall progress
+    const knowledge = student.cognitive.prior_knowledge;
+    const overallProgress = Math.round(
+        (knowledge.literacy + knowledge.numeracy + knowledge.digital + knowledge.citizenship) / 4
+    );
+
+    // Update progress ring
+    const ring = document.getElementById('progress-ring');
+    const circumference = 2 * Math.PI * 60;
+    const offset = circumference - (overallProgress / 100) * circumference;
+    ring.style.strokeDashoffset = offset;
+    document.getElementById('overall-progress').textContent = overallProgress + '%';
+
+    // Update skill progress
+    updateSkillProgress('literacy', knowledge.literacy);
+    updateSkillProgress('numeracy', knowledge.numeracy);
+    updateSkillProgress('digital', knowledge.digital);
+    updateSkillProgress('citizenship', knowledge.citizenship);
+
+    // Update XP
+    const xp = Math.round(overallProgress * 10);
+    const level = Math.floor(xp / 100) + 1;
+    document.getElementById('current-xp').textContent = xp;
+    document.getElementById('current-level').textContent = level;
+    document.getElementById('next-level').textContent = level + 1;
+    document.getElementById('next-level-xp').textContent = (level * 100) - xp;
+    document.getElementById('xp-bar').style.width = (xp % 100) + '%';
+
+    // Update next activity
+    document.getElementById('next-activity-title').textContent = 'Fundamentos de Seguridad Digital';
+    document.getElementById('next-activity-time').textContent = '15 min';
+    document.getElementById('next-activity-desc').textContent =
+        `Segun tu progreso, te recomendamos continuar con ${student.cognitive.prior_knowledge.digital < 50 ? 'competencias digitales' : 'citizenship'}.`;
+    document.getElementById('start-activity-btn').disabled = false;
+
+    // Update recent activities
+    updateRecentActivities(student);
+
+    // Update streak
+    const streak = student.completed_nodes ? student.completed_nodes.length : 0;
+    document.querySelector('.streak-fire').parentElement.innerHTML =
+        `<i class="bi bi-fire streak-fire me-1"></i><strong>${streak} Dias de Racha</strong>`;
+}
+
+function updateSkillProgress(skill, value) {
+    const percent = Math.round(value);
+    document.getElementById(`${skill}-progress`).style.width = percent + '%';
+    document.getElementById(`${skill}-percent`).textContent = percent + '%';
+
+    const trend = Math.round(Math.random() * 10);
+    document.getElementById(`${skill}-trend`).textContent = '+' + trend + '%';
+}
+
+function updateRecentActivities(student) {
+    const container = document.getElementById('recent-activities');
+    const completedNodes = student.completed_nodes || [];
+
+    if (completedNodes.length === 0) {
+        container.innerHTML = `
+            <div class="text-center text-muted py-4">
+                <i class="bi bi-inbox fs-1 mb-2 d-block"></i>
+                <p>Aun no has completado ninguna actividad. Empieza a aprender!</p>
+            </div>
+        `;
+        return;
+    }
+
+    const activities = [
+        { name: 'Comprender la Privacidad en Linea', skill: 'Digital', icon: 'bi-shield-lock', color: '#9C27B0', score: 85 },
+        { name: 'Comprension Lectora', skill: 'Literacy', icon: 'bi-book', color: '#4CAF50', score: 72 },
+        { name: 'Interpretacion de Graficos', skill: 'Numeracy', icon: 'bi-bar-chart', color: '#2196F3', score: 68 }
+    ];
+
+    container.innerHTML = activities.slice(0, 3).map(act => `
+        <div class="activity-item">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <div class="rounded-circle p-2 me-3" style="background: ${act.color}20;">
+                        <i class="${act.icon}" style="color: ${act.color};"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-0">${act.name}</h6>
+                        <small class="text-muted">${act.skill}</small>
+                    </div>
+                </div>
+                <div class="text-end">
+                    <span class="badge bg-success">${act.score}%</span>
+                    <br><small class="text-muted">Hoy</small>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Auto-seleccionar primer estudiante si esta disponible
+if (studentSelect.options.length > 1) {
+    studentSelect.selectedIndex = 1;
+    loadStudentDashboard();
+}
+</script>
+{% endblock %}

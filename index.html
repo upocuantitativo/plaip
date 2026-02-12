@@ -127,9 +127,25 @@
             max-width: 600px;
             margin: 10px auto;
         }
+        /* Language Selector Sidebar */
+        .lang-sidebar { position: fixed; left: 0; top: 50%; transform: translateY(-50%); z-index: 1050; display: flex; flex-direction: column; gap: 8px; padding: 10px 6px; background: rgba(255,255,255,0.95); border-radius: 0 12px 12px 0; box-shadow: 2px 2px 12px rgba(0,0,0,0.15); }
+        .lang-sidebar a { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; text-decoration: none; font-size: 0.75rem; font-weight: 700; color: #fff; transition: transform 0.2s, box-shadow 0.2s; }
+        .lang-sidebar a:hover { transform: scale(1.15); box-shadow: 0 2px 8px rgba(0,0,0,0.25); }
+        .lang-sidebar a.active { outline: 3px solid #003399; outline-offset: 2px; }
+        .lang-sidebar .lang-es { background: #c60b1e; }
+        .lang-sidebar .lang-en { background: #003478; }
+        .lang-sidebar .lang-de { background: #000; }
+        @media (max-width: 768px) { .lang-sidebar { top: auto; bottom: 10px; left: 50%; transform: translateX(-50%); flex-direction: row; border-radius: 12px; padding: 6px 10px; } }
     </style>
 </head>
 <body>
+    <!-- Language Selector Sidebar -->
+    <div class="lang-sidebar">
+        <a href="docs/es/index.html" class="lang-es" title="Español">ES</a>
+        <a href="docs/index.html" class="lang-en active" title="English">EN</a>
+        <a href="docs/de/index.html" class="lang-de" title="Deutsch">DE</a>
+    </div>
+
     <!-- Logo Bar -->
     <div class="logo-bar">
         <div class="container-fluid">
