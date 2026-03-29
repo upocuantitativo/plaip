@@ -212,6 +212,14 @@
                             {% if lang == 'es' %}Simulación RL{% elif lang == 'de' %}RL-Simulation{% else %}RL Simulation{% endif %}
                         </a>
                     </li>
+
+                    <!-- References -->
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'references' %}active{% endif %}" href="{{ url_for('references', lang=lang) }}">
+                            <i class="bi bi-journal-bookmark-fill"></i>
+                            {% if lang == 'es' %}Referencias{% elif lang == 'de' %}Referenzen{% else %}References{% endif %}
+                        </a>
+                    </li>
                 </ul>
                 <span class="navbar-text">
                     <span class="badge bg-light text-primary">

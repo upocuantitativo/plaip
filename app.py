@@ -204,6 +204,14 @@ def consolidation(lang='en'):
                           lang=lang)
 
 
+@app.route('/<lang>/references')
+def references(lang='en'):
+    """References - Academic and institutional sources"""
+    if lang not in SUPPORTED_LANGS:
+        return redirect(url_for('references', lang='en'))
+    return render_template(f'{lang}/references.html', lang=lang)
+
+
 # ============================================================================
 # API Endpoints
 # ============================================================================
